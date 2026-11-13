@@ -1,21 +1,91 @@
 # Guia Dourado — Acessibilidade e Comunicação Universal no Capim Dourado Shopping
 
-**Desafio 01 · 1.ª entrega — planeamento técnico inicial (13/11/2026, até 12h)**
-Tecnologia sorteada: **React + Next.js (TypeScript)** · Palmas/TO — Av. JK, Av. NS-05, Av. LO 2A · 38.800,50 m²
+**Desafio 01 · MVP funcional** · Tecnologia sorteada: **React + Next.js (TypeScript)** · Palmas/TO — Av. JK, Av. NS-05, Av. LO 2A · 38.800,50 m²
 
-O **Guia Dourado** é um PWA que o visitante abre por **QR Code + NFC + Braille** (sem instalar nada, sem cadastro) para **encontrar** (mapa, busca e rotas acessíveis por perfil), **entender** (voz, linguagem simples, Libras, PT/EN/ES, alto contraste), **conversar** (modo frente a frente, prancha de pictogramas, intérprete de Libras) e **pedir ajuda** (pedido com localização automática à Central da equipe).
+O **Guia Dourado** é um PWA que o visitante abre por **QR Code + NFC + Braille** (sem instalar nada, sem cadastro) para **encontrar** (mapa, busca e rotas acessíveis por perfil), **entender** (voz, linguagem simples, Libras, alto contraste), **conversar** (voz ↔ texto ↔ idiomas) e **pedir ajuda** (pedido com localização automática à Central da equipe).
 
-## Entregas desta fase
+---
+
+## 🚀 Instruções de execução
+
+### Pré-requisitos
+- **Node.js ≥ 18** (testado com Node 24) — https://nodejs.org
+- **npm** (instalado junto com o Node)
+- Git (opcional, para clonar o repositório)
+
+### Passo a passo
+
+```powershell
+# 1. Clonar o repositório
+git clone https://github.com/DevMarinhou/guia-dourado.git
+cd guia-dourado
+
+# 2. Instalar dependências
+npm install
+
+# 3. Iniciar em modo desenvolvimento
+npm run dev
+```
+
+Abra **http://localhost:3000** no navegador.
+
+### Build de produção
+
+```powershell
+npm run build   # compila
+npm start       # inicia em produção
+```
+
+### Não há variáveis de ambiente obrigatórias
+O projeto roda sem `.env`. (Integrações futuras — VLibras, API de tradução, Supabase — usarão `.env.local` na fase de produção.)
+
+---
+
+## 🥚 Easter Egg — "Prato Secreto: Poção Anti-Azar"
+
+> **Missão sexta-feira 13** — implementado no produto, não só na documentação.
+
+| | |
+|---|---|
+| **Onde** | T04 — Detalhe do local (`/locais/outback`) |
+| **Como ativar** | Tocar **13 vezes** no ícone de favoritar **♡** (canto superior direito do cabeçalho) |
+| **O que acontece** | Insere temporariamente o item **"Combo Sexta-feira 13 Sem Sustos — R$ 13,00"** na seção *Cardápio (ilustrativo, fornecido pela loja)* |
+| **Acessibilidade** | O item é compatível com os botões **🔊 Ouvir**, **🤟 Libras** e **🧩 Linguagem simples** da mesma tela; ativação anunciada em `aria-live` + fala (Web Speech API) |
+
+*Detalhes da missão em `src/components/DetalheLocal.tsx` (busque por `EASTER EGG`).*
+
+---
+
+## 📱 Telas implementadas no MVP
+
+| ID | Tela | Rota | Estado |
+|---|---|---|---|
+| T00 | Início (atalhos + destaques) | `/` | ✅ |
+| T01 | Preferências (barra fixa) | barra global | ✅ |
+| T02 | Mapa por piso | `/mapa/[piso]` | ✅ (simplificado) |
+| T03 | Buscar | `/buscar` | ✅ |
+| T04 | Detalhe do local + cardápio | `/locais/[slug]` | ✅ **+ Easter Egg** |
+| T06 | Conversar (voz/idiomas) | `/conversar` | ✅ (ilustrativo) |
+| T08 | Pedir ajuda | `/ajuda` | ✅ |
+
+**Recursos de acessibilidade ativos:** skip-link, foco visível, contraste alto (alternável), tamanho de fonte A+/A−, voz lida (Web Speech API), linguagem simples, Libras (painel), `aria-live`, alvos de toque ≥ 48 px, tema escuro automático.
+
+---
+
+## 📦 Conteúdo do repositório
 
 | Ficheiro | Descrição |
 |---|---|
-| [`docs/PLANEJAMENTO_TECNICO_INICIAL_v2.pdf`](docs/PLANEJAMENTO_TECNICO_INICIAL_v2.pdf) | **Documento oficial** — planeamento técnico v2.0, 91 páginas (fonte em caso de divergência) |
-| [`docs/PLANEJAMENTO_TECNICO_INICIAL_v2.md`](docs/PLANEJAMENTO_TECNICO_INICIAL_v2.md) | Transcrição em Markdown para leitura no GitHub (gerada do PDF) |
-| [`wireframes/wireframe.html`](wireframes/wireframe.html) | Wireframes de baixa fidelidade das **14 telas (T00–T13)** + T12 Central — abrir no browser |
-| [`data/grafo-planta.json`](data/grafo-planta.json) | Grafo de navegação extraído da Planta Mix (nov/2026): 219 nós, 593 arestas |
-| [`data/build_grafo.py`](data/build_grafo.py) | Script que regenera o grafo a partir do PDF da planta (pdfplumber) |
+| `src/` | **Código-fonte do MVP** (Next.js App Router + TypeScript + Tailwind) |
+| [`docs/PLANEJAMENTO_TECNICO_INICIAL_v2.pdf`](docs/PLANEJAMENTO_TECNICO_INICIAL_v2.pdf) | Documento oficial — planeamento técnico v2.0, 91 páginas |
+| [`docs/PLANEJAMENTO_TECNICO_INICIAL_v2.md`](docs/PLANEJAMENTO_TECNICO_INICIAL_v2.md) | Transcrição em Markdown (gerada do PDF) |
+| [`wireframes/wireframe.html`](wireframes/wireframe.html) | Wireframes das 14 telas (T00–T13) — abrir no browser |
+| [`data/grafo-planta.json`](data/grafo-planta.json) | Grafo de navegação da Planta Mix: 219 nós, 593 arestas |
+| [`data/build_grafo.py`](data/build_grafo.py) | Script que regenera o grafo (requer `pdfplumber`) |
 
-## Estrutura das 14 telas (v2)
+---
+
+## 🗺️ Estrutura completa das 14 telas (v2)
 
 | ID | Tela | Rota | Prioridade |
 |---|---|---|---|
@@ -34,25 +104,59 @@ O **Guia Dourado** é um PWA que o visitante abre por **QR Code + NFC + Braille*
 | T12 | Central da equipe (interno) | `/central` | Must · nova |
 | T13 | Modo totem | `/totem/[ponto]` | Could · nova |
 
-## Como ver os wireframes
+---
 
-```powershell
-start wireframes\wireframe.html
+## 🗂️ Estrutura do código
+
+```
+guia-dourado/
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx          # Layout raiz + skip-link + provider
+│   │   ├── page.tsx            # T00 Início
+│   │   ├── globals.css         # Tema + componentes base (.btn, .card)
+│   │   ├── buscar/page.tsx     # T03 Buscar
+│   │   ├── mapa/[piso]/        # T02 Mapa
+│   │   ├── locais/[slug]/      # T04 Detalhe (Easter Egg)
+│   │   ├── conversar/page.tsx  # T06 Conversar
+│   │   └── ajuda/page.tsx      # T08 Pedir ajuda
+│   ├── components/
+│   │   ├── DetalheLocal.tsx    # 🥚 Easter Egg aqui
+│   │   ├── PreferenciasProvider.tsx  # Perfil global (localStorage)
+│   │   ├── BarraAcessibilidade.tsx   # Contraste/fonte/voz
+│   │   └── Voz.tsx             # Web Speech API
+│   └── data/locais.ts          # Catálogo de locais
+├── data/                       # Grafo da planta + script Python
+├── docs/                       # Documentação oficial (PDF + MD)
+└── wireframes/                 # Wireframes v2
 ```
 
-O ficheiro é autocontido (HTML + CSS), acessível (skip-link, foco visível, contraste, `prefers-reduced-motion`) e mostra o fluxo, cada tela com objetivo/nota de acessibilidade e a tabela de mudanças v1 → v2.
+---
 
-## Dados da planta
+## 🌐 Dados da planta
 
-`data/grafo-planta.json` foi extraído de `2026_11_CDS_MIX.pdf` (Planta Mix, Operações Capim Dourado Shopping, nov/2026) — 139 lojas, 31 quiosques, escadas E2/E3, docas, sanitários e sub-solos. **Pendências declaradas** (ver `meta.pendencias`): mapear âncoras (C&A, Riachuelo, Marisa, Cinemark, Centauro, Pernambucanas, STZ) para números de loja, substituir coordenadas por vetorização oficial (ADR-0004) e validar adjacências com operações.
+`data/grafo-planta.json` foi extraído de `2026_11_CDS_MIX.pdf` (Planta Mix, nov/2026) — 219 nós, 593 arestas (139 lojas, 31 quiosques, escadas E2/E3, docas, sanitários, sub-solos). Pendências declaradas em `meta.pendencias` (vetorização oficial na Fase 2, validação com operações).
 
 ```powershell
 python data\build_grafo.py   # regenera o JSON (requer pdfplumber)
 ```
 
-## Stack (definida no documento v2)
+---
 
-Next.js 16 (App Router) · React 19 · TypeScript · Tailwind 4 + shadcn/ui (Radix) · Supabase/PostgreSQL · VLibras · Web Speech API · Dijkstra no cliente · GitHub Actions (axe-core + Lighthouse CI) · WCAG 2.2 AA (ABNT NBR 17225:2025).
+## 🛠️ Stack
+
+Next.js 15 (App Router) · React 19 · TypeScript · Tailwind 4 · Web Speech API · WCAG 2.2 AA
+
+**Roadmap de produção:** VLibras · Supabase/PostgreSQL · Dijkstra no cliente (usando `grafo-planta.json`) · i18n pt/en/es · GitHub Actions (axe-core + Lighthouse CI)
 
 ---
-*Guia Dourado · Equipe do Desafio 01 · Documento v2.0 de 13/11/2026.*
+
+## 📅 Entregas
+
+| Data | Entrega |
+|---|---|
+| 13/11 (sex) | Planeamento técnico v2 + wireframes + Easter Egg implementado ✅ |
+| 14/11 (sáb) até 12h | MVP funcional + repositório + documentação + instruções ✅ |
+
+---
+*Guia Dourado · Equipe do Desafio 01 · MVP de 13/11/2026.*

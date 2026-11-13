@@ -1,0 +1,23 @@
+flowchart LR
+  V["Visitante<br/>(PcD, idoso, turista, acompanhante)"]
+  E["Equipe do shopping<br/>(SAC, segurança, brigada)"]
+  O["Operações / conteúdo<br/>do shopping"]
+  P["Placas QR + NFC + Braille<br/>(totens, lojas, mesas, pilares)"]
+  GD(["GUIA DOURADO<br/>PWA do visitante + Central da equipe"])
+  VL["VLibras (gov.br)<br/>texto para Libras"]
+  TR["Tradução<br/>(no aparelho ou em nuvem)"]
+  SP["Voz do navegador/SO<br/>(Web Speech API)"]
+  SB["Supabase<br/>(Postgres, Realtime, Auth)"]
+  CIL["Intérpretes de Libras<br/>(videochamada, parceria)"]
+  EM["Emergência<br/>192 · 193 · 190"]
+  V -- "escaneia / encosta" --> P
+  P -- "abre /q/CODIGO" --> GD
+  V -- "usa" --> GD
+  E -- "atende pedidos,<br/>atualiza elevadores" --> GD
+  O -- "atualiza lojas,<br/>planta e avisos" --> GD
+  GD --> VL
+  GD --> TR
+  GD --> SP
+  GD --> SB
+  GD --> CIL
+  GD -- "discagem direta" --> EM

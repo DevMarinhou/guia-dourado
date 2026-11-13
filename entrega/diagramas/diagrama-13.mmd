@@ -1,0 +1,12 @@
+stateDiagram-v2
+  [*] --> Aberto: visitante envia
+  Aberto --> Aceito: atendente aceita (meta ≤ 2 min)
+  Aberto --> Escalonado: 2 min sem aceite (RN-04)
+  Escalonado --> Aceito: supervisor designa
+  Aceito --> ACaminho: informa previsão
+  ACaminho --> Concluido: atendimento feito
+  Aberto --> Cancelado: visitante cancela
+  Aceito --> Trote: equipe marca trote
+  Concluido --> [*]
+  Cancelado --> [*]
+  Trote --> [*]

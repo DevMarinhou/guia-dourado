@@ -1,0 +1,34 @@
+{
+  "versao": "2026-11-13",
+  "observacao": "Prancha de comunicação (CAA). Imagens finais: Mulberry Symbols (CC BY-SA, com atribuição) em public/pictogramas/. Emoji é só marcador provisório.",
+  "categorias": [
+    { "id": "necessidades", "nome": { "pt-BR": "Necessidades", "en": "Needs", "es": "Necesidades" },
+      "itens": [
+        { "id": "banheiro", "emoji": "🚻", "imagem": null, "rotulo": { "pt-BR": "Banheiro", "en": "Restroom", "es": "Baño" }, "frase": { "pt-BR": "Onde fica o banheiro?", "en": "Where is the restroom?", "es": "¿Dónde está el baño?" }, "acao": { "tipo": "rota", "categoria": "sanitario" } },
+        { "id": "agua", "emoji": "💧", "imagem": null, "rotulo": { "pt-BR": "Água", "en": "Water", "es": "Agua" }, "frase": { "pt-BR": "Quero água.", "en": "I would like water.", "es": "Quiero agua." } },
+        { "id": "ajuda", "emoji": "🙋", "imagem": null, "rotulo": { "pt-BR": "Ajuda", "en": "Help", "es": "Ayuda" }, "frase": { "pt-BR": "Preciso de ajuda.", "en": "I need help.", "es": "Necesito ayuda." }, "acao": { "tipo": "ajuda" } },
+        { "id": "dor", "emoji": "🤕", "imagem": null, "rotulo": { "pt-BR": "Dor", "en": "Pain", "es": "Dolor" }, "frase": { "pt-BR": "Estou com dor.", "en": "I am in pain.", "es": "Tengo dolor." } },
+        { "id": "cansado", "emoji": "🪑", "imagem": null, "rotulo": { "pt-BR": "Sentar", "en": "Sit down", "es": "Sentarme" }, "frase": { "pt-BR": "Preciso sentar.", "en": "I need to sit down.", "es": "Necesito sentarme." } },
+        { "id": "comer", "emoji": "🍽️", "imagem": null, "rotulo": { "pt-BR": "Comer", "en": "Eat", "es": "Comer" }, "frase": { "pt-BR": "Quero comer.", "en": "I want to eat.", "es": "Quiero comer." } }
+      ] },
+    { "id": "sentimentos", "nome": { "pt-BR": "Sentimentos", "en": "Feelings", "es": "Sentimientos" },
+      "itens": [
+        { "id": "barulho", "emoji": "🔊", "imagem": null, "rotulo": { "pt-BR": "Barulho demais", "en": "Too noisy", "es": "Demasiado ruido" }, "frase": { "pt-BR": "Tem barulho demais.", "en": "It is too noisy.", "es": "Hay demasiado ruido." }, "acao": { "tipo": "rota", "categoria": "area_tranquila" } },
+        { "id": "sair", "emoji": "🚪", "imagem": null, "rotulo": { "pt-BR": "Quero sair", "en": "I want to leave", "es": "Quiero salir" }, "frase": { "pt-BR": "Quero sair daqui.", "en": "I want to leave.", "es": "Quiero salir de aquí." } },
+        { "id": "medo", "emoji": "😟", "imagem": null, "rotulo": { "pt-BR": "Com medo", "en": "Scared", "es": "Con miedo" }, "frase": { "pt-BR": "Estou com medo.", "en": "I am scared.", "es": "Tengo miedo." } },
+        { "id": "perdido", "emoji": "🧭", "imagem": null, "rotulo": { "pt-BR": "Estou perdido", "en": "I am lost", "es": "Estoy perdido" }, "frase": { "pt-BR": "Estou perdido(a).", "en": "I am lost.", "es": "Estoy perdido(a)." }, "acao": { "tipo": "ajuda" } }
+      ] },
+    { "id": "compras", "nome": { "pt-BR": "Compras", "en": "Shopping", "es": "Compras" },
+      "itens": [
+        { "id": "quanto", "emoji": "💲", "imagem": null, "rotulo": { "pt-BR": "Quanto custa?", "en": "How much?", "es": "¿Cuánto cuesta?" }, "frase": { "pt-BR": "Quanto custa?", "en": "How much is it?", "es": "¿Cuánto cuesta?" } },
+        { "id": "tamanho", "emoji": "👕", "imagem": null, "rotulo": { "pt-BR": "Outro tamanho", "en": "Another size", "es": "Otra talla" }, "frase": { "pt-BR": "Tem outro tamanho?", "en": "Do you have another size?", "es": "¿Tiene otra talla?" } },
+        { "id": "pagar", "emoji": "💳", "imagem": null, "rotulo": { "pt-BR": "Pagar", "en": "Pay", "es": "Pagar" }, "frase": { "pt-BR": "Quero pagar.", "en": "I want to pay.", "es": "Quiero pagar." } }
+      ] },
+    { "id": "lugares", "nome": { "pt-BR": "Lugares", "en": "Places", "es": "Lugares" },
+      "itens": [
+        { "id": "praca", "emoji": "🍔", "imagem": null, "rotulo": { "pt-BR": "Praça de alimentação", "en": "Food court", "es": "Patio de comidas" }, "frase": { "pt-BR": "Onde fica a praça de alimentação?", "en": "Where is the food court?", "es": "¿Dónde está el patio de comidas?" } },
+        { "id": "saida", "emoji": "🚶", "imagem": null, "rotulo": { "pt-BR": "Saída", "en": "Exit", "es": "Salida" }, "frase": { "pt-BR": "Onde fica a saída?", "en": "Where is the exit?", "es": "¿Dónde está la salida?" } },
+        { "id": "estacionamento", "emoji": "🅿️", "imagem": null, "rotulo": { "pt-BR": "Estacionamento", "en": "Parking", "es": "Estacionamiento" }, "frase": { "pt-BR": "Onde fica o estacionamento?", "en": "Where is the parking?", "es": "¿Dónde está el estacionamiento?" } }
+      ] }
+  ]
+}

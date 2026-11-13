@@ -1,0 +1,18 @@
+sequenceDiagram
+  autonumber
+  actor V as Visitante
+  participant R as T05 Rota (Client Component)
+  participant C as Cache (Service Worker)
+  participant E as /api/equipamentos
+  participant D as dominio/rotas
+  V->>R: "Como chegar" ao Mundo Imersivo
+  R->>C: grafo.json e locais.json
+  R->>E: status dos equipamentos (timeout 2 s)
+  alt online
+    E-->>R: ELV-01 em manutenção
+  else offline
+    R->>R: usa o último status conhecido e avisa a hora
+  end
+  R->>D: calcular(origem, destino, perfil, inativos)
+  D-->>R: passos, distância e tempo (determinístico)
+  R-->>V: texto + voz + vibração, anunciados em aria-live

@@ -1,0 +1,9 @@
+{
+  "versao": "2026-11-13",
+  "observacao": "Posições e identificadores a validar em visita técnica. O status real vem da Central (Supabase); este arquivo é o padrão offline.",
+  "equipamentos": [
+    { "id": "ELV-01", "tipo": "elevador", "pisos": ["terreo", "praca-alimentacao"], "status": "operando", "descricao": "Elevador principal (posição a validar)" },
+    { "id": "ELV-02", "tipo": "elevador", "pisos": ["terreo", "praca-alimentacao"], "status": "operando", "descricao": "Elevador secundário (posição a validar)" },
+    { "id": "ROL-01", "tipo": "escada_rolante", "pisos": ["terreo", "praca-alimentacao"], "status": "operando", "descricao": "Escadas rolantes da praça de alimentação" }
+  ]
+}

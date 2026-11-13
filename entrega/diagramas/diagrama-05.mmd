@@ -1,0 +1,15 @@
+sequenceDiagram
+  autonumber
+  actor V as Visitante
+  participant P as Placa QR/NFC
+  participant Q as /q/[codigo] (Route Handler)
+  participant T as T00 Início (estática, CDN)
+  participant S as sessionStorage
+  V->>P: escaneia ou encosta o celular
+  P->>Q: GET /q/MESA-07
+  Q->>Q: valida o código (zod) e localiza o ponto em pontos.json
+  Q-->>Q: incrementa contador diário do ponto (sem IP)
+  Q-->>V: 307 para /es?ponto=MESA-07 (idioma do aparelho ou cookie)
+  V->>T: carrega a página estática
+  T->>S: grava ponto atual (MESA-07, piso 2, nó PA-12)
+  T-->>V: "Estás en: Mesa 07 · Patio de comidas" (e voz, se ativada)

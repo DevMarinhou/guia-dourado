@@ -1,0 +1,10 @@
+flowchart TB
+  TS["TypeScript (tipos do domínio e esquemas zod)"] --> R["React 19 (componentes, Context, hooks)"]
+  TS --> N["Next.js 16 (App Router)"]
+  R --> UI["shadcn/ui + Radix · Tailwind (temas) · componentes a11y"]
+  R --> HK["Hooks de Web APIs: fala, escuta, vibração, tela acesa"]
+  N --> RSC["RSC + estático + Cache Components"]
+  N --> RH["Route Handlers + Server Actions"]
+  N --> PX["Proxy (idioma) + Metadata + anunciador de rotas"]
+  N --> PWA["manifest.ts + Service Worker + useOffline"]
+  RH --> EXT["Supabase · Tradução · VLibras"]

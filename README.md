@@ -1,170 +1,85 @@
-# Guia Dourado — Acessibilidade e Comunicação Universal no Capim Dourado Shopping
+# Guia Dourado
 
-**Desafio 01 · MVP funcional** · Tecnologia sorteada: **React + Next.js (TypeScript)** · Palmas/TO — Av. JK, Av. NS-05, Av. LO 2A · 38.800,50 m²
+**Acessibilidade e comunicação universal no Capim Dourado Shopping (Palmas/TO).** Desafio 01 do hackathon · Tecnologia sorteada: **React + Next.js (TypeScript)**.
 
-O **Guia Dourado** é um PWA que o visitante abre por **QR Code + NFC + Braille** (sem instalar nada, sem cadastro) para **encontrar** (mapa, busca e rotas acessíveis por perfil), **entender** (voz, linguagem simples, Libras, alto contraste), **conversar** (voz ↔ texto ↔ idiomas) e **pedir ajuda** (pedido com localização automática à Central da equipe).
+PWA que o visitante abre por **QR Code ou NFC** (sem instalar e sem cadastro) para **encontrar** lojas e serviços com **rotas acessíveis por perfil**, **entender** tudo em voz, linguagem simples, **Libras** e PT/EN/ES, **conversar** com a equipe (legenda ao vivo, tradução, pictogramas, intérprete) e **pedir ajuda** com localização automática para a **Central** do shopping.
 
----
+> 👉 **Equipe: comece por [`PROXIMOS_PASSOS.md`](PROXIMOS_PASSOS.md).**
 
-## 🚀 Instruções de execução
+## Rodar localmente
 
-### Pré-requisitos
-- **Node.js ≥ 18** (testado com Node 24) — https://nodejs.org
-- **npm** (instalado junto com o Node)
-- Git (opcional, para clonar o repositório)
+Requisitos: Node.js 22+.
 
-### Passo a passo
-
-```powershell
-# 1. Clonar o repositório
-git clone https://github.com/DevMarinhou/guia-dourado.git
-cd guia-dourado
-
-# 2. Instalar dependências
+```bash
 npm install
+```
 
-# 3. Iniciar em modo desenvolvimento
+```bash
+cp .env.example .env.local
+```
+
+```bash
 npm run dev
 ```
 
-Abra **http://localhost:3000** no navegador.
+Experimente: `http://localhost:3000/q/ENT-JK` (QR da entrada), `/es` (espanhol), `/locais/outback-steakhouse`, `/mapa/praca-alimentacao`, `/prancha`, `/central`.
 
-### Build de produção
+## Scripts
 
-```powershell
-npm run build   # compila
-npm start       # inicia em produção
-```
-
-### Não há variáveis de ambiente obrigatórias
-O projeto roda sem `.env`. (Integrações futuras — VLibras, API de tradução, Supabase — usarão `.env.local` na fase de produção.)
-
----
+| Comando | Para quê |
+|---|---|
+| `npm run dev` / `build` / `start` | Desenvolvimento, build e servidor de produção |
+| `npm run verificar` | Lint + tipos + testes + build (rode antes de cada PR) |
+| `npm test` | Testes do domínio (rotas, busca) e dos dados |
+| `npm run test:e2e` | Playwright + axe (acessibilidade) em 3 temas, celular e desktop |
+| `npm run dados:validar` | Valida `dados/*.json` (esquemas, conectividade, rota sem degraus) |
+| `npm run qr:gerar` | Gera as placas QR para impressão (`entrega/qr/placas.html`) |
+| `npm run docs:entrega` | Regera o PDF/DOCX do planejamento a partir de `docs/*.md` |
 
 ## 🥚 Easter Egg — "Prato Secreto: Poção Anti-Azar"
 
-> **Missão sexta-feira 13** — implementado no produto, não só na documentação.
+> Missão **sexta-feira 13** — implementado no produto, não só na documentação.
 
 | | |
 |---|---|
-| **Onde** | T04 — Detalhe do local (`/locais/outback`) |
+| **Onde** | T04 — Detalhe do local (`/locais/outback-steakhouse`) |
 | **Como ativar** | Tocar **13 vezes** no ícone de favoritar **♡** (canto superior direito do cabeçalho) |
 | **O que acontece** | Insere temporariamente o item **"Combo Sexta-feira 13 Sem Sustos — R$ 13,00"** na seção *Cardápio (ilustrativo, fornecido pela loja)* |
-| **Acessibilidade** | O item é compatível com os botões **🔊 Ouvir**, **🤟 Libras** e **🧩 Linguagem simples** da mesma tela; ativação anunciada em `aria-live` + fala (Web Speech API) |
+| **Acessibilidade** | O item é compatível com os botões **🔊 Ouvir**, **🤟 Libras** e **🧩 Linguagem simples** da mesma tela; ativação anunciada (aria-live) e falada (Web Speech API) |
+| **Código** | `src/funcionalidades/detalhe/detalhe-local.tsx` (busque por `EASTER EGG`) + chaves `local.*` em `src/mensagens/*.json` |
 
-*Detalhes da missão em `src/components/DetalheLocal.tsx` (busque por `EASTER EGG`).*
+## Estrutura
 
----
-
-## 📱 Telas implementadas no MVP
-
-| ID | Tela | Rota | Estado |
-|---|---|---|---|
-| T00 | Início (atalhos + destaques) | `/` | ✅ |
-| T01 | Preferências (barra fixa) | barra global | ✅ |
-| T02 | Mapa por piso | `/mapa/[piso]` | ✅ (simplificado) |
-| T03 | Buscar | `/buscar` | ✅ |
-| T04 | Detalhe do local + cardápio | `/locais/[slug]` | ✅ **+ Easter Egg** |
-| T06 | Conversar (voz/idiomas) | `/conversar` | ✅ (ilustrativo) |
-| T08 | Pedir ajuda | `/ajuda` | ✅ |
-
-**Recursos de acessibilidade ativos:** skip-link, foco visível, contraste alto (alternável), tamanho de fonte A+/A−, voz lida (Web Speech API), linguagem simples, Libras (painel), `aria-live`, alvos de toque ≥ 48 px, tema escuro automático.
-
----
-
-## 📦 Conteúdo do repositório
-
-| Ficheiro | Descrição |
-|---|---|
-| `src/` | **Código-fonte do MVP** (Next.js App Router + TypeScript + Tailwind) |
-| [`docs/PLANEJAMENTO_TECNICO_INICIAL_v2.pdf`](docs/PLANEJAMENTO_TECNICO_INICIAL_v2.pdf) | Documento oficial — planeamento técnico v2.0, 91 páginas |
-| [`docs/PLANEJAMENTO_TECNICO_INICIAL_v2.md`](docs/PLANEJAMENTO_TECNICO_INICIAL_v2.md) | Transcrição em Markdown (gerada do PDF) |
-| [`wireframes/wireframe.html`](wireframes/wireframe.html) | Wireframes das 14 telas (T00–T13) — abrir no browser |
-| [`data/grafo-planta.json`](data/grafo-planta.json) | Grafo de navegação da Planta Mix: 219 nós, 593 arestas |
-| [`data/build_grafo.py`](data/build_grafo.py) | Script que regenera o grafo (requer `pdfplumber`) |
-
----
-
-## 🗺️ Estrutura completa das 14 telas (v2)
-
-| ID | Tela | Rota | Prioridade |
-|---|---|---|---|
-| T00 | Início (local + atalhos) | `/[locale]` | Must |
-| T01 | Preferências funcionais | `/[locale]/preferencias` | Must |
-| T02 | Mapa por piso | `/[locale]/mapa/[piso]` | Must |
-| T03 | Buscar | `/[locale]/buscar` | Must |
-| T04 | Detalhe do local | `/[locale]/locais/[slug]` | Must |
-| T05 | Rota passo a passo | `/[locale]/rota?de=&para=` | Must |
-| T06 | Conversar (frente a frente) | `/[locale]/conversar` | Must |
-| T07 | Prancha de pictogramas | `/[locale]/prancha` | Must · nova |
-| T08 | Pedir ajuda | `/[locale]/ajuda` | Must |
-| T09 | Acompanhar pedido | `/[locale]/ajuda/[id]` | Must |
-| T10 | Avaliar / reportar barreira | `/[locale]/avaliar` | Should |
-| T11 | Serviços acessíveis | `/[locale]/servicos` | Should · nova |
-| T12 | Central da equipe (interno) | `/central` | Must · nova |
-| T13 | Modo totem | `/totem/[ponto]` | Could · nova |
-
----
-
-## 🗂️ Estrutura do código
-
-```
-guia-dourado/
-├── src/
-│   ├── app/
-│   │   ├── layout.tsx          # Layout raiz + skip-link + provider
-│   │   ├── page.tsx            # T00 Início
-│   │   ├── globals.css         # Tema + componentes base (.btn, .card)
-│   │   ├── buscar/page.tsx     # T03 Buscar
-│   │   ├── mapa/[piso]/        # T02 Mapa
-│   │   ├── locais/[slug]/      # T04 Detalhe (Easter Egg)
-│   │   ├── conversar/page.tsx  # T06 Conversar
-│   │   └── ajuda/page.tsx      # T08 Pedir ajuda
-│   ├── components/
-│   │   ├── DetalheLocal.tsx    # 🥚 Easter Egg aqui
-│   │   ├── PreferenciasProvider.tsx  # Perfil global (localStorage)
-│   │   ├── BarraAcessibilidade.tsx   # Contraste/fonte/voz
-│   │   └── Voz.tsx             # Web Speech API
-│   └── data/locais.ts          # Catálogo de locais
-├── data/                       # Grafo da planta + script Python
-├── docs/                       # Documentação oficial (PDF + MD)
-└── wireframes/                 # Wireframes v2
+```text
+dados/            dados versionados: pisos, locais, grafo, pontos QR, equipamentos, frases, prancha
+docs/             documentação (00–15), ADRs, glossário, referências, revisão da v1
+entrega/          PDF/DOCX da 1ª entrega e imagens
+ferramentas/      scripts: documento de entrega, wireframes, QR
+src/app/          rotas Next.js: [locale]/ (visitante), central/, q/[codigo], totem/, api/
+src/dominio/      TypeScript puro: tipos, esquemas zod, Dijkstra, instruções, busca
+src/funcionalidades/  código por funcionalidade (preferências, localização…)
+src/adaptadores/  voz, tradução, Libras (VLibras), tempo real
+src/componentes/  layout e componentes de acessibilidade
+supabase/         migração SQL (pedidos de ajuda, equipamentos, RLS)
+tests/            testes de dados e E2E (Playwright + axe)
+wireframes/       wireframes v2 navegáveis
 ```
 
----
+## Documentação
 
-## 🌐 Dados da planta
-
-`data/grafo-planta.json` foi extraído de `2026_11_CDS_MIX.pdf` (Planta Mix, nov/2026) — 219 nós, 593 arestas (139 lojas, 31 quiosques, escadas E2/E3, docas, sanitários, sub-solos). Pendências declaradas em `meta.pendencias` (vetorização oficial na Fase 2, validação com operações).
-
-```powershell
-python data\build_grafo.py   # regenera o JSON (requer pdfplumber)
-```
-
----
-
-## 🛠️ Stack
-
-Next.js 15 (App Router) · React 19 · TypeScript · Tailwind 4 · Web Speech API · WCAG 2.2 AA
-
-**Roadmap de produção:** VLibras · Supabase/PostgreSQL · Dijkstra no cliente (usando `grafo-planta.json`) · i18n pt/en/es · GitHub Actions (axe-core + Lighthouse CI)
-
----
-
-## 📅 Entregas
-
-| Data | Entrega |
-|---|---|
-| 13/11 (sex) | Planeamento técnico v2 + wireframes + Easter Egg implementado ✅ |
-| 14/11 (sáb) até 12h | MVP funcional + repositório + documentação + instruções ✅ |
-
----
+Índice em [`docs/README.md`](docs/README.md). Destaques: [telas](docs/04-telas-e-fluxos.md) · [arquitetura](docs/07-arquitetura.md) · [tecnologia sorteada](docs/09-tecnologia-sorteada-react-nextjs.md) · [dados e rotas](docs/10-dados-e-rotas.md) · [acessibilidade e LGPD](docs/11-acessibilidade-legal-lgpd.md) · [plano do MVP](docs/13-plano-mvp-riscos-roadmap.md) · [pitch](docs/15-pitch-e-demo.md).
 
 ## 🤝 Contribuir
 
-**Colaboradores humanos e agentes de IA:** leiam primeiro o **[`AGENTS.md`](AGENTS.md)** (regras do projeto, mapa do código, checklist antes de cada push) e o **[`CONTRIBUTING.md`](CONTRIBUTING.md)** (guia prático de contribuição).
+**Colaboradores humanos e agentes de IA:** leiam primeiro o **[`AGENTS.md`](AGENTS.md)**
+(regras do projeto, mapa do código, checklist antes de cada push) e o **[`CONTRIBUTING.md`](CONTRIBUTING.md)**
+(fluxo de PRs e definição de pronto). O plano da equipe está em [`PROXIMOS_PASSOS.md`](PROXIMOS_PASSOS.md).
 
 > Regra de ouro: **evoluir sem reescrever** — o que já funciona não se mexe; o Easter Egg é intocável.
 
----
-*Guia Dourado · Equipe do Desafio 01 · MVP de 13/11/2026.*
+## Créditos e licenças de terceiros
+
+- Planta Mix nov/2026: Operações Capim Dourado Shopping (uso no contexto do hackathon).
+- VLibras: Governo Federal (gratuito, código aberto).
+- Pictogramas previstos: Mulberry Symbols (CC BY-SA, com atribuição).
+- Fonte Atkinson Hyperlegible Next: Braille Institute (SIL Open Font License).

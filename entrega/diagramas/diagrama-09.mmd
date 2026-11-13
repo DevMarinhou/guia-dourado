@@ -1,0 +1,6 @@
+flowchart LR
+  DEV["Dev local<br/>next dev"] --> GH["GitHub<br/>PR + Actions: lint, tipos, testes, axe, Lighthouse"]
+  GH -- "preview por PR" --> PRE["Vercel Preview"]
+  GH -- "merge na main" --> PROD["Vercel Produção<br/>região gru1"]
+  PRE --> SBT["Supabase de teste"]
+  PROD --> SBP["Supabase produção<br/>região São Paulo"]

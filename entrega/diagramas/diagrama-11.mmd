@@ -1,0 +1,58 @@
+erDiagram
+  PISO ||--o{ LOCAL : contem
+  PISO ||--o{ NO : contem
+  NO ||--o{ ARESTA : origem
+  NO ||--o{ ARESTA : destino
+  LOCAL }o--|| NO : "entrada (porta)"
+  PONTO_QR }o--|| NO : ancora
+  EQUIPAMENTO ||--o{ ARESTA : "afeta"
+  PISO {
+    string id "terreo | praca-alimentacao | subsolo-1 | subsolo-2"
+    int ordinal "0 = térreo, 1 = 2º pavimento, -1/-2 = subsolos"
+    string nome "1º Pavimento - Térreo"
+    string planta "/plantas/terreo.svg"
+  }
+  LOCAL {
+    string id
+    string slug "outback-steakhouse"
+    string nome "Outback Steakhouse"
+    string numero "Loja 32"
+    string categoria
+    string pisoId
+    string entradaNoId
+    float areaM2
+    json horario
+    json acessibilidade
+    json sensorial
+    json textos "pt-BR/en/es + linguagem simples"
+    string[] sinonimos
+  }
+  NO {
+    string id "T-C12"
+    string pisoId
+    float x
+    float y
+    string tipo "corredor|porta|elevador|escada|escada_rolante|rampa|entrada|ponto"
+    string rotuloFalado
+  }
+  ARESTA {
+    string de
+    string para
+    string tipo "plano|rampa|escada|escada_rolante|elevador"
+    float distanciaM
+    bool pisoTatil
+    float inclinacaoPct
+    string equipamentoId
+  }
+  EQUIPAMENTO {
+    string id "ELV-01"
+    string tipo "elevador|escada_rolante"
+    string status "operando|manutencao|fora"
+  }
+  PONTO_QR {
+    string codigo "ENT-JK | MESA-07 | LOJA-32"
+    string noId
+    string tipo "totem|entrada|loja|mesa|estacionamento|sanitario"
+    bool nfc
+    bool braille
+  }

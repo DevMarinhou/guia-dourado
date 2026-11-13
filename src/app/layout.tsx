@@ -1,24 +1,5 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import { PreferenciasProvider } from "@/components/PreferenciasProvider";
-
-export const metadata: Metadata = {
-  title: "Guia Dourado — Capim Dourado Shopping",
-  description:
-    "Acessibilidade e comunicação universal no Capim Dourado Shopping (Palmas/TO). Mapa, rotas acessíveis, voz, Libras e suporte.",
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
-  return (
-    <html lang="pt-BR">
-      <body>
-        <a className="skip-link" href="#conteudo">
-          Saltar para o conteúdo
-        </a>
-        <PreferenciasProvider>{children}</PreferenciasProvider>
-      </body>
-    </html>
-  );
+// Layout raiz "passa-adiante": cada área tem seu próprio <html> (visitante em [locale], Central em /central).
+// Padrão recomendado pelo next-intl quando existe not-found.tsx na raiz.
+export default function LayoutRaiz({ children }: { children: React.ReactNode }) {
+  return children;
 }

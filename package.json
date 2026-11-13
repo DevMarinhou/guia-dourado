@@ -1,24 +1,48 @@
 {
-  "name": "guia-dourado",
+  "name": "capim-dourado-acessivel",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint .",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "dados:validar": "vitest run tests/dados.test.ts",
+    "verificar": "npm run lint && npm run typecheck && npm test && npm run build",
+    "qr:gerar": "node ferramentas/gerar_qr.mjs",
+    "wireframes:capturar": "node ferramentas/capturar_wireframes.mjs wireframes/index.html entrega/wireframes",
+    "docs:entrega": "npm run wireframes:capturar && python3 ferramentas/gerar_documento_entrega.py --repo . --saida entrega --mmdc \"npx -y @mermaid-js/mermaid-cli@12.2.0\" --mermaid-config ferramentas/mermaid.json --reference-doc ferramentas/reference.docx --css ferramentas/entrega.css && node ferramentas/html_para_pdf.mjs entrega/_entrega.html entrega/PLANEJAMENTO_TECNICO_INICIAL_v2.pdf"
   },
   "dependencies": {
-    "next": "^15.3.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.119.0",
+    "next": "16.4.6",
+    "next-intl": "^4.15.1",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.3.5",
-    "@types/node": "^22.0.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "tailwindcss": "^4.3.5",
-    "typescript": "^5.8.0"
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.65.0",
+    "@tailwindcss/turbopack": "4.3.3",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.6",
+    "prettier": "^3.10.1",
+    "qrcode": "^1.5.4",
+    "tailwindcss": "4.3.3",
+    "typescript": "^5",
+    "vitest": "^5.1.0"
+  },
+  "description": "Guia Dourado: acessibilidade e comunicação universal no Capim Dourado Shopping (Palmas/TO). Next.js 16 + React 19 + TypeScript.",
+  "engines": {
+    "node": ">=22"
   }
 }

@@ -1,13 +1,20 @@
-import Link from "next/link";
+import Link from 'next/link';
+import './globals.css';
 
-export default function NaoEncontrado() {
+export default function NaoEncontradoGlobal() {
   return (
-    <main id="conteudo" className="mx-auto max-w-3xl px-4 py-16 text-center">
-      <h1 className="text-2xl font-extrabold">Local não encontrado</h1>
-      <p className="mt-2 opacity-80">Verifica o link ou volta ao início.</p>
-      <Link href="/" className="btn btn-primario mt-6">
-        ← Início
-      </Link>
-    </main>
+    <html lang="pt-BR">
+      <body>
+        <main id="conteudo" className="mx-auto max-w-xl p-6">
+          <h1 className="text-2xl font-bold">Página não encontrada</h1>
+          <p className="mt-2">Não encontramos esta página.</p>
+          <p className="mt-4">
+            <Link className="underline" href="/">
+              Voltar ao início
+            </Link>
+          </p>
+        </main>
+      </body>
+    </html>
   );
 }

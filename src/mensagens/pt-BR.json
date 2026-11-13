@@ -1,0 +1,81 @@
+{
+  "comum": {
+    "nomeApp": "Guia Dourado",
+    "pularConteudo": "Pular para o conteúdo",
+    "ajuda": "Ajuda",
+    "idioma": "Idioma",
+    "libras": "Libras",
+    "ouvir": "Ouvir",
+    "inicio": "Início",
+    "emConstrucao": "Tela em construção para o MVP. Veja a especificação em docs/04-telas-e-fluxos.md.",
+    "requisitos": "Requisitos atendidos",
+    "acessibilidade": "Acessibilidade",
+    "privacidade": "Privacidade",
+    "versaoDados": "Dados da Planta Mix, nov/2026"
+  },
+  "inicio": {
+    "titulo": "Guia Dourado",
+    "subtitulo": "Acessibilidade e comunicação no Capim Dourado Shopping",
+    "voceEstaEm": "Você está em:",
+    "escolherLocal": "Não é aqui? Escolher onde estou",
+    "semLocal": "Escaneie uma placa do Guia Dourado ou escolha onde você está.",
+    "oQueFazer": "O que você quer fazer?"
+  },
+  "atalhos": {
+    "buscar": "Buscar",
+    "mapa": "Mapa",
+    "conversar": "Conversar",
+    "prancha": "Prancha",
+    "servicos": "Serviços acessíveis",
+    "preferencias": "Preferências"
+  },
+  "pisos": {
+    "terreo": "1º pavimento – Térreo",
+    "praca-alimentacao": "2º pavimento – Praça de Alimentação"
+  },
+  "telas": {
+    "T01": { "titulo": "Preferências", "objetivo": "Escolha o que facilita para você. Suas preferências ficam só neste celular." },
+    "T02": { "titulo": "Mapa", "objetivo": "Planta do piso com camadas e alternativa em lista." },
+    "T03": { "titulo": "Buscar", "objetivo": "Encontre lojas, serviços e sanitários por nome, número, categoria ou voz." },
+    "T04": { "titulo": "Local", "objetivo": "Informações do local em texto, voz, linguagem simples e Libras." },
+    "T05": { "titulo": "Rota", "objetivo": "Rota acessível passo a passo, com status dos elevadores." },
+    "T06": { "titulo": "Conversar", "objetivo": "Conversa frente a frente com legenda, digitação com voz, tradução e frases prontas." },
+    "T07": { "titulo": "Prancha de comunicação", "objetivo": "Toque num pictograma para mostrar e falar a frase." },
+    "T08": { "titulo": "Pedir ajuda", "objetivo": "Peça ajuda à equipe do shopping. Em emergência, ligue 192, 193 ou 190." },
+    "T09": { "titulo": "Seu pedido de ajuda", "objetivo": "Acompanhe o pedido em tempo real." },
+    "T10": { "titulo": "Avaliar", "objetivo": "Conte como foi a rota ou reporte uma barreira." },
+    "T11": { "titulo": "Serviços acessíveis", "objetivo": "Sanitários PNE, fraldário, mesas reservadas, área tranquila e mais." }
+  },
+  "local": {
+    "comoChegar": "Como chegar",
+    "naoInformado": "não informado",
+    "area": "Área",
+    "cardapio": "Cardápio (ilustrativo, fornecido pela loja)",
+    "favoritar": "Favoritar",
+    "dicaToques": "{n, plural, one {✨ # toque para revelar o prato secreto} other {✨ # toques para revelar o prato secreto}}",
+    "ovosTitulo": "🥚 Prato secreto revelado: Poção Anti-Azar!",
+    "itemSecreto": "Combo Sexta-feira 13 Sem Sustos",
+    "precoSecreto": "R$ 13,00",
+    "itemSecretoSimples": "Combo especial: hambúrguer, batata e bebida por treze reais. Sem sustos!",
+    "linguagemSimples": "Linguagem simples",
+    "recursos": "Recursos de acessibilidade",
+    "recursoSanitarioPne": "Sanitário PNE",
+    "ruido": "Ruído",
+    "ruidoBaixo": "baixo",
+    "ruidoMedio": "médio",
+    "ruidoAlto": "alto",
+    "sim": "sim",
+    "nao": "não"
+  },
+  "emergencia": {
+    "titulo": "Emergência?",
+    "samu": "SAMU 192",
+    "bombeiros": "Bombeiros 193",
+    "policia": "Polícia 190"
+  },
+  "naoEncontrado": {
+    "titulo": "Página não encontrada",
+    "texto": "Não encontramos esta página.",
+    "voltar": "Voltar ao início"
+  }
+}

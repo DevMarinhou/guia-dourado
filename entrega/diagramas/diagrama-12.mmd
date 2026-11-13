@@ -1,0 +1,14 @@
+flowchart LR
+  A["Push / PR"] --> B["Instalar dependências<br/>(cache npm)"]
+  B --> C["Lint (ESLint + jsx-a11y)"]
+  B --> D["Typecheck (tsc --noEmit)"]
+  B --> E["Testes unitários e de dados (Vitest)"]
+  C --> F["Build (next build)"]
+  D --> F
+  E --> F
+  F --> G["E2E + axe (Playwright)"]
+  F --> H["Lighthouse CI"]
+  G --> I{"Tudo verde?"}
+  H --> I
+  I -- "sim" --> J["Preview na Vercel + revisão"]
+  I -- "não" --> K["PR bloqueado"]

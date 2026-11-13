@@ -1,0 +1,20 @@
+{
+  "versao": "2026-11-13",
+  "observacao": "Códigos curtos gravados nas placas QR/NFC/Braille. URL: https://<domínio>/q/<CÓDIGO>",
+  "pontos": [
+    { "codigo": "ENT-JK", "noId": "T-ENT-JK", "pisoId": "terreo", "tipo": "entrada", "nfc": true, "braille": true, "ativo": true,
+      "nome": { "pt-BR": "Entrada Av. JK", "en": "JK Avenue entrance", "es": "Entrada Av. JK" } },
+    { "codigo": "LOJA-32", "noId": "T-P32", "pisoId": "terreo", "tipo": "loja", "nfc": false, "braille": true, "ativo": true,
+      "nome": { "pt-BR": "Outback Steakhouse (Loja 32)", "en": "Outback Steakhouse (Store 32)", "es": "Outback Steakhouse (Local 32)" } },
+    { "codigo": "MESA-07", "noId": "P-MESA-07", "pisoId": "praca-alimentacao", "tipo": "mesa", "nfc": true, "braille": true, "ativo": true,
+      "nome": { "pt-BR": "Mesa 07, Praça de Alimentação", "en": "Table 07, Food court", "es": "Mesa 07, Patio de comidas" } },
+    { "codigo": "ELV-01-T", "noId": "T-ELV01", "pisoId": "terreo", "tipo": "elevador", "nfc": true, "braille": true, "ativo": true,
+      "nome": { "pt-BR": "Elevador ELV-01 (térreo)", "en": "Elevator ELV-01 (ground floor)", "es": "Ascensor ELV-01 (planta baja)" } },
+    { "codigo": "ELV-01-2", "noId": "P-ELV01", "pisoId": "praca-alimentacao", "tipo": "elevador", "nfc": true, "braille": true, "ativo": true,
+      "nome": { "pt-BR": "Elevador ELV-01 (2º pavimento)", "en": "Elevator ELV-01 (level 2)", "es": "Ascensor ELV-01 (planta 2)" } },
+    { "codigo": "ENT-NS", "noId": null, "pisoId": "terreo", "tipo": "entrada", "nfc": true, "braille": true, "ativo": false,
+      "nome": { "pt-BR": "Entrada Av. NS-05", "en": "NS-05 Avenue entrance", "es": "Entrada Av. NS-05" } },
+    { "codigo": "ENT-LO", "noId": null, "pisoId": "terreo", "tipo": "entrada", "nfc": true, "braille": true, "ativo": false,
+      "nome": { "pt-BR": "Entrada Av. LO 2A", "en": "LO 2A Avenue entrance", "es": "Entrada Av. LO 2A" } }
+  ]
+}

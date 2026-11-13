@@ -1,0 +1,29 @@
+flowchart LR
+  subgraph APP["app/ (rotas Next.js)"]
+    PG2["Páginas T00–T13"]
+    HD["Route Handlers"]
+  end
+  subgraph FN["funcionalidades/"]
+    F1["preferencias · localizacao · mapa · busca · locais"]
+    F2["rotas · conversa · prancha · ajuda · feedback · central"]
+  end
+  subgraph DM["dominio/ (TypeScript puro)"]
+    D1["tipos + esquemas zod"]
+    D2["grafo + Dijkstra + pesos por perfil"]
+    D3["gerador de instruções"]
+    D4["índice de busca"]
+  end
+  subgraph AD["adaptadores/ (portas)"]
+    A1["voz (TTS/STT)"]
+    A2["tradução"]
+    A3["libras"]
+    A4["tempo real"]
+    A5["armazenamento"]
+  end
+  CP["componentes/ (ui + a11y)"]
+  PG2 --> FN
+  HD --> DM
+  HD --> AD
+  FN --> DM
+  FN --> AD
+  FN --> CP

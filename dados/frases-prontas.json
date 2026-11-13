@@ -1,0 +1,30 @@
+{
+  "versao": "2026-11-13",
+  "observacao": "Frases pré-traduzidas e revisadas por humanos. Funcionam offline no modo Conversar (T06).",
+  "grupos": [
+    { "id": "visitante", "nome": { "pt-BR": "Para o visitante", "en": "For visitors", "es": "Para el visitante" },
+      "frases": [
+        { "id": "v-quanto-custa", "pt-BR": "Quanto custa?", "en": "How much is it?", "es": "¿Cuánto cuesta?" },
+        { "id": "v-outro-tamanho", "pt-BR": "Tem outro tamanho?", "en": "Do you have another size?", "es": "¿Tiene otra talla?" },
+        { "id": "v-cartao", "pt-BR": "Posso pagar com cartão?", "en": "Can I pay by card?", "es": "¿Puedo pagar con tarjeta?" },
+        { "id": "v-pix", "pt-BR": "Posso pagar com Pix?", "en": "Can I pay with Pix?", "es": "¿Puedo pagar con Pix?" },
+        { "id": "v-caixa", "pt-BR": "Onde fica o caixa?", "en": "Where is the checkout?", "es": "¿Dónde está la caja?" },
+        { "id": "v-escrever", "pt-BR": "Pode escrever, por favor?", "en": "Could you write it down, please?", "es": "¿Puede escribirlo, por favor?" },
+        { "id": "v-devagar", "pt-BR": "Pode falar mais devagar?", "en": "Could you speak more slowly?", "es": "¿Puede hablar más despacio?" },
+        { "id": "v-surdo", "pt-BR": "Sou surdo(a). Vamos conversar por escrito?", "en": "I am deaf. Can we talk in writing?", "es": "Soy sordo(a). ¿Hablamos por escrito?" },
+        { "id": "v-trocar", "pt-BR": "Quero trocar este produto.", "en": "I would like to exchange this item.", "es": "Quiero cambiar este producto." },
+        { "id": "v-banheiro", "pt-BR": "Onde fica o banheiro?", "en": "Where is the restroom?", "es": "¿Dónde está el baño?" },
+        { "id": "v-ajuda", "pt-BR": "Preciso de ajuda.", "en": "I need help.", "es": "Necesito ayuda." },
+        { "id": "v-obrigado", "pt-BR": "Obrigado(a)!", "en": "Thank you!", "es": "¡Gracias!" }
+      ] },
+    { "id": "atendente", "nome": { "pt-BR": "Para o atendente", "en": "For staff", "es": "Para el personal" },
+      "frases": [
+        { "id": "a-momento", "pt-BR": "Um momento, por favor.", "en": "One moment, please.", "es": "Un momento, por favor." },
+        { "id": "a-siga-me", "pt-BR": "Siga-me, por favor.", "en": "Please follow me.", "es": "Sígame, por favor." },
+        { "id": "a-temos", "pt-BR": "Temos, sim.", "en": "Yes, we have it.", "es": "Sí, lo tenemos." },
+        { "id": "a-nao-temos", "pt-BR": "No momento, não temos.", "en": "We don't have it right now.", "es": "Por el momento, no lo tenemos." },
+        { "id": "a-provador", "pt-BR": "O provador fica ali.", "en": "The fitting room is over there.", "es": "El probador está allí." },
+        { "id": "a-ajudar", "pt-BR": "Como posso ajudar?", "en": "How can I help you?", "es": "¿Cómo puedo ayudarle?" }
+      ] }
+  ]
+}

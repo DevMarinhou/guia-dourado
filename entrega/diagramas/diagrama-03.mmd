@@ -1,0 +1,31 @@
+flowchart TB
+  subgraph AP["Aparelho do visitante ou totem"]
+    UI["Interface do visitante<br/>React 19 (RSC + Client Components)"]
+    SW["Service Worker (PWA)<br/>app, dados e plantas em cache"]
+    LS[("Armazenamento local<br/>preferências, contexto, fila")]
+    WAPI["Web APIs<br/>Speech, Vibration, Wake Lock, NFC"]
+  end
+  subgraph VC["Vercel (região gru1, São Paulo)"]
+    NX["Next.js 16 (App Router)<br/>páginas estáticas/RSC + Proxy de idioma"]
+    RH["Route Handlers e Server Actions<br/>/q, /api/ajuda, /api/traducao, /api/barreiras"]
+    DD["Dados versionados no build<br/>planta SVG, grafo, locais, pontos, frases"]
+    CE["Central da equipe<br/>/central"]
+  end
+  subgraph SBS["Supabase (região São Paulo)"]
+    PG[("PostgreSQL + RLS<br/>pedidos, eventos, equipamentos, barreiras")]
+    RT["Realtime"]
+    AU["Auth (somente equipe)"]
+  end
+  EXT["Externos<br/>VLibras · Tradução · Intérprete"]
+  UI <--> SW
+  UI --- LS
+  UI --- WAPI
+  SW -- "HTTPS" --> NX
+  UI -- "fetch / Server Actions" --> RH
+  NX --- DD
+  RH -- "chave de serviço (servidor)" --> PG
+  CE -- "login" --> AU
+  CE <-- "assinatura" --> RT
+  RT --- PG
+  UI -. "widget / vídeo" .-> EXT
+  RH -- "chave só no servidor" --> EXT

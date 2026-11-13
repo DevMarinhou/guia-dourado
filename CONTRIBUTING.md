@@ -1,64 +1,36 @@
-# CONTRIBUTING.md — Guia do colaborador
+# Como contribuir
 
-Bem-vindo(a) à equipe do **Guia Dourado**! 👋
-
-Este repositório é o **MVP do Desafio 01** (entrega final: **sáb 14/11 até 12h**).
-Antes de contribuir, leia o **[`AGENTS.md`](AGENTS.md)** — é a fonte das regras do projeto
-(para humanos **e** agentes de IA).
+> Antes de qualquer coisa: leia o **[`AGENTS.md`](AGENTS.md)** — regras do projeto para humanos **e**
+> agentes de IA (mapa do código, convenções, checklist). Este ficheiro é o fluxo prático.
 
 ## Primeiros passos
-
-```powershell
-git clone https://github.com/DevMarinhou/guia-dourado.git
-cd guia-dourado
+```bash
 npm install
-npm run dev        # http://localhost:3000
+cp .env.example .env.local   # opcional em dev
+npm run dev                   # http://localhost:3000
 ```
+Requisitos: **Node.js 22+**.
 
-Requisitos: **Node.js ≥ 18** e npm.
+## Fluxo
+- `main` sempre funcionando. Trabalhe em ramos curtos: `feat/rotas-tela`, `fix/contraste-ajuda`.
+- PRs pequenos (até ~300 linhas) e revisados por outra pessoa. Integre com frequência para evitar conflitos.
+- Cada pessoa é dona das suas pastas (trilhas em `PROXIMOS_PASSOS.md`). Arquivos compartilhados (`src/mensagens/*.json`, `dados/*.json`) têm mudanças pequenas e atômicas.
 
-## O que já está pronto (não reescrever)
+## Commits (Conventional Commits, em português)
+`feat(rotas): recalcula quando o elevador entra em manutenção` · `fix(a11y): contraste do botão Ajuda no alto contraste` · `docs: atualiza plano do MVP`
 
-| Área | Estado |
-|---|---|
-| T00 Início · T03 Buscar · T02 Mapa · T04 Detalhe · T06 Conversar · T08 Ajuda | ✅ funcionando |
-| Easter Egg "Poção Anti-Azar" (13× no ♡ do T04) | ✅ **intocável** — requisito da missão |
-| Barra de acessibilidade (contraste, fonte A+/A−, voz) | ✅ global |
-| Perfil do visitante (localStorage `gd-perfil`) | ✅ `PreferenciasProvider` |
-| Grafo da planta (219 nós) | ✅ `data/grafo-planta.json` |
-| T05 rota · T07 prancha · T09–T13 | ❌ pendente |
+## Checklist do PR (Definição de Pronto, docs/12 §12.6)
+- [ ] `npm run verificar` verde (lint, tipos, testes, build)
+- [ ] `npm run test:e2e` sem violações axe nas telas alteradas
+- [ ] Testei **só com teclado** e com **um leitor de tela** (TalkBack ou VoiceOver)
+- [ ] Um `h1` por tela e título único (`generateMetadata`)
+- [ ] Textos em `src/mensagens/` nos **3 idiomas**; nada de texto fixo na interface
+- [ ] Alvos de toque ≥ 48 px; nenhuma informação só por cor
+- [ ] Nenhum dado de loja inventado; nenhum segredo no código
+- [ ] **Easter Egg intacto**: T04 → 13 toques no ♡ → "Combo Sexta-feira 13 Sem Sustos" aparece no cardápio (não renomear nem simplificar — ver `AGENTS.md` §2.3)
 
-## Como contribuir
-
-1. **Crie uma branch** por tarefa: `feat/…`, `fix/…`, `docs/…`
-2. **Siga as convenções** do `AGENTS.md` §4 (TypeScript estrito, PT-BR, Tailwind + vars do tema)
-3. **Checklist antes do push** (AGENTS.md §5):
-   - `npm.run build` sem erros
-   - testar teclado + tema claro/escuro + mobile
-   - confirmar que o **Easter Egg** ainda funciona
-4. **Commit descritivo** em PT-BR: `feat: adiciona prancha de pictogramas (T07)`
-5. **Push** para `main` (ou PR se a mudança for arriscada)
-
-## Acessibilidade — não negociável
-
-Toda tela nova precisa de: alvos ≥ 48px, foco visível, `aria-live` em atualizações,
-contraste 4.5:1, informação nunca só por cor, navegação por teclado.
-Na dúvida, teste com **leitor de ecrã** (NVDA/VoiceOver) ou com o botão "🔊 Ouvir" do próprio app.
-
-## O que NÃO fazer
-
-- ❌ Alterar o PDF/MD oficiais em `docs/` ou os wireframes (referência da entrega)
-- ❌ Editar `data/grafo-planta.json` à mão (regenerar com `python data/build_grafo.py`)
-- ❌ Remover/simplificar o Easter Egg em `DetalheLocal.tsx`
-- ❌ Adicionar dependências sem justificar
-- ❌ Commitar `.env` com chaves, `node_modules/`, `.next/`
-- ❌ Deixar `npm run build` quebrado no `main`
-
-## Dúvidas?
-
-- Arquitetura/decisões → `docs/PLANEJAMENTO_TECNICO_INICIAL_v2.pdf` (fonte da verdade)
-- Regras de código → `AGENTS.md`
-- Estrutura das telas → `wireframes/wireframe.html`
-
----
-*Guia Dourado · Equipe do Desafio 01 · FASEC — Faculdade Serra do Carmo*
+## Como adicionar…
+- **Uma loja:** edite `dados/locais.json` (veja o esquema em `src/dominio/esquemas.ts`) e rode `npm run dados:validar`.
+- **Um ponto QR/NFC:** adicione em `dados/pontos.json` (código curto em maiúsculas, `noId` existente) e gere a placa com `npm run qr:gerar`.
+- **Um trecho de caminho:** adicione nós/arestas em `dados/grafo.json`. Toda escada/escada rolante/elevador precisa do tipo correto e, se for equipamento, de `equipamentoId`.
+- **Uma decisão de arquitetura:** crie `docs/adr/00NN-titulo.md` com o modelo de `docs/adr/README.md`.

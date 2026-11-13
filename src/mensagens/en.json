@@ -1,0 +1,81 @@
+{
+  "comum": {
+    "nomeApp": "Guia Dourado",
+    "pularConteudo": "Skip to content",
+    "ajuda": "Help",
+    "idioma": "Language",
+    "libras": "Libras (sign language)",
+    "ouvir": "Listen",
+    "inicio": "Home",
+    "emConstrucao": "Screen under construction for the MVP. See docs/04-telas-e-fluxos.md.",
+    "requisitos": "Requirements covered",
+    "acessibilidade": "Accessibility",
+    "privacidade": "Privacy",
+    "versaoDados": "Data from the Mix floor plan, Nov 2026"
+  },
+  "inicio": {
+    "titulo": "Guia Dourado",
+    "subtitulo": "Accessibility and communication at Capim Dourado Shopping",
+    "voceEstaEm": "You are at:",
+    "escolherLocal": "Not here? Choose where you are",
+    "semLocal": "Scan a Guia Dourado sign or choose where you are.",
+    "oQueFazer": "What would you like to do?"
+  },
+  "atalhos": {
+    "buscar": "Search",
+    "mapa": "Map",
+    "conversar": "Talk",
+    "prancha": "Picture board",
+    "servicos": "Accessible services",
+    "preferencias": "Preferences"
+  },
+  "pisos": {
+    "terreo": "Level 1 – Ground floor",
+    "praca-alimentacao": "Level 2 – Food court"
+  },
+  "telas": {
+    "T01": { "titulo": "Preferences", "objetivo": "Choose what helps you. Your preferences stay on this phone only." },
+    "T02": { "titulo": "Map", "objetivo": "Floor plan with layers and a list alternative." },
+    "T03": { "titulo": "Search", "objetivo": "Find stores, services and restrooms by name, number, category or voice." },
+    "T04": { "titulo": "Place", "objetivo": "Place information in text, voice, plain language and sign language." },
+    "T05": { "titulo": "Route", "objetivo": "Step-by-step accessible route, with elevator status." },
+    "T06": { "titulo": "Talk", "objetivo": "Face-to-face conversation with captions, type-to-speak, translation and ready phrases." },
+    "T07": { "titulo": "Picture board", "objetivo": "Tap a picture to show and speak the sentence." },
+    "T08": { "titulo": "Ask for help", "objetivo": "Ask the mall staff for help. In an emergency, call 192, 193 or 190." },
+    "T09": { "titulo": "Your help request", "objetivo": "Follow your request in real time." },
+    "T10": { "titulo": "Feedback", "objetivo": "Tell us about the route or report a barrier." },
+    "T11": { "titulo": "Accessible services", "objetivo": "Accessible restrooms, baby changing, reserved tables, quiet area and more." }
+  },
+  "local": {
+    "comoChegar": "Get directions",
+    "naoInformado": "not provided",
+    "area": "Area",
+    "cardapio": "Menu (illustrative, provided by the store)",
+    "favoritar": "Add to favorites",
+    "dicaToques": "{n, plural, one {✨ # tap to reveal the secret dish} other {✨ # taps to reveal the secret dish}}",
+    "ovosTitulo": "🥚 Secret dish revealed: Anti-Bad-Luck Potion!",
+    "itemSecreto": "Friday the 13th No-Scare Combo",
+    "precoSecreto": "R$ 13.00",
+    "itemSecretoSimples": "Special combo: burger, fries and a drink for thirteen reais. No scares!",
+    "linguagemSimples": "Simple language",
+    "recursos": "Accessibility features",
+    "recursoSanitarioPne": "Accessible restroom",
+    "ruido": "Noise",
+    "ruidoBaixo": "low",
+    "ruidoMedio": "medium",
+    "ruidoAlto": "high",
+    "sim": "yes",
+    "nao": "no"
+  },
+  "emergencia": {
+    "titulo": "Emergency?",
+    "samu": "Ambulance 192",
+    "bombeiros": "Fire 193",
+    "policia": "Police 190"
+  },
+  "naoEncontrado": {
+    "titulo": "Page not found",
+    "texto": "We could not find this page.",
+    "voltar": "Back to home"
+  }
+}

@@ -1,0 +1,23 @@
+sequenceDiagram
+  autonumber
+  actor V as Visitante
+  participant A as T08/T09 (cliente)
+  participant API as /api/ajuda
+  participant DB as Postgres (Supabase)
+  participant RT as Realtime
+  participant C as T12 Central
+  actor L as Atendente
+  V->>A: tipo + confirma local e modo de comunicação
+  A->>API: POST tipo, ponto, modo, idioma, tokenAparelho
+  API->>API: valida (zod) e aplica limite de envios
+  API->>DB: insere pedido (status aberto)
+  API-->>A: id + token de acompanhamento
+  DB-->>RT: alteração na tabela
+  RT-->>C: novo pedido em até 2 s, com alerta sonoro e visual
+  L->>C: Aceitar, a caminho em 3 min
+  C->>DB: atualiza status (RLS: só equipe)
+  loop a cada 5 s
+    A->>API: GET /api/ajuda/id com token
+    API-->>A: status atual
+  end
+  A-->>V: "Luana está a caminho (cerca de 3 min)"

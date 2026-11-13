@@ -1,0 +1,14 @@
+{
+  "versao": "2026-11-13",
+  "fonte": "Planta Mix nov/2026 (Operações Capim Dourado Shopping)",
+  "pisos": [
+    { "id": "subsolo-2", "ordinal": -2, "publico": false, "planta": null,
+      "nome": { "pt-BR": "Subsolo 2 (estacionamento)", "en": "Basement 2 (parking)", "es": "Subsuelo 2 (estacionamiento)" } },
+    { "id": "subsolo-1", "ordinal": -1, "publico": false, "planta": null,
+      "nome": { "pt-BR": "Subsolo 1 (estacionamento)", "en": "Basement 1 (parking)", "es": "Subsuelo 1 (estacionamiento)" } },
+    { "id": "terreo", "ordinal": 0, "publico": true, "planta": "/plantas/terreo.svg",
+      "nome": { "pt-BR": "1º pavimento – Térreo", "en": "Level 1 – Ground floor", "es": "Planta 1 – Planta baja" } },
+    { "id": "praca-alimentacao", "ordinal": 1, "publico": true, "planta": "/plantas/praca-alimentacao.svg",
+      "nome": { "pt-BR": "2º pavimento – Praça de Alimentação", "en": "Level 2 – Food court", "es": "Planta 2 – Patio de comidas" } }
+  ]
+}

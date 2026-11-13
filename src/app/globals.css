@@ -1,95 +1,122 @@
 @import "tailwindcss";
 
+/*
+ * Tokens de design (ADR-0010). Os temas trocam por data-tema no <html>, aplicado antes da
+ * primeira pintura pelo script de preferências. Contrastes verificados (WCAG 2.2):
+ * texto ≥ 4,5:1 no tema padrão e ≥ 7:1 no alto contraste; foco e bordas ≥ 3:1.
+ */
 :root {
-  --azul: #0b4f8a;
-  --azul-claro: #e8f1fa;
-  --laranja: #c25e00;
-  --verde: #0f7b4f;
-  --vermelho: #b3261e;
-  --texto: #1c2430;
-  --fundo: #f4f6f8;
+  --escala-fonte: 1;
+  --cor-fundo: #ffffff;
+  --cor-superficie: #f4f6f8;
+  --cor-texto: #1c2430;          /* 15,6:1 sobre branco */
+  --cor-texto-suave: #4d5563;    /* 7,6:1 */
+  --cor-primaria: #0b4f8a;       /* 8,4:1 */
+  --cor-primaria-texto: #ffffff;
+  --cor-ajuda: #0f7b4f;          /* 5,3:1 */
+  --cor-ajuda-texto: #ffffff;
+  --cor-perigo: #b3261e;         /* 6,5:1 */
+  --cor-perigo-texto: #ffffff;
+  --cor-borda: #8a94a3;
+  --cor-foco: #c25e00;
+  --alvo-minimo: 48px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --azul: #8cc4ff;
-    --azul-claro: #13263a;
-    --laranja: #ffb366;
-    --verde: #5fd3a0;
-    --vermelho: #ff8a80;
-    --texto: #e8edf3;
-    --fundo: #0f141a;
-  }
+:root[data-tema="escuro"] {
+  --cor-fundo: #0f141a;
+  --cor-superficie: #18202a;
+  --cor-texto: #e8edf3;
+  --cor-texto-suave: #b7c0cc;
+  --cor-primaria: #8cc4ff;
+  --cor-primaria-texto: #0b1420;
+  --cor-ajuda: #5fd3a0;
+  --cor-ajuda-texto: #0b1420;
+  --cor-perigo: #ff8a80;
+  --cor-perigo-texto: #0b1420;
+  --cor-borda: #6b7685;
+  --cor-foco: #ffb366;
+}
+
+:root[data-tema="alto-contraste"] {
+  --cor-fundo: #000000;
+  --cor-superficie: #000000;
+  --cor-texto: #ffffff;
+  --cor-texto-suave: #ffffff;
+  --cor-primaria: #ffff00;
+  --cor-primaria-texto: #000000;
+  --cor-ajuda: #00ff7f;
+  --cor-ajuda-texto: #000000;
+  --cor-perigo: #ff6b6b;
+  --cor-perigo-texto: #000000;
+  --cor-borda: #ffffff;
+  --cor-foco: #00ffff;
+}
+
+@theme inline {
+  --color-fundo: var(--cor-fundo);
+  --color-superficie: var(--cor-superficie);
+  --color-texto: var(--cor-texto);
+  --color-texto-suave: var(--cor-texto-suave);
+  --color-primaria: var(--cor-primaria);
+  --color-primaria-texto: var(--cor-primaria-texto);
+  --color-ajuda: var(--cor-ajuda);
+  --color-ajuda-texto: var(--cor-ajuda-texto);
+  --color-perigo: var(--cor-perigo);
+  --color-perigo-texto: var(--cor-perigo-texto);
+  --color-borda: var(--cor-borda);
+  --font-sans: var(--fonte-atkinson), system-ui, sans-serif;
 }
 
 html {
-  scroll-behavior: smooth;
+  font-size: calc(100% * var(--escala-fonte));
 }
 
 body {
-  background: var(--fundo);
-  color: var(--texto);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family: var(--fonte-atkinson), system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  line-height: 1.5;
 }
 
 :focus-visible {
-  outline: 3px solid var(--laranja);
+  outline: 3px solid var(--cor-foco);
   outline-offset: 2px;
 }
 
-.skip-link {
+/* O botão Ajuda fixo não pode esconder o elemento focado (WCAG 2.4.11). */
+html {
+  scroll-padding-bottom: 6rem;
+}
+
+.pular-link {
   position: absolute;
   left: -9999px;
   top: 0;
-  background: var(--azul);
-  color: #fff;
-  padding: 0.6rem 1rem;
-  z-index: 100;
+  z-index: 50;
+  padding: 0.75rem 1rem;
+  background: var(--cor-primaria);
+  color: var(--cor-primaria-texto);
 }
-.skip-link:focus {
+.pular-link:focus {
   left: 0;
 }
 
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  min-height: 48px;
-  min-width: 48px;
-  padding: 0.6rem 1.1rem;
-  border-radius: 10px;
-  border: 2px solid var(--azul);
-  background: #fff;
-  color: var(--azul);
-  font-weight: 700;
-  font-size: 1rem;
-  cursor: pointer;
-  text-decoration: none;
-  transition: transform 0.1s ease, background 0.15s ease;
-}
-.btn:active {
-  transform: scale(0.97);
-}
-.btn-primario {
-  background: var(--azul);
-  color: #fff;
-}
-.btn-fantasma {
-  border-color: transparent;
-  background: transparent;
-  color: var(--azul);
+.alvo {
+  min-height: var(--alvo-minimo);
+  min-width: var(--alvo-minimo);
 }
 
-.card {
-  background: #fff;
-  border: 1px solid #c7ccd3;
-  border-radius: 14px;
-  padding: 1.1rem;
-}
-@media (prefers-color-scheme: dark) {
-  .card {
-    background: #18202a;
-    border-color: #3a4452;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
+}
+:root[data-movimento="reduzido"] * {
+  animation: none !important;
+  transition: none !important;
 }

@@ -1,0 +1,21 @@
+sequenceDiagram
+  autonumber
+  actor At as Atendente
+  participant C as T06 Conversar
+  participant STT as Reconhecimento de fala (navegador)
+  participant TR as Porta de tradução
+  participant VL as VLibras (opcional)
+  actor Vi as Visitante
+  At->>C: fala "Temos no tamanho M"
+  C->>STT: áudio do microfone (não é gravado)
+  STT-->>C: texto em pt-BR
+  C->>TR: traduzir pt-BR para es
+  alt frase pronta
+    TR-->>C: tradução local (offline)
+  else Translator API disponível (Chrome desktop / totem)
+    TR-->>C: tradução no próprio aparelho
+  else
+    TR-->>C: /api/traducao (provedor em nuvem)
+  end
+  C-->>Vi: legenda grande em espanhol
+  C-->>VL: texto em português para o avatar de Libras

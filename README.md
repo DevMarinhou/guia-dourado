@@ -159,4 +159,12 @@ Next.js 15 (App Router) · React 19 · TypeScript · Tailwind 4 · Web Speech AP
 | 14/11 (sáb) até 12h | MVP funcional + repositório + documentação + instruções ✅ |
 
 ---
+
+## 🤝 Contribuir
+
+**Colaboradores humanos e agentes de IA:** leiam primeiro o **[`AGENTS.md`](AGENTS.md)** (regras do projeto, mapa do código, checklist antes de cada push) e o **[`CONTRIBUTING.md`](CONTRIBUTING.md)** (guia prático de contribuição).
+
+> Regra de ouro: **evoluir sem reescrever** — o que já funciona não se mexe; o Easter Egg é intocável.
+
+---
 *Guia Dourado · Equipe do Desafio 01 · MVP de 13/11/2026.*

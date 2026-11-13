@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframes v2: Guia Dourado</title>
+<meta name="description" content="Wireframes de baixa fidelidade das 14 telas do Guia Dourado: acessibilidade e comunicação universal no Capim Dourado Shopping (Palmas/TO).">
+<style>
+  :root{
+    --azul:#0b4f8a; --azul-claro:#e8f1fa; --azul-borda:#b9d3ec; --texto:#1c2430; --cinza:#4d5563;
+    --linha:#c7ccd3; --fundo:#f4f6f8; --cartao:#ffffff; --verde:#0f7b4f; --verde-claro:#eaf6f0;
+    --vermelho:#b3261e; --amarelo:#fff4d6; --amarelo-borda:#d9a35a; --foco:#c25e00;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --azul:#8cc4ff; --azul-claro:#13263a; --azul-borda:#2e4a66; --texto:#e8edf3; --cinza:#b7c0cc;
+      --linha:#3a4452; --fundo:#0f141a; --cartao:#18202a; --verde:#5fd3a0; --verde-claro:#11291f;
+      --vermelho:#ff8a80; --amarelo:#2f2715; --amarelo-borda:#a07a3a; --foco:#ffb366;
+    }
+  }
+  :root[data-theme="dark"]{
+    --azul:#8cc4ff; --azul-claro:#13263a; --azul-borda:#2e4a66; --texto:#e8edf3; --cinza:#b7c0cc;
+    --linha:#3a4452; --fundo:#0f141a; --cartao:#18202a; --verde:#5fd3a0; --verde-claro:#11291f;
+    --vermelho:#ff8a80; --amarelo:#2f2715; --amarelo-borda:#a07a3a; --foco:#ffb366;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--fundo);color:var(--texto);line-height:1.5}
+  a{color:var(--azul)}
+  :focus-visible{outline:3px solid var(--foco);outline-offset:2px}
+  .pular{position:absolute;left:-9999px;top:0;background:var(--azul);color:#fff;padding:.6rem 1rem;z-index:10}
+  .pular:focus{left:0}
+  header.topo{background:#0b4f8a;color:#fff;padding:1.4rem 1rem}
+  header.topo .lim{max-width:1400px;margin:0 auto}
+  header.topo h1{margin:0 0 .3rem;font-size:1.55rem}
+  header.topo p{margin:.2rem 0;max-width:75ch}
+  main{padding:1rem;max-width:1400px;margin:0 auto}
+  h2{color:var(--azul);border-bottom:2px solid var(--linha);padding-bottom:.35rem;margin-top:2.2rem;font-size:1.35rem}
+  .legenda{display:flex;flex-wrap:wrap;gap:.5rem 1.2rem;font-size:.9rem;background:var(--cartao);border:1px solid var(--linha);border-radius:10px;padding:.8rem 1rem}
+  .fluxo{background:var(--cartao);border:1px solid var(--linha);border-radius:10px;padding:1rem;overflow-x:auto}
+  .fluxo ol{margin:0;padding-left:1.2rem}
+  .grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem}
+  .cartao{background:var(--cartao);border:1px solid var(--linha);border-radius:12px;padding:1rem;display:flex;flex-direction:column;gap:.7rem;min-width:0}
+  .cartao h3{margin:0;color:var(--azul);font-size:1.05rem}
+  .etiquetas{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center}
+  .tag{display:inline-block;background:var(--azul-claro);color:var(--azul);border:1px solid var(--azul-borda);border-radius:999px;padding:.05rem .6rem;font-size:.75rem;font-weight:700}
+  .tag.must{background:var(--verde-claro);color:var(--verde);border-color:var(--verde)}
+  .tag.novo{background:var(--amarelo);color:var(--texto);border-color:var(--amarelo-borda)}
+  .rota{font-family:ui-monospace,Consolas,monospace;font-size:.78rem;background:var(--fundo);border:1px solid var(--linha);padding:.1rem .4rem;border-radius:5px}
+  /* moldura do celular */
+  figure.fone{margin:0 auto;width:100%;max-width:310px;background:#fff;color:#1c2430;border:3px solid #2b3440;border-radius:22px;padding:.55rem;min-height:540px;display:flex;flex-direction:column;gap:.45rem}
+  figure.fone.largo{max-width:none;min-height:420px}
+  .barra{background:#2b3440;color:#fff;border-radius:14px 14px 0 0;margin:-.55rem -.55rem 0;padding:.45rem .7rem;font-size:.72rem;display:flex;justify-content:space-between;gap:.4rem}
+  .cab{display:flex;align-items:center;justify-content:space-between;gap:.3rem;font-size:.68rem;border-bottom:1px solid #d5dae0;padding-bottom:.35rem}
+  .cab b{font-size:.8rem}
+  .bloco{border:1.5px dashed #b0b8c2;border-radius:8px;padding:.45rem .5rem;font-size:.76rem;background:#fafbfc}
+  .bloco.forte{border-style:solid;background:#e8f1fa;border-color:#9cc1e3}
+  .bloco.ok{border-style:solid;background:#eaf6f0;border-color:#7cc3a2}
+  .bloco.alerta{border-style:solid;background:#fff4d6;border-color:#d9a35a}
+  .tit{font-weight:700;font-size:.82rem}
+  .btn{border:2px solid #2b3440;border-radius:8px;padding:.45rem .3rem;text-align:center;font-weight:700;font-size:.74rem;background:#fff;min-height:40px;display:flex;align-items:center;justify-content:center}
+  .btn.prim{background:#0b4f8a;border-color:#0b4f8a;color:#fff}
+  .btn.perigo{background:#b3261e;border-color:#b3261e;color:#fff}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:.35rem}
+  .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.35rem}
+  .ajuda{margin-top:auto;background:#0f7b4f;color:#fff;border-radius:10px;text-align:center;font-weight:700;padding:.55rem;font-size:.82rem}
+  .mapa{position:relative;height:200px;background:#eef2f6;border:1.5px solid #c7ccd3;border-radius:8px;overflow:hidden}
+  .loja{position:absolute;background:#cfe0f0;border:1px solid #7aa7cf;font-size:.55rem;display:flex;align-items:center;justify-content:center;text-align:center;color:#123;line-height:1.1}
+  .loja.elv{background:#ffe6c7;border-color:#d9a35a;font-weight:700}
+  .loja.calmo{background:#d9f2e6;border-color:#58b48a}
+  .rlin{position:absolute;background:#0f7b4f;border-radius:2px}
+  .voce{position:absolute;width:12px;height:12px;border-radius:50%;background:#b3261e;border:2px solid #fff;box-shadow:0 0 0 2px #b3261e}
+  .meio{display:grid;grid-template-rows:1fr 1fr;gap:.35rem;flex:1}
+  .girado{transform:rotate(180deg)}
+  .picto{border:1.5px solid #9cc1e3;border-radius:8px;background:#fff;text-align:center;font-size:.64rem;padding:.3rem .1rem;line-height:1.15}
+  .picto span{display:block;font-size:1.25rem}
+  .linha-tempo{list-style:none;margin:0;padding:0;font-size:.74rem}
+  .linha-tempo li{border-left:3px solid #c7ccd3;padding:.15rem .5rem;margin-left:.3rem}
+  .linha-tempo li.feito{border-color:#0f7b4f;font-weight:700}
+  .nota{font-size:.84rem}
+  .nota ul{margin:.25rem 0;padding-left:1.1rem}
+  .nota li{margin:.12rem 0}
+  .a11y{background:var(--verde-claro);border-left:4px solid var(--verde);padding:.45rem .6rem;font-size:.82rem;border-radius:0 6px 6px 0}
+  .a11y b{color:var(--verde)}
+  .mudou{background:var(--amarelo);border-left:4px solid var(--amarelo-borda);padding:.45rem .6rem;font-size:.82rem;border-radius:0 6px 6px 0}
+  table{border-collapse:collapse;width:100%;font-size:.88rem;background:var(--cartao)}
+  th,td{border:1px solid var(--linha);padding:.4rem .5rem;text-align:left;vertical-align:top}
+  th{background:var(--azul-claro)}
+  .tabela{overflow-x:auto}
+  footer{padding:1.5rem 1rem;text-align:center;font-size:.85rem;color:var(--cinza)}
+  .central{display:grid;grid-template-columns:1.3fr 1fr;gap:.5rem;font-size:.74rem}
+  @media (max-width:520px){ .central{grid-template-columns:1fr} figure.fone{max-width:100%} }
+  @media (prefers-reduced-motion: reduce){ *{scroll-behavior:auto!important} }
+</style>
+</head>
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="topo">
+  <div class="lim">
+    <h1>Wireframes v2: Guia Dourado</h1>
+    <p>Acessibilidade e comunicação universal no <strong>Capim Dourado Shopping</strong> (Palmas/TO). Desafio 01 · 1ª entrega · 13/11/2026 · Tecnologia sorteada: React + Next.js (TypeScript).</p>
+    <p>Esboços de <strong>baixa fidelidade</strong> das 14 telas (T00–T13). Dados de lojas conferidos na Planta Mix (nov/2026); textos de cardápio são <strong>ilustrativos</strong>.</p>
+  </div>
+</header>
+
+<main id="conteudo">
+
+<h2 id="como-ler">Como ler</h2>
+<div class="legenda" role="note">
+  <span><span class="tag must">Must</span> obrigatório no MVP</span>
+  <span><span class="tag">Should/Could</span> se houver tempo</span>
+  <span><span class="tag novo">Nova na v2</span> tela que não existia na v1</span>
+  <span><b>Botão verde “Ajuda”</b>: fixo em todas as telas do visitante (WCAG 3.2.6)</span>
+  <span><b>Alvos de toque</b>: ≥ 48 × 48 px</span>
+</div>
+
+<h2 id="fluxo">Fluxo principal</h2>
+<div class="fluxo">
+  <ol>
+    <li><strong>Placa QR + NFC + Braille</strong> (<span class="rota">/q/CODIGO</span>) ou <strong>Totem</strong> (T13) → <strong>T00 Início</strong>, já sabendo onde a pessoa está.</li>
+    <li>Do Início: <strong>T03 Buscar</strong> · <strong>T02 Mapa</strong> · <strong>T06 Conversar</strong> · <strong>T07 Prancha</strong> · <strong>T11 Serviços acessíveis</strong> · <strong>T01 Preferências</strong>.</li>
+    <li><strong>T03/T02/T11 → T04 Detalhe do local → T05 Rota → T10 Avaliar</strong>.</li>
+    <li>Em qualquer tela: <strong>Ajuda → T08 Pedir ajuda → T09 Acompanhar</strong>, que se comunica em tempo real com a <strong>T12 Central da equipe</strong>.</li>
+  </ol>
+</div>
+
+<h2 id="telas">Telas</h2>
+<div class="grade">
+
+  <!-- T00 -->
+  <section class="cartao" aria-labelledby="t00">
+    <h3 id="t00">T00: Início</h3>
+    <div class="etiquetas"><span class="tag must">Must</span><span class="rota">/[locale]</span></div>
+    <figure class="fone" role="img" aria-label="Tela Início: cartão 'Você está em Entrada Av. JK, 1º pavimento' com opção de trocar o local; seis atalhos grandes: Buscar, Mapa, Conversar, Prancha, Serviços acessíveis e Preferências; aviso de hora silenciosa; botão Ajuda fixo.">
+      <div class="barra"><span>Guia Dourado</span><span>PT · Libras · Ouvir</span></div>
+      <div class="bloco ok"><div class="tit">Você está em:</div>Entrada Av. JK · 1º pavimento<br><u>Não é aqui? Escolher onde estou</u></div>
+      <div class="tit">O que você quer fazer?</div>
+      <div class="g2">
+        <div class="btn prim">🔎 Buscar</div><div class="btn">🗺️ Mapa</div>
+        <div class="btn">💬 Conversar</div><div class="btn">🖼️ Prancha</div>
+        <div class="btn">♿ Serviços acessíveis</div><div class="btn">⚙️ Preferências</div>
+      </div>
+      <div class="bloco alerta">🔕 Hora silenciosa: sábado, 9h–10h</div>
+      <div class="ajuda">🆘 Ajuda</div>
+    </figure>
+    <div class="nota"><strong>Objetivo:</strong> mostrar onde a pessoa está e o que ela pode fazer, com no máximo 1 toque até cada função.
+      <div class="a11y"><b>Acessibilidade:</b> anuncia o local ao abrir (se a voz estiver ativa); título único; atalhos com ícone + texto; ordem de foco lógica.</div>
+      <div class="mudou"><b>Mudou da v1:</b> funde Landing (T00) e Menu (T04); não pede para escanear de novo.</div>
+    </div>
+  </section>
+
+  <!-- T01 -->
+  <section class="cartao" aria-labelledby="t01">
+    <h3 id="t01">T01: Preferências</h3>
+    <div class="etiquetas"><span class="tag must">Must</span><span class="rota">/[locale]/preferencias</span></div>
+    <figure class="fone" role="img" aria-label="Tela Preferências com a pergunta 'O que facilita para você?'. Grupos: Ver (letra grande, alto contraste), Ouvir (ler telas em voz alta), Entender (linguagem simples, pictogramas), Comunicar (Libras, idioma), Locomover (evitar escadas, evitar áreas ruidosas). Aviso de que as preferências ficam só no celular. Botões Pular e Salvar.">
+      <div class="cab"><span>◀ Voltar</span><b>Preferências</b><span>Pular</span></div>
+      <div class="tit">O que facilita para você?</div>
+      <div class="bloco"><b>Ver</b> · ☑ Letra grande (150%) · ☑ Alto contraste</div>
+      <div class="bloco"><b>Ouvir</b> · ☑ Ler as telas em voz alta · Velocidade ▸ normal</div>
+      <div class="bloco"><b>Entender</b> · ☐ Linguagem simples · ☐ Pictogramas</div>
+      <div class="bloco"><b>Comunicar</b> · ☐ Libras · Idioma: PT ▾</div>
+      <div class="bloco forte"><b>Locomover</b> · ☑ Evitar escadas e escadas rolantes · ☐ Evitar áreas com barulho</div>
+      <div class="bloco ok">🔒 Suas preferências ficam <b>só neste celular</b>.</div>
+      <div class="g2"><div class="btn">Restaurar</div><div class="btn prim">Salvar</div></div>
+      <div class="ajuda">🆘 Ajuda</div>
+    </figure>
+    <div class="nota"><strong>Objetivo:</strong> configurar uma vez, com prévia ao vivo. É opcional.
+      <div class="a11y"><b>Acessibilidade:</b> <code>fieldset</code>/<code>legend</code> por grupo; interruptores com estado anunciado; aplicado antes da primeira pintura.</div>
+      <div class="mudou"><b>Mudou da v1:</b> pergunta por <em>necessidade funcional</em>, não por deficiência; nada vai para o servidor (LGPD).</div>
+    </div>
+  </section>
+
+  <!-- T02 -->
+  <section class="cartao" aria-labelledby="t02">
+    <h3 id="t02">T02: Mapa por piso</h3>
+    <div class="etiquetas"><span class="tag must">Must</span><span class="rota">/[locale]/mapa/[piso]</span></div>
+    <figure class="fone" role="img" aria-label="Tela Mapa do 1º pavimento, Térreo: seletor de piso, planta simplificada com C&amp;A, Riachuelo, Renner, Marisa, Cinemark, Outback, Camicado, elevador e área tranquila; marcador 'você está aqui' na Entrada Av. JK; botões de zoom; camadas; botão 'Ver como lista'.">
+      <div class="cab"><span>◀</span><b>Mapa</b><span>Camadas ▾</span></div>
+      <div class="g2"><div class="btn prim">1º Térreo</div><div class="btn">2º Praça de Alimentação</div></div>
+      <div class="mapa">
+        <div class="loja" style="left:38%;top:4%;width:26%;height:22%">C&amp;A<br>Âncora A9</div>
+        <div class="loja" style="left:36%;top:32%;width:30%;height:22%">Riachuelo<br>Âncora 02</div>
+        <div class="loja" style="left:2%;top:46%;width:22%;height:30%">Renner<br>Âncora 01</div>
+        <div class="loja" style="left:74%;top:30%;width:24%;height:32%">Cinemark<br>Âncora 04</div>
+        <div class="loja" style="left:28%;top:62%;width:16%;height:16%">Camicado</div>
+        <div class="loja" style="left:46%;top:62%;width:16%;height:16%">Outback</div>
+        <div class="loja" style="left:64%;top:66%;width:20%;height:18%">Marisa</div>
+        <div class="loja elv" style="left:30%;top:82%;width:14%;height:14%">ELV-01</div>
+        <div class="loja calmo" style="left:76%;top:6%;width:22%;height:18%">Área<br>tranquila</div>
+        <div class="voce" style="left:4%;top:86%" title="Você está aqui"></div>
+      </div>
+      <div class="g3"><div class="btn">＋ Zoom</div><div class="btn">－ Zoom</div><div class="btn">◎ Onde estou</div></div>
+      <div class="btn prim">☰ Ver como lista</div>
+      <div class="bloco">Camadas: Lojas · Alimentação · Sanitários · Elevadores (status) · Mesas reservadas · Sensorial</div>
+      <div class="ajuda">🆘 Ajuda</div>
+    </figure>
+    <div class="nota"><strong>Objetivo:</strong> visão espacial com alternativa textual equivalente (lista).
+      <div class="a11y"><b>Acessibilidade:</b> SVG com título; marcadores focáveis; zoom por botões (WCAG 2.5.7); <em>lista</em> completa para leitor de tela.</div>
+      <div class="mudou"><b>Mudou da v1:</b> camadas sensorial e de mesas reservadas; status dos elevadores; posições das âncoras conferidas na planta.</div>
+    </div>
+  </section>
+
+  <!-- T03 -->
+  <section class="cartao" aria-labelledby="t03">
+    <h3 id="t03">T03: Buscar</h3>
+    <div class="etiquetas"><span class="tag must">Must</span><span class="rota">/[locale]/buscar</span></div>
+    <figure class="fone" role="img" aria-label="Tela Buscar: campo com a busca 'ca' e microfone; categorias Alimentação, Moda, Serviços, Lazer, Sanitários, Acessibilidade; resultados: C&amp;A, Âncora A9, 1º pavimento, 60 metros; Camicado, Loja 20, 1º pavimento, 85 metros; Sanitário PNE mais próximo, 40 metros.">
+      <div class="cab"><span>◀</span><b>Buscar</b><span></span></div>
+      <div class="bloco forte">🔎 <b>ca</b>▏ <span style="float:right">🎤</span></div>
+      <div class="g3" style="font-size:.7rem">
+        <div class="btn">🍽️ Alimentação</div><div class="btn">👕 Moda</div><div class="btn">🛠️ Serviços</div>
+        <div class="btn">🎬 Lazer</div><div class="btn">🚻 Sanitários</div><div class="btn">♿ Acessível</div>
+      </div>
+      <div class="tit">3 resultados</div>
+      <div class="bloco"><b>C&amp;A</b> · Âncora A9 · 1º pavimento · 60 m · Aberta<br><u>Como chegar</u></div>
+      <div class="bloco"><b>Camicado</b> · Loja 20 · 1º pavimento · 85 m<br><u>Como chegar</u></div>
+      <div class="bloco"><b>Sanitário PNE</b> mais próximo · 40 m<br><u>Como chegar</u></div>
+      <div class="ajuda">🆘 Ajuda</div>
+    </figure>
+    <div class="nota"><strong>Objetivo:</strong> achar qualquer local em até 3 interações.
+      <div class="a11y"><b>Acessibilidade:</b> busca tolerante a acentos e erros; número de resultados anunciado; resultados em lista; busca por voz opcional.</div>
+    </div>
+  </section>
+
+  <!-- T04 -->
+  <section class="cartao" aria-labelledby="t04">
+    <h3 id="t04">T04: Detalhe do local</h3>
+    <div class="etiquetas"><span class="tag must">Must</span><span class="rota">/[locale]/locais/[slug]</span></div>
+    <figure class="fone" role="img" aria-label="Tela Detalhe: Outback Steakhouse, Loja 32, 1º pavimento, alimentação, aberto agora. Botões: Como chegar, Ouvir, Libras, Linguagem simples, Traduzir. Seção de acessibilidade do local com itens não informados. Cardápio marcado como ilustrativo.">
+      <div class="cab"><span>◀</span><b>Outback Steakhouse</b><span>♡</span></div>
+      <div class="bloco forte"><b>Loja 32</b> · 1º pavimento · Alimentação · 499,33 m²<br>🟢 <b>Aberto agora</b> · fecha às 23h</div>
+      <div class="btn prim">➜ Como chegar</div>
+      <div class="g2"><div class="btn">🔊 Ouvir</div><div class="btn">🤟 Libras</div><div class="btn">📝 Linguagem simples</div><div class="btn">🌐 Traduzir</div></div>
+      <div class="bloco"><b>Acessibilidade do local</b><br>Balcão rebaixado: <i>não informado</i> · Cardápio em Braille: <i>não informado</i> · Ruído: médio</div>
+      <div class="bloco"><b>Cardápio</b> (ilustrativo, fornecido pela loja)<br>Prato exemplo 1 · R$ 00,00<br>Prato exemplo 2 · R$ 00,00</div>
+      <div class="ajuda">🆘 Ajuda</div>
+    </figure>
+    <div class="nota"><strong>Objetivo:</strong> tudo sobre o local, em vários formatos.
+      <div class="a11y"><b>Acessibilidade:</b> página estática (rápida); VLibras sob demanda; “não informado” ≠ “não tem”.</div>
+      <div class="mudou"><b>Mudou da v1:</b> dados corretos (Outback = <b>Loja 32</b>, e não Loja 104); cardápio sem pratos inventados.</div>
+    </div>
+  </section>
+
+  <!-- T05 -->
+  <section class="cartao" aria-labelledby="t05">
+    <h3 id="t05">T05: Rota passo a passo</h3>
+    <div class="etiquetas"><span class="tag must">Must</span><span class="rota">/[locale]/rota?de=&amp;para=</span></div>
+    <figure class="fone" role="img" aria-label="Tela Rota: da Entrada Av. JK ao Mundo Imersivo, 2º pavimento, cerca de 90 metros e 3 minutos, perfil sem degraus. Aviso: elevador ELV-02 em manutenção, rota ajustada. Quatro passos numerados com o passo 3 em destaque: pegue o elevador ELV-01 até o 2º pavimento. Botões Anterior, Repetir, Próximo, Cheguei e Estou perdido.">
+      <div class="cab"><span>◀</span><b>Rota</b><span>≈ 90 m · 3 min</span></div>
+      <div class="bloco forte"><b>Entrada Av. JK → Mundo Imersivo (Loja 215)</b><br>Perfil: <b>sem degraus</b> · 2º pavimento</div>
+      <div class="bloco alerta">⚠️ Elevador ELV-02 em manutenção. Rota ajustada.</div>
+      <div class="bloco"><b>1.</b> Siga em frente 35 m pela Alameda das Cores. A Camicado fica à sua direita.</div>
+      <div class="bloco"><b>2.</b> Vire à esquerda na Praça de Eventos. Siga 20 m.</div>
+      <div class="bloco ok"><b>3. Pegue o elevador ELV-01 até o 2º pavimento.</b></div>
+      <div class="bloco"><b>4.</b> Ao sair, siga 15 m. O Mundo Imersivo fica à sua frente.</div>
+      <div class="g3"><div class="btn">◀ Anterior</div><div class="btn prim">🔊 Repetir</div><div class="btn">Próximo ▶</div></div>
+      <div class="g2"><div class="btn">✔ Cheguei</div><div class="btn">❓ Estou perdido</div></div>
+      <div class="ajuda">🆘 Ajuda</div>
+    </figure>
+    <div class="nota"><strong>Objetivo:</strong> rota segura para o perfil, calculada no aparelho (funciona offline).
+      <div class="a11y"><b>Acessibilidade:</b> passos anunciados em <code>aria-live</code>; voz e vibração antes das curvas; tela acesa (Wake Lock); padrão Wayfindr (ITU-T F.921).</div>
+      <div class="mudou"><b>Mudou da v1:</b> o perfil sem degraus <b>nunca</b> usa escada rolante (erro da v1); status dos elevadores com recálculo.</div>
+    </div>
+  </section>
+
+  <!-- T06 -->
+  <section class="cartao" aria-labelledby="t06">
+    <h3 id="t06">T06: Conversar</h3>
+    <div class="etiquetas"><span class="tag must">Must</span><span class="rota">/[locale]/conversar</span></div>
+    <figure class="fone" role="img" aria-label="Tela Conversar dividida em duas metades. A metade de cima, girada 180 graus para a atendente, mostra em português: 'Ela pergunta: Vocês têm tamanho M?'. A metade de baixo, da visitante, mostra em espanhol a legenda da atendente: 'Sí, tenemos talla M. ¿Quiere probarlo?'. Botões Falar, Digitar e Frases prontas, e botão 'Chamar intérprete de Libras'.">
+      <div class="cab"><span>◀</span><b>Conversar</b><span>PT ⇄ ES</span></div>
+      <div class="meio">
+        <div class="bloco forte girado"><b>Atendente (PT)</b><br>“Ela pergunta: <b>Vocês têm tamanho M?</b>”<div class="g3" style="margin-top:.3rem"><div class="btn">🎤 Falar</div><div class="btn">⌨️ Digitar</div><div class="btn">📋 Frases</div></div></div>
+        <div class="bloco ok"><b>Visitante (ES)</b><br>“<b>Sí, tenemos talla M. ¿Quiere probarlo?</b>”<div class="g3" style="margin-top:.3rem"><div class="btn">🎤 Hablar</div><div class="btn">⌨️ Escribir</div><div class="btn">📋 Frases</div></div></div>
+      </div>
+      <div class="btn">🤟 Chamar intérprete de Libras</div>
+      <div class="bloco" style="font-size:.66rem">Nada é gravado · Tradução automática pode ter erros</div>
+      <div class="ajuda">🆘 Ajuda</div>
+    </figure>
+    <div class="nota"><strong>Objetivo:</strong> conversa frente a frente sem barreira de língua ou deficiência.
+      <div class="a11y"><b>Acessibilidade:</b> legenda ao vivo em letras grandes; digite e o celular fala; frases prontas funcionam offline; VLibras para o texto da atendente; intérprete humano para Libras → português.</div>
+      <div class="mudou"><b>Mudou da v1:</b> cabeçalho coerente (PT ⇄ ES); não promete “Libras por IA”.</div>
+    </div>
+  </section>
+
+  <!-- T07 -->
+  <section class="cartao" aria-labelledby="t07">
+    <h3 id="t07">T07: Prancha de comunicação</h3>
+    <div class="etiquetas"><span class="tag must">Must</span><span class="tag novo">Nova na v2</span><span class="rota">/[locale]/prancha</span></div>
+    <figure class="fone" role="img" aria-label="Tela Prancha com abas Necessidades, Sentimentos, Compras e Lugares. Grade de pictogramas: banheiro, água, ajuda, dor, barulho demais, quero sair, quanto custa, outro tamanho, pagar. Frase montada 'Barulho demais. Quero sair.' com botões Falar e Mostrar em tela cheia.">
+      <div class="cab"><span>◀</span><b>Prancha</b><span>🔊</span></div>
+      <div class="g2" style="font-size:.66rem"><div class="btn prim">Necessidades</div><div class="btn">Sentimentos</div><div class="btn">Compras</div><div class="btn">Lugares</div></div>
+      <div class="g3">
+        <div class="picto"><span>🚻</span>Banheiro</div><div class="picto"><span>💧</span>Água</div><div class="picto"><span>🙋</span>Ajuda</div>
+        <div class="picto"><span>🤕</span>Dor</div><div class="picto"><span>🔊</span>Barulho demais</div><div class="picto"><span>🚪</span>Quero sair</div>
+        <div class="picto"><span>💲</span>Quanto custa?</div><div class="picto"><span>👕</span>Outro tamanho</div><div class="picto"><span>💳</span>Pagar</div>
+      </div>
+      <div class="bloco ok"><b>Frase:</b> “Barulho demais. Quero sair.”</div>
+      <div class="g2"><div class="btn prim">🔊 Falar</div><div class="btn">⛶ Mostrar em tela cheia</div></div>
+      <div class="ajuda">🆘 Ajuda</div>
+    </figure>
+    <div class="nota"><strong>Objetivo:</strong> comunicação por imagens para pessoas autistas, com afasia, surdas ou estrangeiras.
+      <div class="a11y"><b>Acessibilidade:</b> pictogramas Mulberry (CC BY-SA) com rótulo; fala e tradução; offline; sem animações.</div>
+    </div>
+  </section>
+
+  <!-- T08 -->
+  <section class="cartao" aria-labelledby="t08">
+    <h3 id="t08">T08: Pedir ajuda</h3>
+    <div class="etiquetas"><span class="tag must">Must</span><span class="rota">/[locale]/ajuda</span></div>
+    <figure class="fone" role="img" aria-label="Tela Pedir ajuda, etapa 2 de 2: tipo Comunicação; local detectado Mesa 07, Praça de Alimentação, com opção de mudar; forma de comunicação preferida Texto e Libras; aviso de consentimento; botões Voltar e Enviar pedido; números de emergência SAMU 192, Bombeiros 193 e Polícia 190.">
+      <div class="cab"><span>◀</span><b>Pedir ajuda</b><span>Etapa 2 de 2</span></div>
+      <div class="bloco"><b>Tipo:</b> 💬 Comunicação (Libras/idioma) <u>mudar</u></div>
+      <div class="bloco forte"><b>Onde você está:</b> Mesa 07 · Praça de Alimentação · 2º pavimento <u>mudar</u></div>
+      <div class="bloco"><b>Como prefere se comunicar?</b><br>◉ Texto/Libras ○ Voz ○ Espanhol ○ Pictogramas</div>
+      <div class="bloco ok" style="font-size:.68rem">Vamos enviar à equipe <b>onde você está</b> e <b>como prefere se comunicar</b>. Apagado em 30 dias.</div>
+      <div class="g2"><div class="btn">Voltar</div><div class="btn prim">Enviar pedido</div></div>
+      <div class="bloco alerta"><b>Emergência?</b></div>
+      <div class="g3"><div class="btn perigo">SAMU 192</div><div class="btn perigo">Bombeiros 193</div><div class="btn perigo">Polícia 190</div></div>
+    </figure>
+    <div class="nota"><strong>Objetivo:</strong> ajuda humana com contexto, sem expor dados desnecessários.
+      <div class="a11y"><b>Acessibilidade:</b> 2 etapas (evita acionamento acidental); sem CAPTCHA; local preenchido (WCAG 3.3.7); discagem direta.</div>
+      <div class="mudou"><b>Mudou da v1:</b> “botão de pânico” virou pedido com tipos + números de emergência + consentimento.</div>
+    </div>
+  </section>
+
+  <!-- T09 -->
+  <section class="cartao" aria-labelledby="t09">
+    <h3 id="t09">T09: Acompanhar pedido</h3>
+    <div class="etiquetas"><span class="tag must">Must</span><span class="rota">/[locale]/ajuda/[id]</span></div>
+    <figure class="fone" role="img" aria-label="Tela Acompanhar pedido: linha do tempo com Enviado, Aceito por Luana e A caminho em cerca de 3 minutos (atual); Concluído pendente. Botões Abrir conversa, Atualizar meu local e Cancelar pedido.">
+      <div class="cab"><span>◀</span><b>Seu pedido</b><span>#A7F2</span></div>
+      <ol class="linha-tempo">
+        <li class="feito">✔ Enviado · 14:02</li>
+        <li class="feito">✔ Aceito por Luana · 14:03</li>
+        <li class="feito">➜ A caminho · cerca de 3 min</li>
+        <li>○ Concluído</li>
+      </ol>
+      <div class="bloco ok">Luana vai usar <b>texto/Libras</b> com você.</div>
+      <div class="btn prim">💬 Abrir conversa</div>
+      <div class="g2"><div class="btn">📍 Atualizar meu local</div><div class="btn">✖ Cancelar pedido</div></div>
+      <div class="bloco" style="font-size:.66rem">Sem internet? Vá ao SAC (rota offline disponível).</div>
+    </figure>
+    <div class="nota"><strong>Objetivo:</strong> dar segurança enquanto a ajuda chega.
+      <div class="a11y"><b>Acessibilidade:</b> cada mudança é anunciada (<code>aria-live</code>) e vibra; textos curtos.</div>
+    </div>
+  </section>
+
+  <!-- T10 -->
+  <section class="cartao" aria-labelledby="t10">
+    <h3 id="t10">T10: Avaliar / reportar barreira</h3>
+    <div class="etiquetas"><span class="tag">Should</span><span class="rota">/[locale]/avaliar</span></div>
+    <figure class="fone" role="img" aria-label="Tela Avaliar: pergunta 'Chegou bem?' com botões Sim, Com dificuldade e Não, e estrelas opcionais. Seção 'Encontrou uma barreira?' com opções Elevador parado, Escada sem alternativa, Caminho bloqueado, Sinalização ruim, Problema no app e Outro. Local preenchido automaticamente. Botão Enviar.">
+      <div class="cab"><span>◀</span><b>Avaliar</b><span></span></div>
+      <div class="bloco forte"><div class="tit">Chegou bem?</div><div class="g3" style="margin-top:.3rem"><div class="btn">👍 Sim</div><div class="btn">😐 Com dificuldade</div><div class="btn">👎 Não</div></div><div style="text-align:center;margin-top:.3rem">★ ★ ★ ★ ☆ (opcional)</div></div>
+      <div class="tit">Encontrou uma barreira?</div>
+      <div class="g2" style="font-size:.66rem"><div class="btn">Elevador parado</div><div class="btn">Escada sem alternativa</div><div class="btn">Caminho bloqueado</div><div class="btn">Sinalização ruim</div><div class="btn">Problema no app</div><div class="btn">Outro 📷</div></div>
+      <div class="bloco">📍 Local: Mundo Imersivo (preenchido)</div>
+      <div class="btn prim">Enviar</div>
+      <div class="ajuda">🆘 Ajuda</div>
+    </figure>
+    <div class="nota"><strong>Objetivo:</strong> medir a efetividade e corrigir barreiras.
+      <div class="a11y"><b>Acessibilidade:</b> formulário funciona sem JavaScript (Server Action); erros anunciados; foto opcional com aviso para não fotografar pessoas.</div>
+    </div>
+  </section>
+
+  <!-- T11 -->
+  <section class="cartao" aria-labelledby="t11">
+    <h3 id="t11">T11: Serviços acessíveis</h3>
+    <div class="etiquetas"><span class="tag">Should</span><span class="tag novo">Nova na v2</span><span class="rota">/[locale]/servicos</span></div>
+    <figure class="fone" role="img" aria-label="Tela Serviços acessíveis: lista com Sanitários PNE e família, Fraldário, SAC, Empréstimo de cadeira de rodas, Mesas reservadas na Praça de Alimentação, Área tranquila, Vagas especiais nos subsolos e Horários, cada um com 'Como chegar'.">
+      <div class="cab"><span>◀</span><b>Serviços acessíveis</b><span></span></div>
+      <div class="bloco">🚻 Sanitários PNE e família · <u>Como chegar</u></div>
+      <div class="bloco">👶 Fraldário · <u>Como chegar</u></div>
+      <div class="bloco">🛎️ SAC / informações · <u>Como chegar</u></div>
+      <div class="bloco">♿ Empréstimo de cadeira de rodas (a confirmar) · <u>Como chegar</u></div>
+      <div class="bloco forte">🍽️ Mesas reservadas PcD · Praça de Alimentação · <u>Ver no mapa</u></div>
+      <div class="bloco">🌿 Área tranquila · <u>Como chegar</u></div>
+      <div class="bloco">🅿️ Vagas PNE, idoso, neurodiverso, gestante (Subsolos 1 e 2)</div>
+      <div class="bloco">🕘 Horários e hora silenciosa</div>
+      <div class="ajuda">🆘 Ajuda</div>
+    </figure>
+    <div class="nota"><strong>Objetivo:</strong> reunir os serviços de acessibilidade do shopping.
+      <div class="a11y"><b>Acessibilidade:</b> lista simples; rota em 1 toque; conteúdo mantido pela equipe.</div>
+    </div>
+  </section>
+
+  <!-- T13 -->
+  <section class="cartao" aria-labelledby="t13">
+    <h3 id="t13">T13: Modo totem</h3>
+    <div class="etiquetas"><span class="tag">Could</span><span class="tag novo">Nova na v2</span><span class="rota">/totem/[ponto]</span></div>
+    <figure class="fone" role="img" aria-label="Tela do totem: conteúdo concentrado na metade de baixo, na faixa de alcance de pessoa em cadeira de rodas; aviso 'Use fones para ouvir'; botões grandes Buscar, Mapa, Conversar e Ajuda; contador 'Reinicia em 60 segundos sem uso, toque para continuar'.">
+      <div class="barra"><span>Totem · Entrada Av. JK</span><span>PT · EN · ES</span></div>
+      <div class="bloco" style="flex:1;display:flex;align-items:center;justify-content:center;text-align:center;color:#4d5563">Área superior: informação visual<br>(sem botões fora do alcance)</div>
+      <div class="bloco forte">🎧 Use fones para ouvir</div>
+      <div class="g2"><div class="btn prim">🔎 Buscar</div><div class="btn">🗺️ Mapa</div><div class="btn">💬 Conversar</div><div class="btn">🆘 Ajuda</div></div>
+      <div class="bloco alerta">Reinicia em 60 s sem uso. <u>Tocar para continuar</u></div>
+    </figure>
+    <div class="nota"><strong>Objetivo:</strong> atender quem não tem celular ou tem pouca familiaridade digital.
+      <div class="a11y"><b>Acessibilidade:</b> faixa de alcance (NBR 9050); áudio por fone; aviso antes de reiniciar (WCAG 2.2.1); dados limpos entre usuários.</div>
+    </div>
+  </section>
+
+</div>
+
+<h2 id="central">T12: Central da equipe (uso interno)</h2>
+<section class="cartao" aria-labelledby="t12">
+  <h3 id="t12">T12: Central da equipe</h3>
+  <div class="etiquetas"><span class="tag must">Must</span><span class="tag novo">Nova na v2</span><span class="rota">/central</span></div>
+  <figure class="fone largo" role="img" aria-label="Tela da Central em formato largo. À esquerda, fila de pedidos em tempo real: 1) Saúde, prioridade máxima, Praça de Eventos central, voz, aberto há 30 segundos, botão Aceitar; 2) Comunicação, Mesa 07, Praça de Alimentação, texto e Libras, aceito por Luana, a caminho; 3) Orientação, Entrada Av. NS-05, espanhol, aberto há 1 minuto e 20 segundos. À direita, equipamentos: ELV-01 operando, ELV-02 em manutenção, escadas rolantes operando; barreiras reportadas: 2 novas; indicadores do dia: 14 pedidos, aceite mediano de 1 minuto e 10 segundos.">
+    <div class="barra"><span>Central · Guia Dourado</span><span>Luana (SAC) · Sair</span></div>
+    <div class="central">
+      <div>
+        <div class="tit">Fila em tempo real 🔔</div>
+        <div class="bloco alerta"><b>❤️ Saúde · prioridade máxima</b> · Praça de Eventos central · <b>Voz</b> · há 30 s<div class="g2" style="margin-top:.3rem"><div class="btn prim">Aceitar</div><div class="btn">Brigada</div></div></div>
+        <div class="bloco ok"><b>💬 Comunicação</b> · Mesa 07 · 2º pav. · <b>Texto/Libras</b> · Luana · a caminho (3 min)<div class="g2" style="margin-top:.3rem"><div class="btn">Concluir</div><div class="btn">Abrir conversa</div></div></div>
+        <div class="bloco"><b>🧭 Orientação</b> · Entrada Av. NS-05 · <b>Espanhol</b> · há 1 min 20 s<div class="g2" style="margin-top:.3rem"><div class="btn prim">Aceitar</div><div class="btn">Marcar trote</div></div></div>
+      </div>
+      <div>
+        <div class="tit">Equipamentos</div>
+        <div class="bloco">ELV-01 · 🟢 Operando ▾</div>
+        <div class="bloco alerta">ELV-02 · 🟠 Manutenção ▾</div>
+        <div class="bloco">Escadas rolantes (3 pares) · 🟢 Operando ▾</div>
+        <div class="tit" style="margin-top:.3rem">Barreiras reportadas</div>
+        <div class="bloco">2 novas · 1 em análise · <u>Ver</u></div>
+        <div class="tit" style="margin-top:.3rem">Hoje</div>
+        <div class="bloco">14 pedidos · aceite mediano 1 min 10 s · 0 trotes</div>
+      </div>
+    </div>
+  </figure>
+  <div class="nota"><strong>Objetivo:</strong> a equipe sabe <b>quem</b> precisa de ajuda, <b>onde</b> e <b>como se comunicar</b>, e mantém o status dos elevadores atualizado para as rotas.
+    <div class="a11y"><b>Acessibilidade:</b> alerta sonoro <em>e</em> visual; operável por teclado; mesmas regras de contraste. A equipe também pode ter deficiência.</div>
+  </div>
+</section>
+
+<h2 id="mudancas">Resumo das mudanças em relação à v1</h2>
+<div class="tabela">
+<table>
+  <caption class="nota" style="text-align:left;padding:.3rem 0">Correspondência entre as telas da v1 e da v2</caption>
+  <thead><tr><th scope="col">v1</th><th scope="col">v2</th><th scope="col">Motivo</th></tr></thead>
+  <tbody>
+    <tr><td>T00 Landing + T04 Menu</td><td>T00 Início</td><td>Menos telas e toques; o QR já informa o local</td></tr>
+    <tr><td>T01 Perfil (categorias de deficiência)</td><td>T01 Preferências funcionais</td><td>Respeito, LGPD, combinação de necessidades</td></tr>
+    <tr><td>T03 Lojas &amp; cardápios</td><td>T03 Buscar + T04 Detalhe</td><td>Descoberta separada do detalhe; dados conferidos na planta</td></tr>
+    <tr><td>T05 Rota (escada rolante no perfil motor)</td><td>T05 Rota (elevador obrigatório + status)</td><td>Correção de segurança</td></tr>
+    <tr><td>T06 Tradutor</td><td>T06 Conversar</td><td>Frente a frente, offline, intérprete humano</td></tr>
+    <tr><td>—</td><td>T07 Prancha</td><td>Comunicação universal por pictogramas</td></tr>
+    <tr><td>T07 Suporte/Pânico</td><td>T08 Pedir ajuda + T09 Acompanhar</td><td>Emergência separada da orientação; consentimento</td></tr>
+    <tr><td>T08 Feedback</td><td>T10 Avaliar/Reportar</td><td>Mantida e ampliada</td></tr>
+    <tr><td>—</td><td>T11 Serviços · T12 Central · T13 Totem</td><td>Operação real do shopping e acesso sem celular</td></tr>
+  </tbody>
+</table>
+</div>
+
+</main>
+
+<footer>
+  Guia Dourado: wireframes v2 · Desafio 01: Acessibilidade e comunicação universal · Planta Mix nov/2026 (Operações Capim Dourado Shopping).
+  Esboços de baixa fidelidade: cores, ícones e textos finais serão definidos no protótipo.
+</footer>
+</body>
+</html>

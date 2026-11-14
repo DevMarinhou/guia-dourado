@@ -133,3 +133,23 @@ export const esquemaBarreira = z.object({
   pontoCodigo: esquemaCodigoPonto.optional(),
   descricao: z.string().max(500).optional(),
 });
+
+// Farol (piloto de navegação por câmera para pessoas cegas): percurso medido em passos.
+export const esquemaPontoPercurso = z.object({
+  id: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, 'id de ponto do percurso inválido (ex.: sala-1)'),
+  passos: z.number().min(0),
+  destino: z.boolean(),
+  trecho: z.boolean(),
+  nome: esquemaTextoI18n,
+  esquerda: esquemaTextoI18n.optional(),
+  direita: esquemaTextoI18n.optional(),
+  perigo: esquemaTextoI18n.optional(),
+});
+
+export const esquemaArquivoPercurso = z.object({
+  versao: z.string().min(1),
+  nome: esquemaTextoI18n,
+  unidade: z.literal('passos'),
+  observacao: z.string(),
+  pontos: z.array(esquemaPontoPercurso).min(2),
+});

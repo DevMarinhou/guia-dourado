@@ -18,6 +18,7 @@
     "docs:entrega": "npm run wireframes:capturar && python3 ferramentas/gerar_documento_entrega.py --repo . --saida entrega --mmdc \"npx -y @mermaid-js/mermaid-cli@12.2.0\" --mermaid-config ferramentas/mermaid.json --reference-doc ferramentas/reference.docx --css ferramentas/entrega.css && node ferramentas/html_para_pdf.mjs entrega/_entrega.html entrega/PLANEJAMENTO_TECNICO_INICIAL_v2.pdf"
   },
   "dependencies": {
+    "@mediapipe/tasks-vision": "0.10.21",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.119.0",
     "next": "16.4.6",

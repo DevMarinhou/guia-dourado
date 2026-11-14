@@ -219,3 +219,37 @@
 .guia-legenda-dita {
   color: var(--cor-ouro-texto);
 }
+
+/* ───────── tela inicial: cartões e atalhos ───────── */
+.guia-icone {
+  display: grid;
+  place-items: center;
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 1.25rem;
+  background: radial-gradient(circle at 35% 30%, var(--cor-ouro-brilho), transparent 75%);
+  border: 1px solid color-mix(in srgb, var(--cor-ouro) 35%, transparent);
+}
+.guia-cartao,
+.guia-atalho {
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.guia-cartao:hover,
+.guia-atalho:hover,
+.guia-atalho:focus-visible {
+  border-color: var(--cor-ouro);
+  box-shadow: 0 8px 24px var(--cor-ouro-brilho);
+}
+.guia-cartao:active,
+.guia-atalho:active {
+  transform: scale(0.98);
+}
+@media (prefers-reduced-motion: reduce) {
+  .guia-cartao,
+  .guia-atalho {
+    transition: none;
+  }
+}

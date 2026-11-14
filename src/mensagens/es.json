@@ -450,7 +450,8 @@
     "falando": "Hablando…",
     "toqueRepetir": "Toca para oír de nuevo",
     "voceDisse": "Dijiste:",
-    "gramatica": "quiero prefiero usar con no veo tarjetas lengua de señas imágenes"
+    "gramatica": "quiero prefiero usar con no veo tarjetas lengua de señas imágenes",
+    "dica": "Después solo di: voz, libras o tarjetas"
   },
   "naoEncontrado": {
     "titulo": "Página no encontrada",

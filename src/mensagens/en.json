@@ -450,7 +450,8 @@
     "falando": "Speaking…",
     "toqueRepetir": "Tap to hear it again",
     "voceDisse": "You said:",
-    "gramatica": "i want prefer use with can't see cards sign language pictures"
+    "gramatica": "i want prefer use with can't see cards sign language pictures",
+    "dica": "Then just say: voice, sign language or cards"
   },
   "naoEncontrado": {
     "titulo": "Page not found",

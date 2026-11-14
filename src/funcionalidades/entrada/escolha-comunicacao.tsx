@@ -21,7 +21,7 @@ import '@/funcionalidades/farol/guia.css';
 export type TextosEntrada = Record<
   | 'titulo' | 'toqueIniciar' | 'f_pergunta' | 'f_naoEntendi' | 'ouvindo' | 'falando' | 'toqueRepetir'
   | 'voceDisse' | 'voz' | 'vozDesc' | 'libras' | 'librasDesc' | 'cards' | 'cardsDesc' | 'abrindo'
-  | 'librasPronto' | 'librasErro' | 'palavrasVoz' | 'palavrasLibras' | 'palavrasCards' | 'gramatica',
+  | 'librasPronto' | 'librasErro' | 'palavrasVoz' | 'palavrasLibras' | 'palavrasCards' | 'gramatica' | 'dica',
   string
 >;
 
@@ -154,7 +154,7 @@ export function EscolhaComunicacao({ textos: t, idioma }: { textos: TextosEntrad
   const rotulo =
     estado === 'falando' ? t.falando : estado === 'ouvindo' ? t.ouvindo : legenda ? t.toqueRepetir : t.toqueIniciar;
   const classeCartao =
-    'guia-vidro alvo grid h-full min-h-24 grid-cols-[auto_1fr] items-center gap-x-4 rounded-3xl p-4 text-left sm:min-h-36 sm:grid-cols-1 sm:justify-items-center sm:text-center';
+    'guia-vidro guia-cartao alvo grid h-full min-h-24 grid-cols-[auto_1fr] items-center gap-x-4 rounded-3xl p-4 text-left sm:min-h-36 sm:grid-cols-1 sm:justify-items-center sm:text-center';
 
   return (
     <section aria-labelledby="entrada-titulo" className="guia-raiz space-y-4">
@@ -192,7 +192,7 @@ export function EscolhaComunicacao({ textos: t, idioma }: { textos: TextosEntrad
               <span>{legenda.texto.slice(legenda.dita)}</span>
             </>
           ) : (
-            <span className="text-texto-suave">{t.toqueIniciar}</span>
+            <span className="text-texto-suave">{t.dica}</span>
           )}
         </span>
       </button>
@@ -201,7 +201,7 @@ export function EscolhaComunicacao({ textos: t, idioma }: { textos: TextosEntrad
       <ul className="grid gap-3 sm:grid-cols-3">
         <li>
           <Link href="/guia?modo=voz" onClick={soltarEscuta} className={classeCartao}>
-            <span aria-hidden="true" className="row-span-2 text-5xl">
+            <span aria-hidden="true" className="guia-icone row-span-2 text-4xl">
               🔊
             </span>
             <span className="text-xl font-bold">{t.voz}</span>
@@ -210,7 +210,7 @@ export function EscolhaComunicacao({ textos: t, idioma }: { textos: TextosEntrad
         </li>
         <li>
           <button type="button" onClick={() => void abrirLibras()} className={`${classeCartao} w-full`}>
-            <span aria-hidden="true" className="row-span-2 text-5xl">
+            <span aria-hidden="true" className="guia-icone row-span-2 text-4xl">
               🤟
             </span>
             <span className="text-xl font-bold">{t.libras}</span>
@@ -219,7 +219,7 @@ export function EscolhaComunicacao({ textos: t, idioma }: { textos: TextosEntrad
         </li>
         <li>
           <Link href="/prancha" onClick={soltarEscuta} className={classeCartao}>
-            <span aria-hidden="true" className="row-span-2 text-5xl">
+            <span aria-hidden="true" className="guia-icone row-span-2 text-4xl">
               🖼️
             </span>
             <span className="text-xl font-bold">{t.cards}</span>

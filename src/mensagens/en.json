@@ -431,9 +431,8 @@
   },
   "entrada": {
     "titulo": "How would you like to communicate?",
-    "perguntarVoz": "Tap here and I will ask out loud",
-    "f_pergunta": "Hello! I am Guia Dourado. How would you like to communicate? Say voice, sign language or cards. Or tap an option.",
-    "f_naoEntendi": "I did not understand. Tap Voice, Libras or Cards.",
+    "f_pergunta": "Hi! I am Guia Dourado. How do you prefer to communicate? Say: voice, sign language or cards.",
+    "f_naoEntendi": "I didn't understand. Say voice, sign language or cards.",
     "ouvindo": "Listening…",
     "voz": "Voice",
     "vozDesc": "I can't see: the guide talks and listens",
@@ -446,7 +445,12 @@
     "librasErro": "VLibras did not open. Check the internet and try again.",
     "palavrasVoz": "voice,talk,speak,listen,audio,sound,blind",
     "palavrasLibras": "libras,sign,signs,sign language,deaf",
-    "palavrasCards": "cards,card,pictures,picture,images,pictograms,board"
+    "palavrasCards": "cards,card,pictures,picture,images,pictograms,board",
+    "toqueIniciar": "Tap anywhere on the screen to start",
+    "falando": "Speaking…",
+    "toqueRepetir": "Tap to hear it again",
+    "voceDisse": "You said:",
+    "gramatica": "i want prefer use with can't see cards sign language pictures"
   },
   "naoEncontrado": {
     "titulo": "Page not found",

@@ -210,3 +210,12 @@
     transform: scale(1.04);
   }
 }
+
+/* ───────── legenda da fala (tela inicial) ───────── */
+.guia-legenda {
+  min-height: 4.5rem;
+  border-top: 1px solid color-mix(in srgb, var(--cor-ouro) 35%, transparent);
+}
+.guia-legenda-dita {
+  color: var(--cor-ouro-texto);
+}

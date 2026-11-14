@@ -431,9 +431,8 @@
   },
   "entrada": {
     "titulo": "Como você prefere se comunicar?",
-    "perguntarVoz": "Toque aqui para eu perguntar em voz alta",
-    "f_pergunta": "Olá! Eu sou o Guia Dourado. Como você prefere se comunicar? Diga voz, libras ou cards. Ou toque numa opção.",
-    "f_naoEntendi": "Não entendi. Toque em Voz, Libras ou Cards.",
+    "f_pergunta": "Olá! Eu sou o Guia Dourado. Como você prefere se comunicar? Diga: voz, libras ou cards.",
+    "f_naoEntendi": "Não entendi. Diga voz, libras ou cards.",
     "ouvindo": "Ouvindo…",
     "voz": "Voz",
     "vozDesc": "Não enxergo: o guia fala e escuta",
@@ -446,7 +445,12 @@
     "librasErro": "O VLibras não abriu agora. Verifique a internet e tente de novo.",
     "palavrasVoz": "voz,falar,fala,ouvir,audio,som,cego,cega,nao enxergo",
     "palavrasLibras": "libras,sinais,surdo,surda,lingua de sinais",
-    "palavrasCards": "cards,card,cartoes,cartao,figuras,figura,imagens,pictogramas,prancha"
+    "palavrasCards": "cards,card,cartoes,cartao,figuras,figura,imagens,pictogramas,prancha",
+    "toqueIniciar": "Toque em qualquer lugar da tela para iniciar",
+    "falando": "Falando…",
+    "toqueRepetir": "Toque para ouvir de novo",
+    "voceDisse": "Você disse:",
+    "gramatica": "quero eu prefiro por com usar não enxergo sou cartões cartão língua de sinais imagens"
   },
   "naoEncontrado": {
     "titulo": "Página não encontrada",

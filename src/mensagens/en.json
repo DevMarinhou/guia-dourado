@@ -28,7 +28,8 @@
     "prancha": "Picture board",
     "servicos": "Accessible services",
     "preferencias": "Preferences",
-    "guia": "Camera guide"
+    "guia": "Camera guide",
+    "letreiro": "Read store sign"
   },
   "pisos": {
     "terreo": "Level 1 – Ground floor",
@@ -89,7 +90,8 @@
       "f_perigo": "Caution: {texto}, {passos} steps ahead.",
       "f_semMovimento": "This device does not report motion. Position will use the camera only.",
       "f_movimentoNegado": "Motion permission denied. Position will use the camera only."
-    }
+    },
+    "letreiro": { "titulo": "Read store sign", "objetivo": "Point the camera at a storefront and your phone says which store is in front of you." }
   },
   "local": {
     "comoChegar": "Get directions",
@@ -121,6 +123,33 @@
     "resultados": "{consulta} — {n, plural, one {# result} other {# results}}",
     "dica": "Type at least 2 letters. E.g.: “ca” finds C&A and “restroom” finds the toilets."
   },
+  "letreiro": {
+    "ligar": "Turn on camera",
+    "desligar": "Turn off camera",
+    "lerAgora": "Read now",
+    "video": "Rear camera image",
+    "guia": "Keep the sign in the center of the screen, about 2 to 5 meters away.",
+    "ligada": "Camera on. Point at the store sign; I will tell you when I recognize it.",
+    "desligada": "Camera off.",
+    "carregando": "Getting the sign reader ready…",
+    "lendo": "Reading…",
+    "naoReconheci": "No store recognized. Move closer or point at the name on the storefront.",
+    "emFrente": "In front of you: {nome}. {numero}, {piso}.",
+    "ultimaLoja": "Last store recognized",
+    "verDetalhes": "See details for {nome}",
+    "aviso": "The reader can make mistakes: check your surroundings or ask for help. The image is read on your phone and is never sent to a server.",
+    "internet": "The first time, the reader downloads about 5 MB. After that it works even with a weak connection.",
+    "erros": {
+      "inseguro": "The camera only works on a secure address (https).",
+      "semSuporte": "This browser does not allow camera access.",
+      "negada": "No permission to use the camera. Allow the camera in your browser settings and try again.",
+      "naoEncontrada": "No camera was found on this device.",
+      "emUso": "The camera is being used by another app.",
+      "ocr": "The sign reader could not be loaded. Check your connection and try again.",
+      "desconhecido": "The camera could not be turned on."
+    },
+    "alternativa": "Prefer not to use the camera? Use search."
+  },
   "preferencias": {
     "tema": "Theme",
     "temaPadrao": "Default",
@@ -145,6 +174,21 @@
     "salvo": "Preferences saved on this device.",
     "pular": "Skip",
     "restaurar": "Restore defaults"
+  },
+  "servicos": {
+    "sanitarios": "Accessible restrooms (wheelchair)",
+    "elevadores": "Elevators and escalators",
+    "entradas": "Entrances with Braille and NFC",
+    "outros": "Other requested services",
+    "fraldario": "Baby changing station",
+    "mesaReservada": "Reserved table",
+    "areaTranquila": "Quiet area",
+    "statusOperando": "operating",
+    "statusManutencao": "under maintenance",
+    "statusFora": "out of service",
+    "braille": "Braille",
+    "nfc": "NFC on your phone",
+    "manterEquipe": "Items maintained by the mall team."
   },
   "emergencia": {
     "titulo": "Emergency?",

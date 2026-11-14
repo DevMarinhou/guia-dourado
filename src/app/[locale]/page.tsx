@@ -20,6 +20,7 @@ export default async function Inicio({ params }: PageProps<'/[locale]'>) {
   const atalhos = [
     { href: '/guia', rotulo: a('guia'), icone: '📷' },
     { href: '/buscar', rotulo: a('buscar'), icone: '🔎' },
+    { href: '/letreiro', rotulo: a('letreiro'), icone: '📷' },
     { href: '/mapa/terreo', rotulo: a('mapa'), icone: '🗺️' },
     { href: '/conversar', rotulo: a('conversar'), icone: '💬' },
     { href: '/prancha', rotulo: a('prancha'), icone: '🖼️' },

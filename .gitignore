@@ -52,3 +52,6 @@ next-env.d.ts
 
 # exceto o modelo de variáveis
 !.env.example
+
+# OCR do leitor de letreiro (copiado de node_modules no postinstall)
+/public/ocr/

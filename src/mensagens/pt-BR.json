@@ -28,7 +28,8 @@
     "prancha": "Prancha",
     "servicos": "Serviços acessíveis",
     "preferencias": "Preferências",
-    "guia": "Guia por câmera"
+    "guia": "Guia por câmera",
+    "letreiro": "Ler letreiro"
   },
   "pisos": {
     "terreo": "1º pavimento – Térreo",
@@ -89,7 +90,8 @@
       "f_perigo": "Atenção: {texto}, a {passos} passos.",
       "f_semMovimento": "Este aparelho não informa movimento. A posição usará só a câmera.",
       "f_movimentoNegado": "Permissão de movimento negada. A posição usará só a câmera."
-    }
+    },
+    "letreiro": { "titulo": "Ler letreiro", "objetivo": "Aponte a câmera para a fachada e o celular fala qual loja está à sua frente." }
   },
   "local": {
     "comoChegar": "Como chegar",
@@ -121,6 +123,33 @@
     "resultados": "{consulta} — {n, plural, one {# resultado} other {# resultados}}",
     "dica": "Digite ao menos 2 letras. Ex.: “ca” encontra a C&A e “banheiro” encontra os sanitários."
   },
+  "letreiro": {
+    "ligar": "Ligar câmera",
+    "desligar": "Desligar câmera",
+    "lerAgora": "Ler agora",
+    "video": "Imagem da câmera traseira",
+    "guia": "Mantenha o letreiro no centro da tela, a cerca de 2 a 5 metros.",
+    "ligada": "Câmera ligada. Aponte para o letreiro da loja; eu aviso quando reconhecer.",
+    "desligada": "Câmera desligada.",
+    "carregando": "Preparando o leitor de letreiros…",
+    "lendo": "Lendo…",
+    "naoReconheci": "Não reconheci nenhuma loja. Aproxime-se ou aponte para o nome na fachada.",
+    "emFrente": "Em frente: {nome}. {numero}, {piso}.",
+    "ultimaLoja": "Última loja reconhecida",
+    "verDetalhes": "Ver detalhes de {nome}",
+    "aviso": "O leitor pode errar: confirme com o ambiente ou peça ajuda. A imagem é lida no próprio celular e não é enviada para nenhum servidor.",
+    "internet": "Na primeira vez, o leitor baixa cerca de 5 MB. Depois funciona mesmo com internet fraca.",
+    "erros": {
+      "inseguro": "A câmera só funciona em endereço seguro (https).",
+      "semSuporte": "Este navegador não permite usar a câmera.",
+      "negada": "Sem permissão para usar a câmera. Libere a câmera nas configurações do navegador e tente de novo.",
+      "naoEncontrada": "Não encontramos uma câmera neste aparelho.",
+      "emUso": "A câmera está sendo usada por outro aplicativo.",
+      "ocr": "Não foi possível carregar o leitor de letreiros. Verifique a internet e tente de novo.",
+      "desconhecido": "Não foi possível ligar a câmera."
+    },
+    "alternativa": "Prefere sem câmera? Use a busca."
+  },
   "preferencias": {
     "tema": "Tema",
     "temaPadrao": "Padrão",
@@ -145,6 +174,21 @@
     "salvo": "Preferências salvas neste aparelho.",
     "pular": "Pular",
     "restaurar": "Restaurar padrões"
+  },
+  "servicos": {
+    "sanitarios": "Sanitários acessíveis (PNE)",
+    "elevadores": "Elevadores e escadas rolantes",
+    "entradas": "Entradas com Braille e NFC",
+    "outros": "Outros serviços pedidos",
+    "fraldario": "Fraldário",
+    "mesaReservada": "Mesa reservada",
+    "areaTranquila": "Área tranquila",
+    "statusOperando": "operando",
+    "statusManutencao": "em manutenção",
+    "statusFora": "fora de serviço",
+    "braille": "Braille",
+    "nfc": "NFC no celular",
+    "manterEquipe": "Itens mantidos pela equipe do shopping."
   },
   "emergencia": {
     "titulo": "Emergência?",

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { CHAVE_PREFERENCIAS, type Preferencias } from './script-preferencias';
@@ -28,21 +28,33 @@ const PERFIS = ['padrao', 'sem_degraus', 'mobilidade_reduzida', 'visual', 'senso
 
 export function FormularioPreferencias() {
   const t = useTranslations('preferencias');
-  // Carrega o que já estava salvo neste aparelho (estado inicial, sem efeito).
-  const [pref, setPref] = useState<Preferencias>(() => {
-    if (typeof window === 'undefined') return PADRAO;
-    try {
-      const salvo = localStorage.getItem(CHAVE_PREFERENCIAS);
-      return salvo ? { ...PADRAO, ...JSON.parse(salvo) } : PADRAO;
-    } catch {
-      // armazenamento indisponível: segue com os padrões
-      return PADRAO;
-    }
-  });
+  // Preferências partem do padrão (idêntico ao servidor — sem mismatch de
+  // hidratação) e o que está salvo só é lido depois da 1ª pintura; o tema
+  // visual já vem aplicado pelo script-preferencias (CT-07), então não pisca.
+  const [pref, setPref] = useState<Preferencias>(PADRAO);
   const [salvou, setSalvou] = useState(false);
+  // Evita que o efeito de aplicar rode no mount com PADRAO e apague o tema que
+  // o script-preferencias já colocou no <html> (isso causaria um "piscar").
+  const carregado = useRef(false);
+
+  useEffect(() => {
+    // setTimeout (e não rAF): tem de carregar mesmo com a aba em segundo plano.
+    const carregar = setTimeout(() => {
+      try {
+        const salvo = localStorage.getItem(CHAVE_PREFERENCIAS);
+        carregado.current = true;
+        if (salvo) setPref({ ...PADRAO, ...JSON.parse(salvo) });
+      } catch {
+        // armazenamento indisponível: segue com os padrões
+        carregado.current = true;
+      }
+    }, 0);
+    return () => clearTimeout(carregar);
+  }, []);
 
   // Aplica as preferências no <html> sempre que mudam (React controla o DOM aqui).
   useEffect(() => {
+    if (!carregado.current) return; // pré-pintura já aplicou o que estava salvo
     const raiz = document.documentElement;
     if (pref.tema === 'escuro' || pref.tema === 'alto-contraste') raiz.dataset.tema = pref.tema;
     else delete raiz.dataset.tema;

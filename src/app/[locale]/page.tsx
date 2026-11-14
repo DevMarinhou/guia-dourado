@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CartaoLocalizacao } from '@/funcionalidades/localizacao/cartao-localizacao';
+import { EscolhaComunicacao, type TextosEntrada } from '@/funcionalidades/entrada/escolha-comunicacao';
 import { Link } from '@/i18n/navigation';
 import type { Idioma } from '@/dominio/tipos';
 import { pontos } from '@/lib/dados';
@@ -11,6 +12,13 @@ export default async function Inicio({ params }: PageProps<'/[locale]'>) {
   setRequestLocale(locale);
   const t = await getTranslations('inicio');
   const a = await getTranslations('atalhos');
+  const e = await getTranslations('entrada');
+  const chavesEntrada = [
+    'titulo', 'toqueIniciar', 'f_pergunta', 'f_naoEntendi', 'ouvindo', 'falando', 'toqueRepetir', 'voceDisse',
+    'voz', 'vozDesc', 'libras', 'librasDesc', 'cards', 'cardsDesc', 'abrindo', 'librasPronto', 'librasErro',
+    'palavrasVoz', 'palavrasLibras', 'palavrasCards', 'gramatica', 'dica',
+  ] as const satisfies readonly (keyof TextosEntrada)[];
+  const textosEntrada = Object.fromEntries(chavesEntrada.map((k) => [k, e.raw(k) as string])) as TextosEntrada;
   const idioma = locale as Idioma;
 
   const nomesDosPontos = Object.fromEntries(
@@ -35,6 +43,9 @@ export default async function Inicio({ params }: PageProps<'/[locale]'>) {
         <p className="text-texto-suave">{t('subtitulo')}</p>
       </div>
 
+      {/* Porta de entrada: a pessoa diz ou toca como prefere se comunicar e abre a ferramenta certa. */}
+      <EscolhaComunicacao textos={textosEntrada} idioma={locale} />
+
       <Suspense fallback={<p>{t('semLocal')}</p>}>
         <CartaoLocalizacao
           nomesDosPontos={nomesDosPontos}
@@ -51,9 +62,9 @@ export default async function Inicio({ params }: PageProps<'/[locale]'>) {
             <li key={at.href}>
               <Link
                 href={at.href}
-                className="alvo flex h-full min-h-20 flex-col items-center justify-center rounded-xl border-2 border-borda p-3 text-center font-bold"
+                className="guia-atalho alvo flex h-full min-h-24 flex-col items-center justify-center gap-1 rounded-2xl border-2 border-borda bg-superficie p-3 text-center font-bold"
               >
-                <span aria-hidden="true" className="text-2xl">
+                <span aria-hidden="true" className="text-3xl">
                   {at.icone}
                 </span>
                 {at.rotulo}

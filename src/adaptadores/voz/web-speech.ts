@@ -5,7 +5,14 @@ export function vozDisponivel(): boolean {
   return typeof window !== 'undefined' && 'speechSynthesis' in window;
 }
 
-export function falar(texto: string, idioma: string, aoTerminar?: () => void, velocidade = 1): void {
+/** aoPalavra (opcional): recebe até que letra já foi dita — serve para legendas que acompanham a voz. */
+export function falar(
+  texto: string,
+  idioma: string,
+  aoTerminar?: () => void,
+  velocidade = 1,
+  aoPalavra?: (ateLetra: number) => void,
+): void {
   if (!vozDisponivel() || !texto.trim()) return;
   window.speechSynthesis.cancel();
   const fala = new SpeechSynthesisUtterance(texto);
@@ -16,6 +23,11 @@ export function falar(texto: string, idioma: string, aoTerminar?: () => void, ve
   if (aoTerminar) {
     fala.onend = aoTerminar;
     fala.onerror = aoTerminar;
+  }
+  if (aoPalavra) {
+    fala.onboundary = (e) => {
+      if (e.name === 'word' || !e.name) aoPalavra(e.charIndex + (e.charLength || 1));
+    };
   }
   window.speechSynthesis.speak(fala);
 }

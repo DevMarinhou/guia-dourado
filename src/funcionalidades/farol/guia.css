@@ -1,0 +1,255 @@
+/*
+ * Guia Dourado · guia por câmera: tokens do acento dourado e animações do "radar".
+ * O texto continua nos tokens do tema (globals.css); o dourado é decoração (anéis, brilho, seta),
+ * com versão própria para os temas escuro e alto contraste. Animações respeitam "reduzir movimento"
+ * (regra global em globals.css).
+ * Arquivo global com prefixo guia-: o next.config trata todo *.css como global (Tailwind/Turbopack),
+ * então CSS Modules não geram classes únicas aqui.
+ */
+.guia-raiz {
+  --cor-ouro: #c99a1c;
+  --cor-ouro-texto: #7a5600; /* 6,9:1 sobre branco */
+  --cor-ouro-brilho: rgb(201 154 28 / 0.28);
+  --cor-vidro: rgb(255 255 255 / 0.72);
+}
+
+:root[data-tema='escuro'] .guia-raiz {
+  --cor-ouro: #f2c14e;
+  --cor-ouro-texto: #f6d27a;
+  --cor-ouro-brilho: rgb(242 193 78 / 0.3);
+  --cor-vidro: rgb(24 32 42 / 0.75);
+}
+
+:root[data-tema='alto-contraste'] .guia-raiz {
+  --cor-ouro: #ffff00;
+  --cor-ouro-texto: #ffff00;
+  --cor-ouro-brilho: transparent;
+  --cor-vidro: #000000;
+}
+
+/* Cartão de "vidro" com borda dourada fina. */
+.guia-vidro {
+  background: var(--cor-vidro);
+  border: 1px solid color-mix(in srgb, var(--cor-ouro) 55%, transparent);
+  box-shadow: 0 8px 30px var(--cor-ouro-brilho);
+  backdrop-filter: blur(8px);
+}
+
+/* Radar: anéis concêntricos que pulsam enquanto a câmera procura. */
+.guia-radar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  width: min(72vw, 17rem);
+  border-radius: 9999px;
+  background: radial-gradient(circle, var(--cor-ouro-brilho) 0%, transparent 70%);
+}
+.guia-anel {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 2px solid var(--cor-ouro);
+  opacity: 0;
+  animation: guia-pulso 2.4s ease-out infinite;
+}
+.guia-anel:nth-child(2) {
+  animation-delay: 0.8s;
+}
+.guia-anel:nth-child(3) {
+  animation-delay: 1.6s;
+}
+@keyframes guia-pulso {
+  0% {
+    transform: scale(0.55);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.05);
+    opacity: 0;
+  }
+}
+.guia-anelFixo {
+  position: absolute;
+  inset: 6%;
+  border-radius: 9999px;
+  border: 3px solid var(--cor-ouro);
+}
+.guia-seta {
+  transition: transform 0.35s ease;
+  color: var(--cor-ouro-texto);
+}
+
+/* Linha de varredura sobre a imagem da câmera. */
+.guia-camera {
+  position: relative;
+  overflow: hidden;
+}
+.guia-camera::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 3px;
+  background: var(--cor-ouro);
+  box-shadow: 0 0 12px var(--cor-ouro);
+  animation: guia-varrer 2.8s linear infinite;
+}
+@keyframes guia-varrer {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(12rem);
+  }
+}
+
+/* Botão de abertura: ocupa a tela, um toque em qualquer lugar começa. */
+.guia-abertura {
+  min-height: 62vh;
+}
+.guia-ouro {
+  color: var(--cor-ouro-texto);
+}
+.guia-bordaOuro {
+  border-color: var(--cor-ouro);
+}
+
+/* ───────── agente de voz: palco + esfera ───────── */
+.guia-palco {
+  background:
+    radial-gradient(120% 80% at 50% 0%, var(--cor-ouro-brilho), transparent 60%),
+    var(--cor-vidro);
+  border: 1px solid color-mix(in srgb, var(--cor-ouro) 45%, transparent);
+  box-shadow: 0 20px 60px var(--cor-ouro-brilho);
+}
+.guia-orb {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(62vw, 15rem);
+  aspect-ratio: 1;
+  border-radius: 9999px;
+  color: #3b2a00;
+  background: radial-gradient(circle at 32% 28%, #fff4cc 0%, #f2c14e 38%, #c8901a 72%, #8a5f0a 100%);
+  box-shadow:
+    0 0 0 6px color-mix(in srgb, var(--cor-ouro) 25%, transparent),
+    0 18px 50px var(--cor-ouro-brilho),
+    inset 0 -12px 30px rgb(0 0 0 / 0.18);
+  transition: transform 0.3s ease;
+}
+:root[data-tema='alto-contraste'] .guia-orb {
+  background: #ffff00;
+  color: #000000;
+  box-shadow: none;
+}
+.guia-orb-falando {
+  animation: guia-respirar 1.6s ease-in-out infinite;
+}
+.guia-orb-anel {
+  position: absolute;
+  inset: -6%;
+  border-radius: 9999px;
+  border: 2px solid var(--cor-ouro);
+  opacity: 0;
+}
+.guia-orb-ouvindo .guia-orb-anel {
+  animation: guia-pulso 2s ease-out infinite;
+}
+.guia-orb-ouvindo .guia-orb-anel:nth-child(2) {
+  animation-delay: 1s;
+}
+.guia-orb-ondas {
+  display: flex;
+  align-items: center;
+  gap: 6%;
+  height: 46%;
+  width: 62%;
+  justify-content: center;
+}
+.guia-orb-barra {
+  width: 7%;
+  height: 22%;
+  border-radius: 9999px;
+  background: currentColor;
+  opacity: 0.85;
+}
+.guia-orb-barra:nth-child(3),
+.guia-orb-barra:nth-child(7) {
+  height: 40%;
+}
+.guia-orb-barra:nth-child(5) {
+  height: 55%;
+}
+.guia-orb-falando .guia-orb-barra {
+  animation: guia-onda 0.9s ease-in-out infinite alternate;
+}
+.guia-orb-ouvindo .guia-orb-barra {
+  animation: guia-onda 1.3s ease-in-out infinite alternate;
+  transform: scaleY(var(--vol, 0.4));
+}
+.guia-orb-seta {
+  width: 46%;
+  height: 46%;
+  transition: transform 0.35s ease;
+}
+@keyframes guia-onda {
+  from {
+    transform: scaleY(0.35);
+  }
+  to {
+    transform: scaleY(1.6);
+  }
+}
+@keyframes guia-respirar {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+/* ───────── legenda da fala (tela inicial) ───────── */
+.guia-legenda {
+  min-height: 4.5rem;
+  border-top: 1px solid color-mix(in srgb, var(--cor-ouro) 35%, transparent);
+}
+.guia-legenda-dita {
+  color: var(--cor-ouro-texto);
+}
+
+/* ───────── tela inicial: cartões e atalhos ───────── */
+.guia-icone {
+  display: grid;
+  place-items: center;
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 1.25rem;
+  background: radial-gradient(circle at 35% 30%, var(--cor-ouro-brilho), transparent 75%);
+  border: 1px solid color-mix(in srgb, var(--cor-ouro) 35%, transparent);
+}
+.guia-cartao,
+.guia-atalho {
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.guia-cartao:hover,
+.guia-atalho:hover,
+.guia-atalho:focus-visible {
+  border-color: var(--cor-ouro);
+  box-shadow: 0 8px 24px var(--cor-ouro-brilho);
+}
+.guia-cartao:active,
+.guia-atalho:active {
+  transform: scale(0.98);
+}
+@media (prefers-reduced-motion: reduce) {
+  .guia-cartao,
+  .guia-atalho {
+    transition: none;
+  }
+}

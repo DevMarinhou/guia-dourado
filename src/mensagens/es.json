@@ -101,6 +101,21 @@
     "pular": "Omitir",
     "restaurar": "Restaurar valores predeterminados"
   },
+  "servicos": {
+    "sanitarios": "Baños accesibles (silla de ruedas)",
+    "elevadores": "Ascensores y escaleras eléctricas",
+    "entradas": "Entradas con Braille y NFC",
+    "outros": "Otros servicios solicitados",
+    "fraldario": "Cambiaduría",
+    "mesaReservada": "Mesa reservada",
+    "areaTranquila": "Área tranquila",
+    "statusOperando": "en funcionamiento",
+    "statusManutencao": "en mantenimiento",
+    "statusFora": "fuera de servicio",
+    "braille": "Braille",
+    "nfc": "NFC en el celular",
+    "manterEquipe": "Elementos mantenidos por el equipo del centro."
+  },
   "emergencia": {
     "titulo": "¿Emergencia?",
     "samu": "Ambulancia 192",

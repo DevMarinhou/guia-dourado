@@ -101,6 +101,21 @@
     "pular": "Skip",
     "restaurar": "Restore defaults"
   },
+  "servicos": {
+    "sanitarios": "Accessible restrooms (wheelchair)",
+    "elevadores": "Elevators and escalators",
+    "entradas": "Entrances with Braille and NFC",
+    "outros": "Other requested services",
+    "fraldario": "Baby changing station",
+    "mesaReservada": "Reserved table",
+    "areaTranquila": "Quiet area",
+    "statusOperando": "operating",
+    "statusManutencao": "under maintenance",
+    "statusFora": "out of service",
+    "braille": "Braille",
+    "nfc": "NFC on your phone",
+    "manterEquipe": "Items maintained by the mall team."
+  },
   "emergencia": {
     "titulo": "Emergency?",
     "samu": "Ambulance 192",

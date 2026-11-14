@@ -101,6 +101,21 @@
     "pular": "Pular",
     "restaurar": "Restaurar padrões"
   },
+  "servicos": {
+    "sanitarios": "Sanitários acessíveis (PNE)",
+    "elevadores": "Elevadores e escadas rolantes",
+    "entradas": "Entradas com Braille e NFC",
+    "outros": "Outros serviços pedidos",
+    "fraldario": "Fraldário",
+    "mesaReservada": "Mesa reservada",
+    "areaTranquila": "Área tranquila",
+    "statusOperando": "operando",
+    "statusManutencao": "em manutenção",
+    "statusFora": "fora de serviço",
+    "braille": "Braille",
+    "nfc": "NFC no celular",
+    "manterEquipe": "Itens mantidos pela equipe do shopping."
+  },
   "emergencia": {
     "titulo": "Emergência?",
     "samu": "SAMU 192",

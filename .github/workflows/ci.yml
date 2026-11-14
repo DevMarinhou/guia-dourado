@@ -1,0 +1,31 @@
+# Pipeline de qualidade (docs/12-qualidade-e-testes.md §12.3)
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  qualidade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Lint (ESLint + jsx-a11y)
+        run: npm run lint
+      - name: Tipos
+        run: npm run typecheck
+      - name: Testes de domínio e de dados
+        run: npm test
+      - name: Build
+        run: npm run build
+      - name: Navegador para os testes E2E
+        run: npx playwright install --with-deps chromium
+      - name: E2E + acessibilidade (axe)
+        run: npx playwright test --trace off

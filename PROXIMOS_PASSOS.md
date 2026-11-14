@@ -22,6 +22,20 @@
 | Testes: 28 unitários/dados + 66 E2E/axe (10 telas × 3 temas × celular/desktop) | ✅ todos passando | `src/**/*.test.ts`, `tests/` |
 | CI (lint, tipos, testes, build, E2E + axe) | ✅ | `.github/workflows/ci.yml` |
 
+### Estado das trilhas (atualizado em 14/11, manhã da entrega)
+
+| Trilha | Itens | Estado |
+|---|---|---|
+| **A** — Front-end | T01 Preferências, T03 Buscar, T04 completo (+ 🥚 Easter Egg), T11 Serviços | ✅ integrada |
+| **B** — Mapa e rotas | T05 Rota (elevador em manutenção), T02 MapaDoPiso (SVG por piso) | ✅ integrada (`e4bf8e3`) |
+| **C** — Comunicação | Escuta, T06 Conversar (legenda/tradução/intérprete), T07 Prancha | ✅ integrada (`9fa6185`) |
+| **D** — Ajuda e Central | API de ajuda (RN-03, modo demo/Supabase), T08 + T09, T12 Central (polling 3 s), alternância de equipamentos | ✅ integrada (`362a4cf`) |
+
+- `npm run verificar` **verde** · **78 testes E2E/axe** passando (inclui o egg: 13 toques no ♡).
+- Modo demo do Supabase ativo por padrão: tudo funciona sem credenciais; com `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` passa a persistir (ver README).
+- **Pendências da trilha D:** deploy na Vercel + `URL_BASE=<url> npm run qr:gerar` + impressão das placas (itens 5 do plano).
+- Branches `main`, `producao`, `feature/0001`, `feature/0002` sincronizadas em `d991861`.
+
 ## 2. Preparar o ambiente (10 min, todos)
 
 ```bash

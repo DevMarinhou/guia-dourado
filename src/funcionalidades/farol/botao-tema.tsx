@@ -32,10 +32,10 @@ export function BotaoTema({ escurecer, clarear }: { escurecer: string; clarear: 
     <button
       type="button"
       onClick={alternar}
-      className="alvo inline-flex items-center gap-2 rounded-full border border-borda bg-superficie px-4 font-bold"
+      className="alvo inline-flex items-center justify-center gap-2 rounded-full border border-borda bg-superficie px-3 font-bold"
     >
       <span aria-hidden="true">{escuro ? '☀️' : '🌙'}</span>
-      {escuro ? clarear : escurecer}
+      <span className="sr-only sm:not-sr-only">{escuro ? clarear : escurecer}</span>
     </button>
   );
 }

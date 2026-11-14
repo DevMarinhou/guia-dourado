@@ -19,10 +19,11 @@ const CHAVES = [
   'f_chegando', 'f_chegouCamera', 'f_chegouPassos', 'f_perigo', 'f_semMovimento', 'f_movimentoNegado',
   'f_proximo', 'f_proximoEsquerda', 'f_proximoDireita', 'f_ficouPraTras', 'f_passou', 'f_contramao',
   'f_vireEsquerda', 'f_vireDireita', 'f_frente', 'f_virarEm', 'f_virarEmFrente', 'f_virarAgora',
-  'ladoEsquerda', 'ladoDireita', 'aberturaToque', 'aberturaSub', 'f_pergunta', 'f_naoEntendiModo', 'modoVoz',
-  'modoVozDesc', 'modoTela', 'modoTelaDesc', 'ouvindo', 'falarComando', 'f_digaDestino', 'f_naoEntendiDestino',
+  'ladoEsquerda', 'ladoDireita', 'aberturaToque', 'aberturaSub', 'ouvindo', 'f_digaDestino', 'f_naoEntendiDestino',
   'escurecer', 'clarear', 'silenciar', 'ativarSom', 'comecarDeNovo', 'semDestino', 'procurando', 'sigaEmFrente',
-  'chegou', 'volte', 'palavrasVoz', 'palavrasTela', 'palavrasOndeEstou', 'palavrasParar', 'numeros',
+  'chegou', 'volte', 'palavrasOndeEstou', 'palavrasParar', 'numeros', 'ordinais', 'palavrasQuantoFalta',
+  'palavrasRepetir', 'apelidos', 'marca', 'subtituloMarca', 'vamosJuntos', 'paraOndeHoje', 'falando',
+  'carregandoVoz', 'toqueRepetir', 'voceDisse', 'f_faltamSo', 'f_semDestinoAinda', 'f_semEscuta',
 ] as const satisfies readonly (keyof TextosGuia)[];
 
 export default async function Pagina({ params }: PageProps<'/[locale]/guia'>) {
@@ -51,8 +52,9 @@ export default async function Pagina({ params }: PageProps<'/[locale]/guia'>) {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">{t('titulo')}</h1>
-      <p className="text-texto-suave">{t('objetivo')}</p>
+      {/* Título e explicação para leitor de tela; na tela, a marca e a esfera do guia já dizem o que é. */}
+      <h1 className="sr-only">{t('titulo')}</h1>
+      <p className="sr-only">{t('objetivo')}</p>
       <GuiaCamera
         pontos={pontos}
         nomePercurso={traduzir(percursoPiloto.nome) ?? ''}

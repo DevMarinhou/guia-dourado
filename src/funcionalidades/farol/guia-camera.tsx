@@ -29,7 +29,8 @@ import { carregarEmbedder, embedQuadro } from './embedder';
 import { liberarAudio, tocar } from './bipes';
 import { obterBase } from './base-visual';
 import { usePassos } from './use-passos';
-import { contemAlguma, escutaDisponivel, normalizarFala, ouvirUmaVez } from './escuta';
+import { criarEscutador, preCarregarEscuta, type Escutador } from './agente-voz';
+import { interpretar, type DestinoFalavel, type VocabularioIntencao } from '@/dominio/farol/intencao';
 import { BotaoTema } from './botao-tema';
 import { velocidadeDaVoz } from './velocidade-voz';
 import './guia.css';
@@ -71,15 +72,16 @@ export type TextosGuia = Record<
   | 'f_perigo' | 'f_semMovimento' | 'f_movimentoNegado' | 'f_proximo' | 'f_proximoEsquerda' | 'f_proximoDireita'
   | 'f_ficouPraTras' | 'f_passou' | 'f_contramao' | 'f_vireEsquerda' | 'f_vireDireita'
   | 'f_frente' | 'f_virarEm' | 'f_virarEmFrente' | 'f_virarAgora' | 'ladoEsquerda' | 'ladoDireita'
-  | 'aberturaToque' | 'aberturaSub' | 'f_pergunta' | 'f_naoEntendiModo' | 'modoVoz' | 'modoVozDesc' | 'modoTela'
-  | 'modoTelaDesc' | 'ouvindo' | 'falarComando' | 'f_digaDestino' | 'f_naoEntendiDestino' | 'escurecer' | 'clarear'
+  | 'aberturaToque' | 'aberturaSub' | 'ouvindo' | 'f_digaDestino' | 'f_naoEntendiDestino' | 'escurecer' | 'clarear'
   | 'silenciar' | 'ativarSom' | 'comecarDeNovo' | 'semDestino' | 'procurando' | 'sigaEmFrente' | 'chegou'
-  | 'volte' | 'palavrasVoz' | 'palavrasTela' | 'palavrasOndeEstou' | 'palavrasParar' | 'numeros',
+  | 'volte' | 'palavrasOndeEstou' | 'palavrasParar' | 'numeros' | 'ordinais' | 'palavrasQuantoFalta'
+  | 'palavrasRepetir' | 'apelidos' | 'marca' | 'subtituloMarca' | 'vamosJuntos' | 'paraOndeHoje' | 'falando'
+  | 'carregandoVoz' | 'toqueRepetir' | 'voceDisse' | 'f_faltamSo' | 'f_semDestinoAinda' | 'f_semEscuta',
   string
 >;
 
-type Fase = 'abertura' | 'pergunta' | 'preparando' | 'ativo' | 'parado';
-type Modo = 'voz' | 'tela';
+type Fase = 'abertura' | 'preparando' | 'ativo' | 'parado';
+type EstadoVoz = 'parado' | 'ouvindo' | 'falando';
 type Direcao = 'procurando' | 'semDestino' | 'frente' | 'esquerda' | 'direita' | 'chegou' | 'voltar';
 
 /**
@@ -95,9 +97,9 @@ function preencher(modelo: string, valores: Record<string, string | number>): st
   return modelo.replace(/\{(\w+)\}/g, (_, k: string) => String(valores[k] ?? ''));
 }
 
-function modoDaUrl(): Modo | null {
-  const m = new URLSearchParams(window.location.search).get('modo');
-  return m === 'voz' || m === 'tela' ? m : null;
+/** Veio da página inicial com ?modo=… (a pessoa já escolheu "voz" lá). */
+function veioDaEntrada(): boolean {
+  return new URLSearchParams(window.location.search).has('modo');
 }
 
 /** Figura de cada tipo de ponto (o projeto usa emojis como ícones). */
@@ -133,10 +135,15 @@ export function GuiaCamera({
   const destinoRef = useRef<PontoGuia | null>(null);
   const trechoRef = useRef<string | null>(null);
   const mudoRef = useRef(false);
+  const escutadorRef = useRef<Escutador | null>(null);
+  const falaIdRef = useRef(0);
+  const fimDaFalaRef = useRef(0);
 
   const [fase, setFase] = useState<Fase>('abertura');
-  const [modo, setModo] = useState<Modo>('voz');
-  const [ouvindo, setOuvindo] = useState(false);
+  const [estadoVoz, setEstadoVoz] = useState<EstadoVoz>('parado');
+  const [volume, setVolume] = useState(0);
+  const [voceDisse, setVoceDisse] = useState<string | null>(null);
+  const [semEscuta, setSemEscuta] = useState(false);
   const [mudo, setMudo] = useState(false);
   const [direcao, setDirecaoBruta] = useState<Direcao>('procurando');
   /** curva anunciada com antecedência: quantos passos faltam até ela (null = "vire agora" ou sem curva) */
@@ -154,20 +161,55 @@ export function GuiaCamera({
   const [diagnostico, setDiagnostico] = useState('');
 
   const ativo = fase === 'ativo';
-  const numeros = useMemo(() => t.numeros.split(','), [t.numeros]);
+  const vocabulario = useMemo<VocabularioIntencao>(
+    () => ({
+      numeros: t.numeros.split(','),
+      ordinais: t.ordinais.split(','),
+      ondeEstou: t.palavrasOndeEstou.split(','),
+      quantoFalta: t.palavrasQuantoFalta.split(','),
+      repetir: t.palavrasRepetir.split(','),
+      parar: t.palavrasParar.split(','),
+    }),
+    [t],
+  );
   const porId = useMemo(() => new Map(pontos.map((p) => [p.id, p])), [pontos]);
   const destinos = useMemo(() => pontos.filter((p) => p.destino), [pontos]);
+  /** "lixeira:lixo,reciclagem;entrada:saida,hall" → apelidos por ponto */
+  const destinosFalaveis = useMemo<DestinoFalavel[]>(() => {
+    const apelidos = new Map(
+      t.apelidos.split(';').map((par) => {
+        const [id = '', lista = ''] = par.split(':');
+        return [id.trim(), lista.split(',').map((x) => x.trim())] as const;
+      }),
+    );
+    return destinos.map((p) => ({ id: p.id, nome: p.nome, apelidos: apelidos.get(p.id) ?? [] }));
+  }, [destinos, t.apelidos]);
   const limites = useMemo(() => {
     const fixos = pontos.filter((p) => !p.trecho).map((p) => p.passos);
     return [Math.min(...fixos) - MARGEM_PERCURSO, Math.max(...fixos) + MARGEM_PERCURSO] as const;
   }, [pontos]);
 
+  // Fala do guia: pausa a escuta enquanto fala (para não ouvir a si mesmo) e anima a esfera.
   const anunciar = useCallback(
     (texto: string, urgente = false, aoTerminar?: () => void) => {
       setStatus(texto);
       anunciarAria(texto, urgente ? 'assertive' : 'polite');
-      if (mudoRef.current) aoTerminar?.();
-      else falar(texto, idioma, aoTerminar, velocidadeDaVoz());
+      if (mudoRef.current) return aoTerminar?.();
+      const id = ++falaIdRef.current;
+      escutadorRef.current?.pausar();
+      setEstadoVoz('falando');
+      falar(
+        texto,
+        idioma,
+        () => {
+          if (id !== falaIdRef.current) return; // uma fala mais nova cancelou esta
+          fimDaFalaRef.current = performance.now();
+          escutadorRef.current?.retomar();
+          setEstadoVoz(escutadorRef.current ? 'ouvindo' : 'parado');
+          aoTerminar?.();
+        },
+        velocidadeDaVoz(),
+      );
     },
     [anunciarAria, idioma],
   );
@@ -354,6 +396,7 @@ export function GuiaCamera({
     const v = videoRef.current;
     return () => {
       if (v?.srcObject instanceof MediaStream) v.srcObject.getTracks().forEach((tr) => tr.stop());
+      escutadorRef.current?.parar();
       pararFala();
     };
   }, []);
@@ -378,39 +421,67 @@ export function GuiaCamera({
     anunciar(pontoAtual ? textoOndeEstou(pontoAtual) : t.f_naoSei);
   }
 
-  /** Destino falado: "sala dois", "elevador 1", "lixeira"… */
-  function destinoDaFala(fala: string): PontoGuia | null {
-    let melhor: PontoGuia | null = null;
-    let pontosMelhor = 0;
-    for (const p of destinos) {
-      const palavras = normalizarFala(`${p.nome} ${p.id.replace(/-/g, ' ')}`, numeros).split(' ');
-      const acertos = palavras.filter((w) => w.length > 0 && ` ${fala} `.includes(` ${w} `)).length;
-      // O número tem de bater ("sala 2" ≠ "sala 1").
-      const numero = p.id.match(/\d+/)?.[0];
-      if (numero && !` ${fala} `.includes(` ${numero} `)) continue;
-      if (acertos > pontosMelhor) {
-        melhor = p;
-        pontosMelhor = acertos;
-      }
-    }
-    return melhor;
-  }
+  /** Tudo o que o guia precisa entender: nomes e apelidos dos destinos, comandos e números. */
+  const palavrasDoGuia = [
+    ...destinosFalaveis.flatMap((d) => [d.nome, ...(d.apelidos ?? [])]),
+    ...vocabulario.numeros,
+    ...vocabulario.ordinais.filter((o) => o !== '-'),
+    ...vocabulario.ondeEstou,
+    ...vocabulario.quantoFalta,
+    ...vocabulario.repetir,
+    ...vocabulario.parar,
+  ].flatMap((f) => f.replace(/[^\p{L}\p{N}\s]/gu, ' ').split(/\s+/).filter(Boolean));
 
-  async function ouvirComando(tentativa = 0) {
-    setOuvindo(true);
-    const bruto = await ouvirUmaVez(idioma);
-    setOuvindo(false);
-    if (!bruto) {
-      if (tentativa === 0 && modo === 'voz') anunciar(t.f_naoEntendiDestino, false, () => void ouvirComando(1));
+  /** O agente ouviu uma frase: entende o pedido e age, sem precisar tocar em nada. */
+  function aoOuvir(texto: string) {
+    if (performance.now() - fimDaFalaRef.current < 400) return; // eco do fim da própria fala
+    setVoceDisse(texto);
+    const intencao = interpretar(texto, destinosFalaveis, vocabulario);
+    if (!intencao) {
+      if (texto.split(' ').length >= 2) anunciar(t.f_naoEntendiDestino);
       return;
     }
-    const fala = normalizarFala(bruto, numeros);
-    if (contemAlguma(fala, t.palavrasParar, numeros)) return parar();
-    if (contemAlguma(fala, t.palavrasOndeEstou, numeros)) return ondeEstou();
-    const d = destinoDaFala(fala);
-    if (d) return escolherDestino(d);
-    if (tentativa === 0) anunciar(t.f_naoEntendiDestino, false, () => void ouvirComando(1));
+    switch (intencao.tipo) {
+      case 'parar':
+        return parar();
+      case 'ondeEstou':
+        return ondeEstou();
+      case 'repetir':
+        return anunciar(status);
+      case 'quantoFalta':
+        return anunciar(
+          destinoRef.current && restante !== null
+            ? preencher(t.f_faltamSo, { passos: restante, nome: destinoRef.current.nome })
+            : t.f_semDestinoAinda,
+        );
+      case 'destino': {
+        const d = porId.get(intencao.id);
+        if (d) escolherDestino(d);
+      }
+    }
   }
+
+  async function ligarEscuta() {
+    if (escutadorRef.current) return;
+    const e = await criarEscutador({
+      idioma,
+      aoOuvir: (texto) => aoOuvirRef.current(texto),
+      aoOuvirParcial: (texto) => setVoceDisse(texto),
+      aoMudarVolume: setVolume,
+      palavras: palavrasDoGuia,
+    });
+    escutadorRef.current = e;
+    if (!e) setSemEscuta(true);
+    else if (estadoVozRef.current !== 'falando') setEstadoVoz('ouvindo');
+    else e.pausar();
+  }
+
+  const aoOuvirRef = useRef(aoOuvir);
+  const estadoVozRef = useRef(estadoVoz);
+  useEffect(() => {
+    aoOuvirRef.current = aoOuvir;
+    estadoVozRef.current = estadoVoz;
+  });
 
   async function preparar(): Promise<boolean> {
     setFase('preparando');
@@ -441,7 +512,9 @@ export function GuiaCamera({
     return true;
   }
 
-  async function comecarCamera(m: Modo) {
+  async function comecar() {
+    liberarAudio();
+    preCarregarEscuta(idioma);
     if (!(await preparar())) return;
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
@@ -450,57 +523,28 @@ export function GuiaCamera({
       await v.play();
       setFase('ativo');
       void passos.ligar();
-      if (m === 'voz') {
-        // Modo voz: já pergunta o destino e escuta.
-        anunciar(`${t.f_cameraLigada} ${t.f_digaDestino}`, false, () => {
-          if (escutaDisponivel()) void ouvirComando();
-        });
-      } else {
-        anunciar(t.f_cameraLigada);
-      }
+      anunciar(`${t.vamosJuntos} ${t.f_digaDestino}`);
+      await ligarEscuta();
     } catch {
       anunciar(t.f_semCamera);
       setFase('parado');
     }
   }
 
-  function escolherModo(m: Modo) {
-    setModo(m);
-    void comecarCamera(m);
-  }
-
-  // Veio da página inicial já com o modo escolhido (?modo=voz|tela)? Se a página já recebeu um toque,
-  // o som está liberado e o guia começa sozinho; senão, o toque na abertura começa direto nesse modo.
+  // Veio da página inicial (a pessoa já tocou lá, então o som está liberado): começa sozinho.
   useEffect(() => {
-    const m = modoDaUrl();
     const jaTocou = (navigator as Navigator & { userActivation?: { hasBeenActive: boolean } }).userActivation
       ?.hasBeenActive;
-    if (!m || !jaTocou) return;
-    const id = window.setTimeout(() => {
-      liberarAudio();
-      escolherModo(m);
-    }, 0);
+    if (!veioDaEntrada() || !jaTocou) return;
+    const id = window.setTimeout(() => void comecar(), 0);
     return () => window.clearTimeout(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- só ao abrir a tela
   }, []);
 
-  /** Abertura: o toque libera o som (exigência dos navegadores) e o guia pergunta como se comunicar. */
-  function abrir() {
-    liberarAudio();
-    const m = modoDaUrl();
-    if (m) return escolherModo(m);
-    setFase('pergunta');
-    anunciar(t.f_pergunta, false, async () => {
-      if (!escutaDisponivel()) return;
-      setOuvindo(true);
-      const bruto = await ouvirUmaVez(idioma);
-      setOuvindo(false);
-      if (!bruto) return; // sem fala: os botões continuam na tela
-      const fala = normalizarFala(bruto, numeros);
-      if (contemAlguma(fala, t.palavrasTela, numeros)) escolherModo('tela');
-      else if (contemAlguma(fala, t.palavrasVoz, numeros)) escolherModo('voz');
-      else anunciar(t.f_naoEntendiModo);
-    });
+  /** Toque em QUALQUER lugar da tela: começa; depois, repete a última instrução. */
+  function tocarTela() {
+    if (fase === 'abertura' || fase === 'parado') return void comecar();
+    if (fase === 'ativo') anunciar(status);
   }
 
   function parar() {
@@ -511,6 +555,9 @@ export function GuiaCamera({
       v.srcObject = null;
     }
     passos.desligar();
+    escutadorRef.current?.parar();
+    escutadorRef.current = null;
+    setEstadoVoz('parado');
     setFase('parado');
     anunciar(t.f_parado);
   }
@@ -544,218 +591,135 @@ export function GuiaCamera({
 
   // ───────────────────────── telas ─────────────────────────
 
-  if (fase === 'abertura') {
-    return (
-      <div className={`${estilos.raiz} space-y-4`}>
-        <button
-          type="button"
-          onClick={abrir}
-          className={`${estilos.abertura} ${estilos.vidro} alvo flex w-full flex-col items-center justify-center gap-6 rounded-3xl p-6 text-center`}
-        >
-          <span className={estilos.radar} aria-hidden="true">
-            <span className={estilos.anel} />
-            <span className={estilos.anel} />
-            <span className={estilos.anel} />
-            <span className={estilos.anelFixo} />
-            <span className="text-6xl">👆</span>
-          </span>
-          <span className="text-2xl font-bold">{t.aberturaToque}</span>
-          <span className="text-lg text-texto-suave">{t.aberturaSub}</span>
-        </button>
-        <div className="flex justify-end">
-          <BotaoTema escurecer={t.escurecer} clarear={t.clarear} />
-        </div>
-      </div>
-    );
-  }
+  const rotuloVoz =
+    fase === 'abertura' || fase === 'parado'
+      ? t.aberturaToque
+      : estadoVoz === 'falando'
+        ? t.falando
+        : estadoVoz === 'ouvindo'
+          ? t.ouvindo
+          : t.toqueRepetir;
+  const guiando = ativo && destino !== null;
+  const titulo = fase === 'preparando' ? t.carregandoVoz : guiando ? rotuloDirecao[direcao] : t.paraOndeHoje;
 
   return (
     <div className={`${estilos.raiz} space-y-5`}>
-      {/* barra: percurso + tema + som */}
-      <div className="flex flex-wrap items-center gap-2">
-        <p className={`${estilos.vidro} mr-auto rounded-full px-4 py-2 text-sm`}>
-          <span aria-hidden="true">🧭 </span>
-          {t.percurso}: <strong>{nomePercurso}</strong>
+      {/* marca + tema + som */}
+      <div className="flex items-center gap-2">
+        <p className="mr-auto">
+          <span className={`${estilos.ouro} text-lg font-bold`}>◆ {t.marca}</span>
+          <span className="block text-xs tracking-[0.25em] text-texto-suave uppercase">
+            {t.subtituloMarca} · {nomePercurso}
+          </span>
         </p>
         <BotaoTema escurecer={t.escurecer} clarear={t.clarear} />
         <button
           type="button"
           onClick={alternarSom}
-          className="alvo inline-flex items-center gap-2 rounded-full border border-borda bg-superficie px-4 font-bold"
+          className="alvo inline-flex items-center gap-2 rounded-full border border-borda bg-superficie px-3 font-bold"
         >
           <span aria-hidden="true">{mudo ? '🔊' : '🔇'}</span>
-          {mudo ? t.ativarSom : t.silenciar}
+          <span className="sr-only sm:not-sr-only">{mudo ? t.ativarSom : t.silenciar}</span>
         </button>
       </div>
 
-      {fase === 'pergunta' && (
-        <section aria-labelledby="guia-pergunta" className="space-y-4">
-          <h2 id="guia-pergunta" className="text-center text-2xl font-bold">
-            {status}
-          </h2>
-          {ouvindo && (
-            <p className={`${estilos.ouro} text-center text-lg font-bold`}>
-              <span aria-hidden="true">🎙️ </span>
-              {t.ouvindo}
-            </p>
-          )}
-          <div className="grid grid-cols-2 gap-3">
-            {(
-              [
-                ['voz', '🔊', t.modoVoz, t.modoVozDesc],
-                ['tela', '👁️', t.modoTela, t.modoTelaDesc],
-              ] as const
-            ).map(([m, figura, nome, desc]) => (
-              <button
-                key={m}
-                type="button"
-                onClick={() => escolherModo(m)}
-                className={`${estilos.vidro} alvo flex min-h-48 flex-col items-center justify-center gap-2 rounded-3xl p-4 text-center`}
-              >
-                <span aria-hidden="true" className="text-6xl">
-                  {figura}
-                </span>
-                <span className="text-2xl font-bold">{nome}</span>
-                <span className="text-texto-suave">{desc}</span>
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {(fase === 'preparando' || fase === 'ativo' || fase === 'parado') && (
-        <>
-          {/* radar: direção grande + quanto falta */}
-          <section
-            aria-labelledby="guia-situacao"
-            className={`${estilos.vidro} flex flex-col items-center gap-3 rounded-3xl p-5 text-center`}
-          >
-            <h2 id="guia-situacao" className="sr-only">
-              {t.situacao}
-            </h2>
-            <div className={estilos.radar} aria-hidden="true">
-              {ativo && direcao === 'procurando' && (
-                <>
-                  <span className={estilos.anel} />
-                  <span className={estilos.anel} />
-                  <span className={estilos.anel} />
-                </>
-              )}
-              <span className={estilos.anelFixo} />
-              {ROTACAO[direcao] !== undefined ? (
-                <svg
-                  viewBox="0 0 100 100"
-                  className={`${estilos.seta} h-2/5 w-2/5`}
-                  style={{ transform: `rotate(${ROTACAO[direcao]}deg)` }}
-                >
-                  <path d="M50 6 L88 56 L62 56 L62 94 L38 94 L38 56 L12 56 Z" fill="currentColor" />
-                </svg>
-              ) : (
-                <span className="text-7xl">
-                  {direcao === 'chegou' ? '✅' : direcao === 'semDestino' ? '📍' : '🔎'}
-                </span>
-              )}
-            </div>
-            <p className={`${estilos.ouro} text-xl font-bold`}>{rotuloDirecao[direcao]}</p>
-            {restante !== null && destino && (
-              <p className="text-texto-suave">
-                <span className="text-5xl font-bold text-texto">{restante}</span> {t.unidade} ·{' '}
-                {figuraDoPonto(destino.id)} {destino.nome}
-              </p>
-            )}
-            {/* Última fala, em texto grande (a mesma frase vai para o leitor de tela pelo anunciador). */}
-            <p className="w-full rounded-2xl border border-borda bg-superficie p-4 text-lg font-bold">{status}</p>
-            {ouvindo && (
-              <p className={`${estilos.ouro} font-bold`}>
-                <span aria-hidden="true">🎙️ </span>
-                {t.ouvindo}
-              </p>
-            )}
-          </section>
-
-          {/* ações principais */}
-          {fase === 'parado' ? (
-            <button
-              type="button"
-              onClick={() => void comecarCamera(modo)}
-              className={`${estilos.bordaOuro} alvo w-full rounded-2xl border-4 bg-primaria p-5 text-xl font-bold text-primaria-texto`}
-            >
-              <span aria-hidden="true">📷 </span>
-              {t.comecarDeNovo}
-            </button>
+      {/* PALCO: a tela inteira é o botão — quem não enxerga toca em qualquer lugar. */}
+      <button
+        type="button"
+        onClick={tocarTela}
+        aria-describedby="guia-instrucao"
+        className="guia-palco alvo flex min-h-[64vh] w-full flex-col items-center justify-center gap-4 rounded-[2rem] px-4 py-8 text-center"
+      >
+        <span className="sr-only">{rotuloVoz}</span>
+        <span className={`guia-orb guia-orb-${fase === 'ativo' ? estadoVoz : fase === 'preparando' ? 'falando' : 'parado'}`} aria-hidden="true">
+          <span className="guia-orb-anel" />
+          <span className="guia-orb-anel" />
+          {guiando && estadoVoz === 'parado' && ROTACAO[direcao] !== undefined ? (
+            <svg viewBox="0 0 100 100" className="guia-orb-seta" style={{ transform: `rotate(${ROTACAO[direcao]}deg)` }}>
+              <path d="M50 8 L86 54 L62 54 L62 92 L38 92 L38 54 L14 54 Z" fill="currentColor" />
+            </svg>
           ) : (
-            <div className="grid grid-cols-3 gap-3">
-              <button
-                type="button"
-                onClick={ondeEstou}
-                disabled={!ativo}
-                className="alvo flex flex-col items-center gap-1 rounded-2xl bg-primaria p-3 font-bold text-primaria-texto disabled:opacity-60"
-              >
-                <span aria-hidden="true" className="text-3xl">
-                  📍
-                </span>
-                {t.ondeEstou}
-              </button>
-              <button
-                type="button"
-                onClick={() => void ouvirComando()}
-                disabled={!ativo || ouvindo}
-                className={`${estilos.bordaOuro} alvo flex flex-col items-center gap-1 rounded-2xl border-2 bg-superficie p-3 font-bold disabled:opacity-60`}
-              >
-                <span aria-hidden="true" className="text-3xl">
-                  🎙️
-                </span>
-                {t.falarComando}
-              </button>
-              <button
-                type="button"
-                onClick={parar}
-                disabled={!ativo}
-                className="alvo flex flex-col items-center gap-1 rounded-2xl border-2 border-perigo bg-superficie p-3 font-bold disabled:opacity-60"
-              >
-                <span aria-hidden="true" className="text-3xl">
-                  ⏹️
-                </span>
-                {t.parar}
-              </button>
-            </div>
+            <span className="guia-orb-ondas" style={{ ['--vol' as string]: String(0.35 + volume) }}>
+              {Array.from({ length: 9 }, (_, k) => (
+                <span key={k} className="guia-orb-barra" style={{ animationDelay: `${(k % 5) * 0.11}s` }} />
+              ))}
+            </span>
           )}
+        </span>
+        <span className={`${estilos.ouro} text-sm font-bold tracking-[0.2em] uppercase`} aria-hidden="true">
+          {rotuloVoz}
+        </span>
+        <span className="block text-lg text-texto-suave">
+          {guiando && destino ? `${figuraDoPonto(destino.id)} ${destino.nome}` : t.vamosJuntos}
+        </span>
+        <span className="block text-3xl leading-tight font-bold sm:text-4xl">{titulo}</span>
+        {guiando && restante !== null && (
+          <span className="block">
+            <span className="text-6xl font-bold">{restante}</span>{' '}
+            <span className="text-texto-suave">{t.unidade}</span>
+          </span>
+        )}
+        <span id="guia-instrucao" className="block max-w-md text-base text-texto-suave">
+          {status}
+        </span>
+        {voceDisse && (
+          <span className="block rounded-full border border-borda px-4 py-1 text-sm">
+            {t.voceDisse} “{voceDisse}”
+          </span>
+        )}
+      </button>
+      {semEscuta && <p className="text-center text-texto-suave">{t.f_semEscuta}</p>}
 
-          {/* destinos com figuras */}
-          <section aria-labelledby="guia-destino">
-            <h2 id="guia-destino" className="mb-3 text-xl font-bold">
-              {t.paraOnde}
-            </h2>
-            <ul className="grid grid-cols-2 gap-3">
-              {destinos.map((p) => {
-                const escolhido = destino?.id === p.id;
-                const dist = distanciaAte(p);
-                return (
-                  <li key={p.id}>
-                    <button
-                      type="button"
-                      aria-pressed={escolhido}
-                      onClick={() => escolherDestino(p)}
-                      className={`alvo flex w-full flex-col items-center gap-1 rounded-2xl border-2 p-4 text-center font-bold ${
-                        escolhido ? `${estilos.bordaOuro} bg-primaria text-primaria-texto` : `border-borda ${estilos.vidro}`
-                      }`}
-                    >
-                      <span aria-hidden="true" className="text-4xl">
-                        {figuraDoPonto(p.id)}
-                      </span>
-                      <span>{p.nome}</span>
-                      {dist !== null && (
-                        <span className="text-sm font-normal">
-                          {dist} {t.unidade}
-                        </span>
-                      )}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-        </>
+      {/* destinos: também dá para tocar (para quem enxerga) */}
+      <section aria-labelledby="guia-destino">
+        <h2 id="guia-destino" className="mb-2 text-lg font-bold">
+          {t.paraOnde}
+        </h2>
+        <ul className="flex flex-wrap gap-2">
+          {destinos.map((p) => {
+            const escolhido = destino?.id === p.id;
+            const dist = distanciaAte(p);
+            return (
+              <li key={p.id}>
+                <button
+                  type="button"
+                  aria-pressed={escolhido}
+                  onClick={() => (ativo ? escolherDestino(p) : tocarTela())}
+                  className={`alvo inline-flex items-center gap-2 rounded-full border-2 px-4 font-bold ${
+                    escolhido ? `${estilos.bordaOuro} bg-primaria text-primaria-texto` : `border-borda ${estilos.vidro}`
+                  }`}
+                >
+                  <span aria-hidden="true" className="text-xl">
+                    {figuraDoPonto(p.id)}
+                  </span>
+                  {p.nome}
+                  {dist !== null && <span className="text-sm font-normal">· {dist}</span>}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+
+      {ativo && (
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            type="button"
+            onClick={ondeEstou}
+            className="alvo inline-flex items-center justify-center gap-2 rounded-full bg-primaria px-4 font-bold text-primaria-texto"
+          >
+            <span aria-hidden="true">📍</span>
+            {t.ondeEstou}
+          </button>
+          <button
+            type="button"
+            onClick={parar}
+            className="alvo inline-flex items-center justify-center gap-2 rounded-full border-2 border-perigo bg-superficie px-4 font-bold"
+          >
+            <span aria-hidden="true">⏹️</span>
+            {t.parar}
+          </button>
+        </div>
       )}
 
       {/* câmera (só aparece ligada) */}
@@ -765,7 +729,7 @@ export function GuiaCamera({
           playsInline
           muted
           aria-label={t.imagemCamera}
-          className="max-h-48 w-full rounded-2xl bg-black object-cover"
+          className="max-h-40 w-full rounded-2xl bg-black object-cover"
         />
       </div>
       <canvas ref={canvasRef} hidden />
@@ -784,6 +748,8 @@ export function GuiaCamera({
             {passosDados}
             {passos.ativo ? '' : ` (${t.contadorDesligado})`}
           </dd>
+          <dt>Voz</dt>
+          <dd className="font-bold">{escutadorRef.current?.motor ?? '—'}</dd>
         </dl>
         {passos.erro && <p className="mt-2 text-texto-suave">{passos.erro}</p>}
         <p className="mt-2">

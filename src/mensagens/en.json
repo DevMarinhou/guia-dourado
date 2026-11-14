@@ -27,7 +27,8 @@
     "conversar": "Talk",
     "prancha": "Picture board",
     "servicos": "Accessible services",
-    "preferencias": "Preferences"
+    "preferencias": "Preferences",
+    "letreiro": "Read store sign"
   },
   "pisos": {
     "terreo": "Level 1 – Ground floor",
@@ -44,7 +45,8 @@
     "T08": { "titulo": "Ask for help", "objetivo": "Ask the mall staff for help. In an emergency, call 192, 193 or 190." },
     "T09": { "titulo": "Your help request", "objetivo": "Follow your request in real time." },
     "T10": { "titulo": "Feedback", "objetivo": "Tell us about the route or report a barrier." },
-    "T11": { "titulo": "Accessible services", "objetivo": "Accessible restrooms, baby changing, reserved tables, quiet area and more." }
+    "T11": { "titulo": "Accessible services", "objetivo": "Accessible restrooms, baby changing, reserved tables, quiet area and more." },
+    "letreiro": { "titulo": "Read store sign", "objetivo": "Point the camera at a storefront and your phone says which store is in front of you." }
   },
   "local": {
     "comoChegar": "Get directions",
@@ -75,6 +77,33 @@
     "nenhumResultado": "No results found.",
     "resultados": "{consulta} — {n, plural, one {# result} other {# results}}",
     "dica": "Type at least 2 letters. E.g.: “ca” finds C&A and “restroom” finds the toilets."
+  },
+  "letreiro": {
+    "ligar": "Turn on camera",
+    "desligar": "Turn off camera",
+    "lerAgora": "Read now",
+    "video": "Rear camera image",
+    "guia": "Keep the sign in the center of the screen, about 2 to 5 meters away.",
+    "ligada": "Camera on. Point at the store sign; I will tell you when I recognize it.",
+    "desligada": "Camera off.",
+    "carregando": "Getting the sign reader ready…",
+    "lendo": "Reading…",
+    "naoReconheci": "No store recognized. Move closer or point at the name on the storefront.",
+    "emFrente": "In front of you: {nome}. {numero}, {piso}.",
+    "ultimaLoja": "Last store recognized",
+    "verDetalhes": "See details for {nome}",
+    "aviso": "The reader can make mistakes: check your surroundings or ask for help. The image is read on your phone and is never sent to a server.",
+    "internet": "The first time, the reader downloads about 5 MB. After that it works even with a weak connection.",
+    "erros": {
+      "inseguro": "The camera only works on a secure address (https).",
+      "semSuporte": "This browser does not allow camera access.",
+      "negada": "No permission to use the camera. Allow the camera in your browser settings and try again.",
+      "naoEncontrada": "No camera was found on this device.",
+      "emUso": "The camera is being used by another app.",
+      "ocr": "The sign reader could not be loaded. Check your connection and try again.",
+      "desconhecido": "The camera could not be turned on."
+    },
+    "alternativa": "Prefer not to use the camera? Use search."
   },
   "preferencias": {
     "tema": "Theme",

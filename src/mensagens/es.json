@@ -27,7 +27,8 @@
     "conversar": "Conversar",
     "prancha": "Tablero de pictogramas",
     "servicos": "Servicios accesibles",
-    "preferencias": "Preferencias"
+    "preferencias": "Preferencias",
+    "letreiro": "Leer letrero"
   },
   "pisos": {
     "terreo": "Planta 1 – Planta baja",
@@ -44,7 +45,8 @@
     "T08": { "titulo": "Pedir ayuda", "objetivo": "Pida ayuda al personal del centro comercial. En emergencia, llame al 192, 193 o 190." },
     "T09": { "titulo": "Su pedido de ayuda", "objetivo": "Siga su pedido en tiempo real." },
     "T10": { "titulo": "Evaluar", "objetivo": "Cuéntenos cómo fue la ruta o informe una barrera." },
-    "T11": { "titulo": "Servicios accesibles", "objetivo": "Baños accesibles, cambiador, mesas reservadas, área tranquila y más." }
+    "T11": { "titulo": "Servicios accesibles", "objetivo": "Baños accesibles, cambiador, mesas reservadas, área tranquila y más." },
+    "letreiro": { "titulo": "Leer letrero", "objetivo": "Apunta la cámara a la fachada y el celular dice qué tienda tienes enfrente." }
   },
   "local": {
     "comoChegar": "Cómo llegar",
@@ -75,6 +77,33 @@
     "nenhumResultado": "Ningún resultado encontrado.",
     "resultados": "{consulta} — {n, plural, one {# resultado} other {# resultados}}",
     "dica": "Escribe al menos 2 letras. Ej.: “ca” encuentra C&A y “baño” encuentra los baños."
+  },
+  "letreiro": {
+    "ligar": "Encender cámara",
+    "desligar": "Apagar cámara",
+    "lerAgora": "Leer ahora",
+    "video": "Imagen de la cámara trasera",
+    "guia": "Mantén el letrero en el centro de la pantalla, a unos 2 a 5 metros.",
+    "ligada": "Cámara encendida. Apunta al letrero de la tienda; te aviso cuando lo reconozca.",
+    "desligada": "Cámara apagada.",
+    "carregando": "Preparando el lector de letreros…",
+    "lendo": "Leyendo…",
+    "naoReconheci": "No reconocí ninguna tienda. Acércate o apunta al nombre en la fachada.",
+    "emFrente": "Enfrente: {nome}. {numero}, {piso}.",
+    "ultimaLoja": "Última tienda reconocida",
+    "verDetalhes": "Ver detalles de {nome}",
+    "aviso": "El lector puede equivocarse: confirma con el entorno o pide ayuda. La imagen se lee en el propio celular y no se envía a ningún servidor.",
+    "internet": "La primera vez, el lector descarga unos 5 MB. Después funciona incluso con internet débil.",
+    "erros": {
+      "inseguro": "La cámara solo funciona en una dirección segura (https).",
+      "semSuporte": "Este navegador no permite usar la cámara.",
+      "negada": "Sin permiso para usar la cámara. Habilítala en la configuración del navegador e inténtalo de nuevo.",
+      "naoEncontrada": "No encontramos una cámara en este dispositivo.",
+      "emUso": "Otra aplicación está usando la cámara.",
+      "ocr": "No se pudo cargar el lector de letreros. Revisa la conexión e inténtalo de nuevo.",
+      "desconhecido": "No se pudo encender la cámara."
+    },
+    "alternativa": "¿Prefieres sin cámara? Usa la búsqueda."
   },
   "preferencias": {
     "tema": "Tema",

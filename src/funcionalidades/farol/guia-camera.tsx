@@ -31,6 +31,7 @@ import { obterBase } from './base-visual';
 import { usePassos } from './use-passos';
 import { contemAlguma, escutaDisponivel, normalizarFala, ouvirUmaVez } from './escuta';
 import { BotaoTema } from './botao-tema';
+import { velocidadeDaVoz } from './velocidade-voz';
 import './guia.css';
 
 /** Classes do guia.css (prefixo guia-). */
@@ -166,7 +167,7 @@ export function GuiaCamera({
       setStatus(texto);
       anunciarAria(texto, urgente ? 'assertive' : 'polite');
       if (mudoRef.current) aoTerminar?.();
-      else falar(texto, idioma, aoTerminar);
+      else falar(texto, idioma, aoTerminar, velocidadeDaVoz());
     },
     [anunciarAria, idioma],
   );

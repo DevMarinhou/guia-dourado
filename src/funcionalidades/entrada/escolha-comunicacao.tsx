@@ -3,7 +3,7 @@
 // Porta de entrada do app: "Como você prefere se comunicar?" — por voz ou por toque.
 // Cada resposta abre a ferramenta que ajuda aquela pessoa:
 //   🔊 Voz    → guia por câmera (/guia, já no modo voz) — pessoa cega ou com baixa visão
-//   🤟 Libras → Conversar (/conversar) com o VLibras ligado — pessoa surda
+//   🤟 Libras → liga o VLibras (gov.br) aqui mesmo e abre o avatar — pessoa surda
 //   🖼️ Cards  → Prancha de pictogramas (/prancha) — quem não fala / prefere figuras
 // O som só pode tocar depois de um toque (regra dos navegadores), por isso a pergunta falada
 // começa no botão "Toque aqui para eu perguntar em voz alta".
@@ -13,11 +13,13 @@ import { falar } from '@/adaptadores/voz/web-speech';
 import { ativarVLibras } from '@/adaptadores/libras/vlibras';
 import { Link, useRouter } from '@/i18n/navigation';
 import { contemAlguma, escutaDisponivel, normalizarFala, ouvirUmaVez } from '@/funcionalidades/farol/escuta';
+import { velocidadeDaVoz } from '@/funcionalidades/farol/velocidade-voz';
 import '@/funcionalidades/farol/guia.css';
 
 export type TextosEntrada = Record<
   | 'titulo' | 'perguntarVoz' | 'f_pergunta' | 'f_naoEntendi' | 'ouvindo' | 'voz' | 'vozDesc' | 'libras'
-  | 'librasDesc' | 'cards' | 'cardsDesc' | 'abrindo' | 'palavrasVoz' | 'palavrasLibras' | 'palavrasCards',
+  | 'librasDesc' | 'cards' | 'cardsDesc' | 'abrindo' | 'librasPronto' | 'librasErro' | 'palavrasVoz'
+  | 'palavrasLibras' | 'palavrasCards',
   string
 >;
 
@@ -32,13 +34,28 @@ export function EscolhaComunicacao({ textos: t, idioma }: { textos: TextosEntrad
   function dizer(texto: string, aoTerminar?: () => void) {
     setAviso(texto);
     anunciarAria(texto, 'polite');
-    falar(texto, idioma, aoTerminar);
+    falar(texto, idioma, aoTerminar, velocidadeDaVoz());
   }
 
+  /** Liga o VLibras (gov.br) nesta mesma página e abre o avatar, clicando no botão do próprio widget. */
   async function abrirLibras() {
     setAviso(t.abrindo);
-    await ativarVLibras(); // o widget fica na página e acompanha a navegação
-    router.push('/conversar');
+    if (!(await ativarVLibras())) {
+      setAviso(t.librasErro);
+      anunciarAria(t.librasErro, 'polite');
+      return;
+    }
+    // O widget monta o botão de acesso alguns instantes depois de carregar.
+    for (let i = 0; i < 25; i++) {
+      const botao = document.querySelector<HTMLElement>('[vw-access-button]');
+      if (botao && botao.childElementCount > 0) {
+        botao.click();
+        break;
+      }
+      await new Promise((r) => window.setTimeout(r, 200));
+    }
+    setAviso(t.librasPronto);
+    anunciarAria(t.librasPronto, 'polite');
   }
 
   function escolher(o: Opcao) {

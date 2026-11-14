@@ -15,7 +15,7 @@ export default async function Inicio({ params }: PageProps<'/[locale]'>) {
   const e = await getTranslations('entrada');
   const chavesEntrada = [
     'titulo', 'perguntarVoz', 'f_pergunta', 'f_naoEntendi', 'ouvindo', 'voz', 'vozDesc', 'libras', 'librasDesc',
-    'cards', 'cardsDesc', 'abrindo', 'palavrasVoz', 'palavrasLibras', 'palavrasCards',
+    'cards', 'cardsDesc', 'abrindo', 'librasPronto', 'librasErro', 'palavrasVoz', 'palavrasLibras', 'palavrasCards',
   ] as const satisfies readonly (keyof TextosEntrada)[];
   const textosEntrada = Object.fromEntries(chavesEntrada.map((k) => [k, e.raw(k) as string])) as TextosEntrada;
   const idioma = locale as Idioma;

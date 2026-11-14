@@ -432,10 +432,12 @@
     "voz": "Voice",
     "vozDesc": "I can't see: the guide talks and listens",
     "libras": "Libras",
-    "librasDesc": "Talk with sign language and captions",
+    "librasDesc": "See the texts in Brazilian Sign Language (VLibras)",
     "cards": "Cards",
     "cardsDesc": "Talk with pictures",
     "abrindo": "Opening…",
+    "librasPronto": "Libras is on. Tap any text on the page to see it in sign language.",
+    "librasErro": "VLibras did not open. Check the internet and try again.",
     "palavrasVoz": "voice,talk,speak,listen,audio,sound,blind",
     "palavrasLibras": "libras,sign,signs,sign language,deaf",
     "palavrasCards": "cards,card,pictures,picture,images,pictograms,board"

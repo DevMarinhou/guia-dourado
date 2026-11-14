@@ -432,10 +432,12 @@
     "voz": "Voz",
     "vozDesc": "Não enxergo: o guia fala e escuta",
     "libras": "Libras",
-    "librasDesc": "Conversar com Libras e legenda",
+    "librasDesc": "Ver os textos em Libras (VLibras)",
     "cards": "Cards",
     "cardsDesc": "Falar com figuras",
     "abrindo": "Abrindo…",
+    "librasPronto": "Libras ligado. Toque num texto da página para ver em Libras.",
+    "librasErro": "O VLibras não abriu agora. Verifique a internet e tente de novo.",
     "palavrasVoz": "voz,falar,fala,ouvir,audio,som,cego,cega,nao enxergo",
     "palavrasLibras": "libras,sinais,surdo,surda,lingua de sinais",
     "palavrasCards": "cards,card,cartoes,cartao,figuras,figura,imagens,pictogramas,prancha"

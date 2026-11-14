@@ -432,10 +432,12 @@
     "voz": "Voz",
     "vozDesc": "No veo: la guía habla y escucha",
     "libras": "Libras",
-    "librasDesc": "Conversar con señas y subtítulos",
+    "librasDesc": "Ver los textos en Libras (VLibras)",
     "cards": "Tarjetas",
     "cardsDesc": "Hablar con figuras",
     "abrindo": "Abriendo…",
+    "librasPronto": "Libras activado. Toca un texto de la página para verlo en señas.",
+    "librasErro": "VLibras no se abrió. Verifica internet e inténtalo de nuevo.",
     "palavrasVoz": "voz,hablar,habla,escuchar,audio,sonido,ciego,ciega",
     "palavrasLibras": "libras,senas,sordo,sorda,lengua de senas",
     "palavrasCards": "tarjetas,tarjeta,cards,figuras,figura,imagenes,pictogramas,tablero"

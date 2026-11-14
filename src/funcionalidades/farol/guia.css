@@ -1,0 +1,116 @@
+/*
+ * Guia Dourado · guia por câmera: tokens do acento dourado e animações do "radar".
+ * O texto continua nos tokens do tema (globals.css); o dourado é decoração (anéis, brilho, seta),
+ * com versão própria para os temas escuro e alto contraste. Animações respeitam "reduzir movimento"
+ * (regra global em globals.css).
+ * Arquivo global com prefixo guia-: o next.config trata todo *.css como global (Tailwind/Turbopack),
+ * então CSS Modules não geram classes únicas aqui.
+ */
+.guia-raiz {
+  --cor-ouro: #c99a1c;
+  --cor-ouro-texto: #7a5600; /* 6,9:1 sobre branco */
+  --cor-ouro-brilho: rgb(201 154 28 / 0.28);
+  --cor-vidro: rgb(255 255 255 / 0.72);
+}
+
+:root[data-tema='escuro'] .guia-raiz {
+  --cor-ouro: #f2c14e;
+  --cor-ouro-texto: #f6d27a;
+  --cor-ouro-brilho: rgb(242 193 78 / 0.3);
+  --cor-vidro: rgb(24 32 42 / 0.75);
+}
+
+:root[data-tema='alto-contraste'] .guia-raiz {
+  --cor-ouro: #ffff00;
+  --cor-ouro-texto: #ffff00;
+  --cor-ouro-brilho: transparent;
+  --cor-vidro: #000000;
+}
+
+/* Cartão de "vidro" com borda dourada fina. */
+.guia-vidro {
+  background: var(--cor-vidro);
+  border: 1px solid color-mix(in srgb, var(--cor-ouro) 55%, transparent);
+  box-shadow: 0 8px 30px var(--cor-ouro-brilho);
+  backdrop-filter: blur(8px);
+}
+
+/* Radar: anéis concêntricos que pulsam enquanto a câmera procura. */
+.guia-radar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  width: min(72vw, 17rem);
+  border-radius: 9999px;
+  background: radial-gradient(circle, var(--cor-ouro-brilho) 0%, transparent 70%);
+}
+.guia-anel {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 2px solid var(--cor-ouro);
+  opacity: 0;
+  animation: guia-pulso 2.4s ease-out infinite;
+}
+.guia-anel:nth-child(2) {
+  animation-delay: 0.8s;
+}
+.guia-anel:nth-child(3) {
+  animation-delay: 1.6s;
+}
+@keyframes guia-pulso {
+  0% {
+    transform: scale(0.55);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.05);
+    opacity: 0;
+  }
+}
+.guia-anelFixo {
+  position: absolute;
+  inset: 6%;
+  border-radius: 9999px;
+  border: 3px solid var(--cor-ouro);
+}
+.guia-seta {
+  transition: transform 0.35s ease;
+  color: var(--cor-ouro-texto);
+}
+
+/* Linha de varredura sobre a imagem da câmera. */
+.guia-camera {
+  position: relative;
+  overflow: hidden;
+}
+.guia-camera::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 3px;
+  background: var(--cor-ouro);
+  box-shadow: 0 0 12px var(--cor-ouro);
+  animation: guia-varrer 2.8s linear infinite;
+}
+@keyframes guia-varrer {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(12rem);
+  }
+}
+
+/* Botão de abertura: ocupa a tela, um toque em qualquer lugar começa. */
+.guia-abertura {
+  min-height: 62vh;
+}
+.guia-ouro {
+  color: var(--cor-ouro-texto);
+}
+.guia-bordaOuro {
+  border-color: var(--cor-ouro);
+}

@@ -143,6 +143,12 @@ export const esquemaPontoPercurso = z.object({
   nome: esquemaTextoI18n,
   esquerda: esquemaTextoI18n.optional(),
   direita: esquemaTextoI18n.optional(),
+  /** o que fica à frente de quem chega da entrada (ex.: lixeiras no fim do hall) */
+  frente: esquemaTextoI18n.optional(),
+  /** curva neste ponto, para quem anda da entrada para o fundo (no sentido contrário, inverte) */
+  virar: z.enum(['esquerda', 'direita']).optional(),
+  /** a câmera já reconhece o ponto a N passos de distância (ex.: lixeiras vistas do meio do hall) */
+  reconhecidoA: z.number().min(0).optional(),
   perigo: esquemaTextoI18n.optional(),
 });
 

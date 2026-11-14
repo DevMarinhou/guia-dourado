@@ -98,7 +98,13 @@
       "f_passou": "Atenção: você passou de {nome}. Vire para trás e volte cerca de {passos} passos.",
       "f_contramao": "Atenção: você está indo no sentido contrário. Vire para trás. {nome} fica a cerca de {passos} passos.",
       "f_vireEsquerda": "Vire à esquerda: {texto}.",
-      "f_vireDireita": "Vire à direita: {texto}."
+      "f_vireDireita": "Vire à direita: {texto}.",
+      "f_frente": "À frente, {texto}.",
+      "f_virarEm": "Em {passos} passos, vire à {lado}.",
+      "f_virarEmFrente": "Em {passos} passos, {texto} à sua frente: vire à {lado}.",
+      "f_virarAgora": "Vire agora à {lado}.",
+      "ladoEsquerda": "esquerda",
+      "ladoDireita": "direita"
     },
     "letreiro": { "titulo": "Ler letreiro", "objetivo": "Aponte a câmera para a fachada e o celular fala qual loja está à sua frente." }
   },

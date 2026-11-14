@@ -14,6 +14,10 @@ export type PontoPercurso = {
   trecho: boolean;
   /** texto curto do perigo (ex.: "escada à direita"); ausente = sem perigo */
   perigo?: string;
+  /** curva neste ponto para quem anda no sentido crescente dos passos (no contrário, inverte) */
+  virar?: 'esquerda' | 'direita';
+  /** a câmera já reconhece o ponto a N passos de distância (a posição encaixa N passos antes dele) */
+  reconhecidoA?: number;
 };
 
 export type EstadoPosicao = {
@@ -35,6 +39,8 @@ export const RAIO_PERIGO = 4;
 export const RAIO_PROXIMO = 5;
 /** passou do destino por pelo menos N passos → manda voltar */
 export const RAIO_PASSOU = 3;
+/** "vire agora" quando a curva está a até N passos */
+export const RAIO_VIRAR_AGORA = 1;
 /** um ponto do caminho "ficou para trás" depois de N passos além dele */
 export const RAIO_FICOU_PRA_TRAS = 2;
 
@@ -42,9 +48,15 @@ export function estadoInicial(): EstadoPosicao {
   return { passos: 0, ultimoPonto: null, passosDesdePonto: 0, passosDoPonto: 0, sentidoRota: 0, inicioRota: 0 };
 }
 
+/** Onde a pessoa está quando a câmera reconhece `p` (antes dele, se for visto de longe). */
+export function posicaoAoReconhecer(p: PontoPercurso, sentidoRota: number): number {
+  return p.passos - (p.reconhecidoA ?? 0) * (sentidoRota || 1);
+}
+
 /** A câmera confirmou um ponto: a posição encaixa nele (mantém a rota atual). */
 export function confirmarPonto(p: PontoPercurso, anterior: EstadoPosicao = estadoInicial()): EstadoPosicao {
-  return { ...anterior, passos: p.passos, ultimoPonto: p.id, passosDesdePonto: 0, passosDoPonto: p.passos };
+  const passos = posicaoAoReconhecer(p, anterior.sentidoRota);
+  return { ...anterior, passos, ultimoPonto: p.id, passosDesdePonto: 0, passosDoPonto: passos };
 }
 
 /** Começa (ou recomeça) a rota até `destino` a partir da posição atual. */
@@ -78,6 +90,7 @@ export type Aviso =
   | { tipo: 'passou'; passos: number }
   | { tipo: 'proximo'; pontoId: string; passos: number }
   | { tipo: 'ficouPraTras'; pontoId: string }
+  | { tipo: 'virar'; pontoId: string; passos: number; lado: 'esquerda' | 'direita'; agora: boolean }
   | { tipo: 'perigo'; pontoId: string; passos: number };
 
 /** Decide o que avisar. `jaAvisado` guarda o que já foi dito na rota atual (sem repetir). */
@@ -115,6 +128,19 @@ export function avisos(
     const noCaminho =
       (p.passos - e.inicioRota) * sentido > 0 && (destino.passos - p.passos) * sentido > 0;
     if (!noCaminho) continue;
+    if (p.virar) {
+      // Curva: "em N passos, vire…" e depois "vire agora…". Na volta, esquerda vira direita.
+      const lado = sentido > 0 ? p.virar : p.virar === 'esquerda' ? 'direita' : 'esquerda';
+      if (distancia <= RAIO_VIRAR_AGORA && distancia >= -RAIO_FICOU_PRA_TRAS && !jaAvisado.has(`virarAgora:${p.id}`)) {
+        jaAvisado.add(`virarAgora:${p.id}`);
+        jaAvisado.add(`virar:${p.id}`);
+        saida.push({ tipo: 'virar', pontoId: p.id, passos: 0, lado, agora: true });
+      } else if (distancia > RAIO_VIRAR_AGORA && distancia <= RAIO_PROXIMO && !jaAvisado.has(`virar:${p.id}`)) {
+        jaAvisado.add(`virar:${p.id}`);
+        saida.push({ tipo: 'virar', pontoId: p.id, passos: Math.round(distancia), lado, agora: false });
+      }
+      continue; // depois da curva não faz sentido "ficou para trás"
+    }
     if (distancia > 0 && distancia <= RAIO_PROXIMO && !jaAvisado.has(`proximo:${p.id}`)) {
       jaAvisado.add(`proximo:${p.id}`);
       saida.push({ tipo: 'proximo', pontoId: p.id, passos: Math.round(distancia) });
@@ -128,7 +154,7 @@ export function avisos(
   }
 
   const restante = Math.abs(destino.passos - e.passos);
-  if (e.ultimoPonto === destino.id && e.passosDesdePonto === 0) {
+  if (e.ultimoPonto === destino.id && e.passosDesdePonto === 0 && restante <= RAIO_CHEGOU_POR_PASSOS) {
     if (!jaAvisado.has('chegou-camera')) {
       jaAvisado.add('chegou-camera');
       jaAvisado.add('chegou-passos');

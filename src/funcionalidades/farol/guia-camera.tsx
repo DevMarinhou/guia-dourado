@@ -17,6 +17,7 @@ import {
   estadoInicial,
   indoAoContrario,
   iniciarRota,
+  posicaoAoReconhecer,
   AVISO_A_CADA,
   RAIO_PASSOU,
   type Aviso,
@@ -36,7 +37,14 @@ const PASSOS_POR_SEGUNDO_DEMO = 0.75;
 const MARGEM_PERCURSO = RAIO_PASSOU + 3;
 
 /** Ponto já traduzido para o idioma da página. */
-export type PontoGuia = PontoPercurso & { nome: string; esquerda?: string; direita?: string; perigoTexto?: string };
+export type PontoGuia = PontoPercurso & {
+  nome: string;
+  esquerda?: string;
+  direita?: string;
+  /** o que fica à frente de quem chega da entrada */
+  frente?: string;
+  perigoTexto?: string;
+};
 
 export type TextosGuia = Record<
   | 'percurso' | 'comecar' | 'demo' | 'ondeEstou' | 'parar' | 'paraOnde' | 'situacao' | 'pontoReconhecido'
@@ -45,9 +53,19 @@ export type TextosGuia = Record<
   | 'f_semCamera' | 'f_demo' | 'f_parado' | 'f_voceEsta' | 'f_esquerda' | 'f_direita' | 'f_trecho' | 'f_naoSei'
   | 'f_destino' | 'f_destinoSemPosicao' | 'f_faltam' | 'f_chegando' | 'f_chegouCamera' | 'f_chegouPassos'
   | 'f_perigo' | 'f_semMovimento' | 'f_movimentoNegado' | 'f_proximo' | 'f_proximoEsquerda' | 'f_proximoDireita'
-  | 'f_ficouPraTras' | 'f_passou' | 'f_contramao' | 'f_vireEsquerda' | 'f_vireDireita' | 'simulados',
+  | 'f_ficouPraTras' | 'f_passou' | 'f_contramao' | 'f_vireEsquerda' | 'f_vireDireita' | 'simulados'
+  | 'f_frente' | 'f_virarEm' | 'f_virarEmFrente' | 'f_virarAgora' | 'ladoEsquerda' | 'ladoDireita',
   string
 >;
+
+/**
+ * Lados e "à frente" valem para quem anda da entrada para o fundo (sentido crescente).
+ * Na volta, esquerda e direita trocam e o que estava "à frente" fica para trás.
+ */
+function ladosNoSentido(p: PontoGuia, sentido: number): { esquerda?: string; direita?: string; frente?: string } {
+  if (sentido < 0) return { esquerda: p.direita, direita: p.esquerda };
+  return { esquerda: p.esquerda, direita: p.direita, frente: p.frente };
+}
 
 function preencher(modelo: string, valores: Record<string, string | number>): string {
   return modelo.replace(/\{(\w+)\}/g, (_, k: string) => String(valores[k] ?? ''));
@@ -76,7 +94,7 @@ export function GuiaCamera({
   const trechoRef = useRef<string | null>(null);
   /** demonstração: depois de chegar, a pessoa para (não simula mais passos até a câmera ver outro ponto) */
   const paradoRef = useRef(false);
-  /** demonstração: o vídeo nunca dá meia-volta, então depois de "passou" só a câmera guia */
+  /** demonstração: o vídeo nunca dá meia-volta, então depois de "passou"/"contrário" só a câmera guia */
   const voltandoRef = useRef(false);
 
   const [ativo, setAtivo] = useState(false);
@@ -105,14 +123,17 @@ export function GuiaCamera({
   );
 
   const textoOndeEstou = useCallback(
-    (p: PontoGuia) =>
-      [
+    (p: PontoGuia) => {
+      const l = ladosNoSentido(p, posRef.current.sentidoRota);
+      return [
         preencher(t.f_voceEsta, { nome: p.nome }),
-        p.esquerda ? preencher(t.f_esquerda, { texto: p.esquerda }) : '',
-        p.direita ? preencher(t.f_direita, { texto: p.direita }) : '',
+        l.frente ? preencher(t.f_frente, { texto: l.frente }) : '',
+        l.esquerda ? preencher(t.f_esquerda, { texto: l.esquerda }) : '',
+        l.direita ? preencher(t.f_direita, { texto: l.direita }) : '',
       ]
         .filter(Boolean)
-        .join(' '),
+        .join(' ');
+    },
     [t],
   );
 
@@ -123,20 +144,35 @@ export function GuiaCamera({
           return preencher(t.f_faltam, { passos: a.passos, nome: d.nome });
         case 'chegando':
           return preencher(t.f_chegando, { passos: a.passos, nome: d.nome });
-        case 'chegou':
+        case 'chegou': {
+          const l = ladosNoSentido(d, posRef.current.sentidoRota);
           return [
             preencher(a.porCamera ? t.f_chegouCamera : t.f_chegouPassos, { nome: d.nome }),
-            d.esquerda ? preencher(t.f_vireEsquerda, { texto: d.esquerda }) : '',
-            d.direita ? preencher(t.f_vireDireita, { texto: d.direita }) : '',
+            l.esquerda ? preencher(t.f_vireEsquerda, { texto: l.esquerda }) : '',
+            l.direita ? preencher(t.f_vireDireita, { texto: l.direita }) : '',
           ]
             .filter(Boolean)
             .join(' ');
+        }
         case 'passou':
           return preencher(t.f_passou, { nome: d.nome, passos: a.passos });
         case 'proximo': {
           const p = porId.get(a.pontoId);
-          const modelo = p?.esquerda ? t.f_proximoEsquerda : p?.direita ? t.f_proximoDireita : t.f_proximo;
+          const l = p ? ladosNoSentido(p, posRef.current.sentidoRota) : {};
+          const modelo = l.esquerda ? t.f_proximoEsquerda : l.direita ? t.f_proximoDireita : t.f_proximo;
           return preencher(modelo, { passos: a.passos, nome: p?.nome ?? '' });
+        }
+        case 'virar': {
+          const p = porId.get(a.pontoId);
+          const lado = a.lado === 'esquerda' ? t.ladoEsquerda : t.ladoDireita;
+          if (a.agora) return preencher(t.f_virarAgora, { lado });
+          // "à frente" só vale para quem chega pelo lado da entrada (sentido crescente).
+          const deFrente = p?.frente && a.lado === p.virar;
+          return preencher(deFrente ? t.f_virarEmFrente : t.f_virarEm, {
+            passos: a.passos,
+            lado,
+            texto: p?.frente ?? '',
+          });
         }
         case 'ficouPraTras':
           return preencher(t.f_ficouPraTras, { nome: porId.get(a.pontoId)?.nome ?? '' });
@@ -159,6 +195,7 @@ export function GuiaCamera({
             tocar('alerta');
             urgente = true;
           }
+          if (a.tipo === 'virar' && a.agora) tocar('bipe', a.lado === 'esquerda' ? -1 : 1);
           if (a.tipo === 'chegou') {
             tocar('ding');
             if (a.porCamera) paradoRef.current = true;
@@ -231,9 +268,17 @@ export function GuiaCamera({
       if (!ponto) return;
       if (confirmado === posRef.current.ultimoPonto) {
         // Ainda vendo o mesmo ponto: corrige a deriva dos passos, sem falar de novo.
-        if (!ponto.trecho && Math.abs(posRef.current.passos - ponto.passos) > RAIO_PASSOU) {
-          posRef.current = confirmarPonto(ponto, posRef.current);
-          setPosicao(ponto.passos);
+        // Vale todo o trecho de onde o ponto começa a ser visto até ele (pontos vistos de longe).
+        const alvo = posicaoAoReconhecer(ponto, posRef.current.sentidoRota);
+        const minimo = Math.min(alvo, ponto.passos) - RAIO_PASSOU;
+        const maximo = Math.max(alvo, ponto.passos) + RAIO_PASSOU;
+        const pos = posRef.current.passos;
+        if (!ponto.trecho && (pos < minimo || pos > maximo)) {
+          // Antes do trecho: encaixa onde o ponto começa a ser visto. Depois: no máximo até o próprio ponto.
+          const encaixe = confirmarPonto(ponto, posRef.current);
+          posRef.current =
+            pos > maximo ? { ...encaixe, passos: ponto.passos, passosDoPonto: ponto.passos } : encaixe;
+          setPosicao(posRef.current.passos);
         }
         return;
       }
@@ -252,7 +297,7 @@ export function GuiaCamera({
       posRef.current = confirmarPonto(ponto, anterior);
       if (!anterior.ultimoPonto && d) posRef.current = iniciarRota(posRef.current, d.passos);
       setPontoAtual(ponto);
-      setPosicao(ponto.passos);
+      setPosicao(posRef.current.passos);
       tocar('ding');
       const falas = [textoOndeEstou(ponto)];
       const passouDoDestino =
@@ -262,6 +307,7 @@ export function GuiaCamera({
         const distancia = Math.round(Math.abs(d.passos - ponto.passos));
         avisadosRef.current = new Set([`faltam:${Math.ceil(distancia / AVISO_A_CADA) * AVISO_A_CADA}`]);
         tocar('alerta');
+        voltandoRef.current = true;
         falas.push(preencher(t.f_contramao, { nome: d.nome, passos: distancia }));
       }
       processarAvisos(falas);

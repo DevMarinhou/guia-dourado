@@ -18,7 +18,8 @@ const CHAVES = [
   'f_voceEsta', 'f_esquerda', 'f_direita', 'f_trecho', 'f_naoSei', 'f_destino', 'f_destinoSemPosicao', 'f_faltam',
   'f_chegando', 'f_chegouCamera', 'f_chegouPassos', 'f_perigo', 'f_semMovimento', 'f_movimentoNegado',
   'f_proximo', 'f_proximoEsquerda', 'f_proximoDireita', 'f_ficouPraTras', 'f_passou', 'f_contramao',
-  'f_vireEsquerda', 'f_vireDireita', 'simulados',
+  'f_vireEsquerda', 'f_vireDireita', 'simulados', 'f_frente', 'f_virarEm', 'f_virarEmFrente', 'f_virarAgora',
+  'ladoEsquerda', 'ladoDireita',
 ] as const satisfies readonly (keyof TextosGuia)[];
 
 export default async function Pagina({ params }: PageProps<'/[locale]/guia'>) {
@@ -39,6 +40,9 @@ export default async function Pagina({ params }: PageProps<'/[locale]/guia'>) {
     nome: traduzir(p.nome) ?? p.id,
     esquerda: traduzir(p.esquerda),
     direita: traduzir(p.direita),
+    frente: traduzir(p.frente),
+    virar: p.virar,
+    reconhecidoA: p.reconhecidoA,
     perigoTexto: traduzir(p.perigo),
   }));
 

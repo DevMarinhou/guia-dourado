@@ -98,7 +98,13 @@
       "f_passou": "Caution: you walked past {nome}. Turn around and go back about {passos} steps.",
       "f_contramao": "Caution: you are walking the wrong way. Turn around. {nome} is about {passos} steps away.",
       "f_vireEsquerda": "Turn left: {texto}.",
-      "f_vireDireita": "Turn right: {texto}."
+      "f_vireDireita": "Turn right: {texto}.",
+      "f_frente": "Ahead, {texto}.",
+      "f_virarEm": "In {passos} steps, turn {lado}.",
+      "f_virarEmFrente": "In {passos} steps, {texto} ahead of you: turn {lado}.",
+      "f_virarAgora": "Turn {lado} now.",
+      "ladoEsquerda": "left",
+      "ladoDireita": "right"
     },
     "letreiro": { "titulo": "Read store sign", "objetivo": "Point the camera at a storefront and your phone says which store is in front of you." }
   },

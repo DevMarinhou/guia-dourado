@@ -63,6 +63,41 @@ describe('Farol · posição', () => {
     expect(iniciarRota(depois, elevador.passos).sentidoRota).toBe(-1);
   });
 
+  it('avisa a curva antes ("em N passos, vire") e na hora ("vire agora"), invertendo na volta', () => {
+    const curva: PontoPercurso = { id: 'curva', passos: 10, destino: false, trecho: false, virar: 'esquerda' };
+    const comCurva = [entrada, curva, sala];
+    const ida = new Set<string>();
+    let e = iniciarRota(confirmarPonto(entrada), sala.passos);
+    const ditosIda: Aviso[] = [];
+    for (let i = 0; i < 12; i++) {
+      e = darPasso(e, limites);
+      ditosIda.push(...avisos(e, sala, comCurva, ida));
+    }
+    expect(ditosIda.filter((a) => a.tipo === 'virar')).toEqual([
+      { tipo: 'virar', pontoId: 'curva', passos: 5, lado: 'esquerda', agora: false },
+      { tipo: 'virar', pontoId: 'curva', passos: 0, lado: 'esquerda', agora: true },
+    ]);
+    const volta = new Set<string>();
+    e = iniciarRota(confirmarPonto(sala), entrada.passos);
+    const ditosVolta: Aviso[] = [];
+    for (let i = 0; i < 22; i++) {
+      e = darPasso(e, limites);
+      ditosVolta.push(...avisos(e, entrada, comCurva, volta));
+    }
+    expect(ditosVolta.filter((a) => a.tipo === 'virar').map((a) => a.tipo === 'virar' && a.lado)).toEqual([
+      'direita',
+      'direita',
+    ]);
+  });
+
+  it('ponto visto de longe encaixa a posição antes dele', () => {
+    const lixeira: PontoPercurso = { id: 'lixeira', passos: 10, destino: false, trecho: false, reconhecidoA: 4 };
+    const ida = iniciarRota(confirmarPonto(entrada), sala.passos);
+    expect(confirmarPonto(lixeira, ida).passos).toBe(6);
+    const volta = iniciarRota(confirmarPonto(sala), entrada.passos);
+    expect(confirmarPonto(lixeira, volta).passos).toBe(14);
+  });
+
   it('reconhece quando a câmera mostra que a pessoa vai no sentido contrário', () => {
     expect(indoAoContrario(20, 15, 30)).toBe(true);
     expect(indoAoContrario(20, 25, 30)).toBe(false);

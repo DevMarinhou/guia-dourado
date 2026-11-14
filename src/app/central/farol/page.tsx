@@ -1,6 +1,9 @@
 import { TreinoPercurso } from '@/funcionalidades/farol/treino-percurso';
 import { percursoPiloto } from '@/lib/dados';
 
+// instant = false: rota sempre dinâmica, como a Central (o layout de /central usa getMessages).
+export const instant = false;
+
 export const metadata = { title: 'Treino do percurso (Farol)' };
 
 // Ferramenta interna da equipe: gera a base visual do guia por câmera a partir do vídeo narrado.

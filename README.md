@@ -70,7 +70,7 @@ Experimente: `http://localhost:3000/q/ENT-JK` (QR da entrada), `/es` (espanhol),
 ```text
 dados/            dados versionados: pisos, locais, grafo, pontos QR, equipamentos, frases, prancha
 docs/             documentação (00–15), ADRs, glossário, referências, revisão da v1
-entrega/          PDF/DOCX da 1ª entrega e imagens
+entrega/          PDF/DOCX da 1ª entrega, resumo para os mentores, pitch em vídeo e imagens
 ferramentas/      scripts: documento de entrega, wireframes, QR
 src/app/          rotas Next.js: [locale]/ (visitante), central/, q/[codigo], totem/, api/
 src/dominio/      TypeScript puro: tipos, esquemas zod, Dijkstra, instruções, busca
@@ -81,6 +81,17 @@ supabase/         migração SQL (pedidos de ajuda, equipamentos, RLS)
 tests/            testes de dados e E2E (Playwright + axe)
 wireframes/       wireframes v2 navegáveis
 ```
+
+## 🎥 Pitch e materiais da entrega
+
+| Material | Arquivo | O quê |
+|---|---|---|
+| **Pitch em vídeo (90 s)** | [`entrega/Pitch-90s-v1.mp4`](entrega/Pitch-90s-v1.mp4) | Vídeo de apresentação do produto — roteiro e passo a passo da demo em [`docs/15-pitch-e-demo.md`](docs/15-pitch-e-demo.md) |
+| **Resumo para os mentores** | [`entrega/Resumo_para_os_mentores_-_Heracross.pdf`](entrega/Resumo_para_os_mentores_-_Heracross.pdf) | Resumo executivo do produto, do time e das entregas |
+
+> Os dois arquivos estão versionados no repositório: baixe pelo link acima ou abra
+> a pasta [`entrega/`](entrega/) direto no GitHub. O vídeo é a **rede de segurança**
+> da demo — se o sinal do local falhar, é só dar play.
 
 ## Documentação
 

@@ -1,5 +1,5 @@
 // Adaptador de FALA com a Web Speech API (SpeechSynthesis): gratuito e funciona offline com vozes locais.
-// TODO(T06): adaptador de ESCUTA (SpeechRecognition/webkitSpeechRecognition) implementando ProvedorEscuta.
+// A ESCUTA (SpeechRecognition) está em ./escuta-web.ts — provedorEscuta implementa ProvedorEscuta.
 
 export function vozDisponivel(): boolean {
   return typeof window !== 'undefined' && 'speechSynthesis' in window;

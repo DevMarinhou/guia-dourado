@@ -1,32 +1,43 @@
+import { Suspense } from 'react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { TelaEmConstrucao } from '@/componentes/tela-em-construcao';
+import { TelaConversar } from '@/funcionalidades/conversar/tela-conversar';
 import type { Idioma } from '@/dominio/tipos';
 import { frasesProntas } from '@/lib/dados';
 
-// T06: Conversar (RF-14 a RF-17). Frases prontas já disponíveis (offline); falta a tela dividida
-// com legenda ao vivo (ProvedorEscuta), "digite e fale" (ProvedorFala) e a cascata de tradução.
-export default async function PaginaConversar({ params }: PageProps<'/[locale]/conversar'>) {
+// T06: Conversar (RF-14 a RF-17). Client Component: metade de cima girada 180°,
+// legenda ao vivo por lado (ProvedorEscuta, sem gravação), "digite e o celular fala",
+// frases prontas offline, tradução em cascata e atalho para intérprete de Libras.
+// URL_INTERPRETE_LIBRAS só é lida aqui (servidor) e passada como prop — não vai ao cliente.
+export async function generateMetadata({ params }: PageProps<'/[locale]/conversar'>) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'telas.T06' });
+  return { title: t('titulo') };
+}
+
+async function Conteudo({ params }: { params: PageProps<'/[locale]/conversar'>['params'] }) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations('telas.T06');
-  const idioma = locale as Idioma;
-
   return (
-    <TelaEmConstrucao id="T06" titulo={t('titulo')} objetivo={t('objetivo')} requisitos={['RF-14', 'RF-15', 'RF-16', 'RF-17']}>
-      {frasesProntas.map((g) => (
-        <section key={g.id} aria-labelledby={`grupo-${g.id}`}>
-          <h2 id={`grupo-${g.id}`} className="mb-2 text-xl font-bold">
-            {g.nome[idioma]}
-          </h2>
-          <ul className="space-y-2">
-            {g.frases.map((f) => (
-              <li key={f.id} className="rounded-lg border border-borda p-3">
-                {f[idioma]}
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
-    </TelaEmConstrucao>
+    <>
+      <h1 className="text-2xl font-bold">{t('titulo')}</h1>
+      <p className="text-texto-suave">{t('objetivo')}</p>
+      <TelaConversar
+        frases={frasesProntas}
+        idioma={locale as Idioma}
+        urlInterprete={process.env.URL_INTERPRETE_LIBRAS ?? ''}
+      />
+    </>
+  );
+}
+
+export default function PaginaConversar({ params }: PageProps<'/[locale]/conversar'>) {
+  return (
+    <div className="space-y-4">
+      {/* params dentro de <Suspense>: navegação instantânea (Next.js 16, como em ajuda/[id]). */}
+      <Suspense fallback={null}>
+        <Conteudo params={params} />
+      </Suspense>
+    </div>
   );
 }

@@ -24,6 +24,23 @@ npm run dev
 
 Experimente: `http://localhost:3000/q/ENT-JK` (QR da entrada), `/es` (espanhol), `/locais/outback-steakhouse`, `/mapa/praca-alimentacao`, `/prancha`, `/central`.
 
+### 🆘 Pedir ajuda e Central (T08 → T09 → T12)
+
+```bash
+# 1) Visitante: /ajuda — formulário em 2 etapas com consentimento LGPD
+#    → gera o link de acompanhamento /ajuda/<id>?token=... (T09, atualiza a cada 5 s)
+# 2) Equipe: /central — fila em tempo real (atualiza a cada 3 s), aceitar,
+#    ir a caminho, concluir, marcar como trote e alternar elevadores/escadas
+```
+
+- **Sem Supabase configurado (demo):** tudo funciona em **modo demonstração** — os pedidos
+  ficam na memória do servidor (não persistem entre reinícios) e a Central mostra o aviso.
+- **Com Supabase (produção):** preencha `NEXT_PUBLIC_SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY`
+  no `.env.local` e aplique `supabase/migrations/0001_inicial.sql` no SQL Editor.
+- **Chave da Central (opcional):** defina `CENTRAL_CHAVE` no `.env.local` para exigir login
+  em `/central`; sem ela, a fila fica aberta (modo demo).
+- **Limites (RN-03):** 1 pedido aberto por aparelho e 3 envios a cada 10 min (HTTP 429).
+
 ## Scripts
 
 | Comando | Para quê |

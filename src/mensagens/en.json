@@ -423,6 +423,23 @@
     "bombeiros": "Fire 193",
     "policia": "Police 190"
   },
+  "entrada": {
+    "titulo": "How would you like to communicate?",
+    "perguntarVoz": "Tap here and I will ask out loud",
+    "f_pergunta": "Hello! I am Guia Dourado. How would you like to communicate? Say voice, sign language or cards. Or tap an option.",
+    "f_naoEntendi": "I did not understand. Tap Voice, Libras or Cards.",
+    "ouvindo": "Listening…",
+    "voz": "Voice",
+    "vozDesc": "I can't see: the guide talks and listens",
+    "libras": "Libras",
+    "librasDesc": "Talk with sign language and captions",
+    "cards": "Cards",
+    "cardsDesc": "Talk with pictures",
+    "abrindo": "Opening…",
+    "palavrasVoz": "voice,talk,speak,listen,audio,sound,blind",
+    "palavrasLibras": "libras,sign,signs,sign language,deaf",
+    "palavrasCards": "cards,card,pictures,picture,images,pictograms,board"
+  },
   "naoEncontrado": {
     "titulo": "Page not found",
     "texto": "We could not find this page.",

@@ -94,6 +94,11 @@ function preencher(modelo: string, valores: Record<string, string | number>): st
   return modelo.replace(/\{(\w+)\}/g, (_, k: string) => String(valores[k] ?? ''));
 }
 
+function modoDaUrl(): Modo | null {
+  const m = new URLSearchParams(window.location.search).get('modo');
+  return m === 'voz' || m === 'tela' ? m : null;
+}
+
 /** Figura de cada tipo de ponto (o projeto usa emojis como ícones). */
 function figuraDoPonto(id: string): string {
   if (id.startsWith('elevador')) return '🛗';
@@ -463,9 +468,26 @@ export function GuiaCamera({
     void comecarCamera(m);
   }
 
+  // Veio da página inicial já com o modo escolhido (?modo=voz|tela)? Se a página já recebeu um toque,
+  // o som está liberado e o guia começa sozinho; senão, o toque na abertura começa direto nesse modo.
+  useEffect(() => {
+    const m = modoDaUrl();
+    const jaTocou = (navigator as Navigator & { userActivation?: { hasBeenActive: boolean } }).userActivation
+      ?.hasBeenActive;
+    if (!m || !jaTocou) return;
+    const id = window.setTimeout(() => {
+      liberarAudio();
+      escolherModo(m);
+    }, 0);
+    return () => window.clearTimeout(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- só ao abrir a tela
+  }, []);
+
   /** Abertura: o toque libera o som (exigência dos navegadores) e o guia pergunta como se comunicar. */
   function abrir() {
     liberarAudio();
+    const m = modoDaUrl();
+    if (m) return escolherModo(m);
     setFase('pergunta');
     anunciar(t.f_pergunta, false, async () => {
       if (!escutaDisponivel()) return;

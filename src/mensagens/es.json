@@ -423,6 +423,23 @@
     "bombeiros": "Bomberos 193",
     "policia": "Policía 190"
   },
+  "entrada": {
+    "titulo": "¿Cómo prefieres comunicarte?",
+    "perguntarVoz": "Toca aquí y te pregunto en voz alta",
+    "f_pergunta": "¡Hola! Soy Guia Dourado. ¿Cómo prefieres comunicarte? Di voz, libras o tarjetas. O toca una opción.",
+    "f_naoEntendi": "No entendí. Toca Voz, Libras o Tarjetas.",
+    "ouvindo": "Escuchando…",
+    "voz": "Voz",
+    "vozDesc": "No veo: la guía habla y escucha",
+    "libras": "Libras",
+    "librasDesc": "Conversar con señas y subtítulos",
+    "cards": "Tarjetas",
+    "cardsDesc": "Hablar con figuras",
+    "abrindo": "Abriendo…",
+    "palavrasVoz": "voz,hablar,habla,escuchar,audio,sonido,ciego,ciega",
+    "palavrasLibras": "libras,senas,sordo,sorda,lengua de senas",
+    "palavrasCards": "tarjetas,tarjeta,cards,figuras,figura,imagenes,pictogramas,tablero"
+  },
   "naoEncontrado": {
     "titulo": "Página no encontrada",
     "texto": "No encontramos esta página.",

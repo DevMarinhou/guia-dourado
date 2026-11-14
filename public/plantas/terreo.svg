@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" width="100%" role="img" aria-labelledby="titulo-terreo">
+  <title id="titulo-terreo">Planta do térreo: Entrada Av. JK à esquerda, corredor central até a Praça de Eventos, elevadores ELV-01 e ELV-02, escadas rolantes e sanitário PNE.</title>
+  <!-- Fundo do pavimento. Coordenadas no MESMO sistema do dados/grafo.json (1 unidade ≈ 1 m, escala 1:500). -->
+  <rect x="0" y="0" width="100" height="80" fill="var(--cor-superficie, #f4f6f8)" stroke="var(--cor-borda, #8a94a3)" stroke-width="0.8"/>
+
+  <!-- Corredores (arestas planas do grafo) -->
+  <g fill="none" stroke="var(--cor-borda, #8a94a3)" stroke-opacity="0.55" stroke-width="5" stroke-linecap="round">
+    <path d="M0 50 H55"/>
+    <path d="M55 50 V10"/>
+    <path d="M20 50 L40 58"/>
+    <path d="M55 50 L62 58"/>
+    <path d="M55 30 L63 25"/>
+    <path d="M20 50 L25 36"/>
+    <path d="M20 50 L30 40"/>
+    <path d="M55 50 L80 60"/>
+    <path d="M55 50 L70 45"/>
+    <path d="M55 30 L45 35"/>
+  </g>
+
+  <!-- Lojas / salas (retângulos ilustrativos sobre as portas do grafo) -->
+  <g fill="var(--cor-fundo, #ffffff)" stroke="var(--cor-borda, #8a94a3)" stroke-width="0.6">
+    <rect x="33" y="59" width="16" height="11"/>
+    <rect x="57" y="59" width="17" height="11"/>
+    <rect x="64" y="17" width="15" height="12"/>
+    <rect x="45" y="2" width="20" height="7"/>
+    <rect x="18" y="27" width="14" height="9"/>
+  </g>
+
+  <!-- Entrada Av. JK (nó T-ENT-JK, x=0 y=50) -->
+  <circle cx="2" cy="50" r="2.4" fill="var(--cor-primaria, #0b4f8a)"/>
+  <path d="M6 50 H12" stroke="var(--cor-primaria, #0b4f8a)" stroke-width="1.2" marker-end="none"/>
+  <text x="4" y="46" font-size="3.2" fill="var(--cor-texto, #1c2430)" font-weight="bold">Entrada JK</text>
+
+  <!-- Elevadores, escadas rolante e escada -->
+  <g fill="var(--cor-primaria, #0b4f8a)" stroke="var(--cor-fundo, #ffffff)" stroke-width="0.5">
+    <rect x="27" y="37" width="7" height="7" rx="1"/>
+    <rect x="77" y="57" width="7" height="7" rx="1"/>
+    <rect x="67" y="42" width="7" height="7" rx="1"/>
+    <rect x="42" y="32" width="7" height="7" rx="1"/>
+  </g>
+  <g font-size="2.6" fill="var(--cor-primaria-texto, #ffffff)" text-anchor="middle" font-weight="bold">
+    <text x="30.5" y="42">ELV1</text>
+    <text x="80.5" y="62">ELV2</text>
+    <text x="70.5" y="47">ROL</text>
+    <text x="45.5" y="37">ESC</text>
+  </g>
+
+  <!-- Rótulos das lojas e do sanitário -->
+  <g font-size="3.2" fill="var(--cor-texto, #1c2430)" text-anchor="middle">
+    <text x="41" y="65.5">Camicado</text>
+    <text x="65.5" y="65.5">Outback</text>
+    <text x="71.5" y="23.5">Riachuelo</text>
+    <text x="55" y="6.5">C&amp;A</text>
+    <text x="25" y="32.5">WC PNE</text>
+    <text x="40" y="53" font-size="3" fill="var(--cor-texto-suave, #4d5563)">Alameda das Cores</text>
+    <text x="58.5" y="40" font-size="3" fill="var(--cor-texto-suave, #4d5563)">Praça de Eventos</text>
+  </g>
+</svg>

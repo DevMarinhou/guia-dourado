@@ -2,18 +2,23 @@
 
 // Farol: guia por câmera para pessoas cegas ou com baixa visão.
 // Câmera (ou vídeo de demonstração) → reconhece o ponto → fala onde a pessoa está.
-// Com destino: câmera + passos → "faltam N passos", "está chegando", "você chegou", perigos.
+// Com destino: câmera + passos → "faltam N passos", "em N passos, X à esquerda", "ficou para trás",
+// "está chegando", "você chegou", "passou do destino", "sentido contrário", perigos.
+// No vídeo de demonstração não há acelerômetro: os passos são simulados pelo tempo do vídeo.
 // Tudo roda no aparelho; nada é gravado. Textos chegam do servidor (3 idiomas) por props.
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ImageEmbedder } from '@mediapipe/tasks-vision';
 import { useAnunciador } from '@/componentes/a11y/anunciador';
 import { falar } from '@/adaptadores/voz/web-speech';
 import {
-  ancorarNaPosicaoAtual,
   avisos,
   confirmarPonto,
   darPasso,
   estadoInicial,
+  indoAoContrario,
+  iniciarRota,
+  AVISO_A_CADA,
+  RAIO_PASSOU,
   type Aviso,
   type EstadoPosicao,
   type PontoPercurso,
@@ -25,6 +30,10 @@ import { obterBase } from './base-visual';
 import { usePassos } from './use-passos';
 
 const INTERVALO_ANALISE_MS = 450;
+/** Ritmo de caminhada do vídeo do piloto (≈ 70 passos em ~93 s), usado só na demonstração. */
+const PASSOS_POR_SEGUNDO_DEMO = 0.75;
+/** Margem além do primeiro/último ponto, para conseguir perceber que a pessoa passou deles. */
+const MARGEM_PERCURSO = RAIO_PASSOU + 3;
 
 /** Ponto já traduzido para o idioma da página. */
 export type PontoGuia = PontoPercurso & { nome: string; esquerda?: string; direita?: string; perigoTexto?: string };
@@ -35,7 +44,8 @@ export type TextosGuia = Record<
   | 'aviso' | 'imagemCamera' | 'f_inicio' | 'f_preparando' | 'f_semBase' | 'f_semModelo' | 'f_cameraLigada'
   | 'f_semCamera' | 'f_demo' | 'f_parado' | 'f_voceEsta' | 'f_esquerda' | 'f_direita' | 'f_trecho' | 'f_naoSei'
   | 'f_destino' | 'f_destinoSemPosicao' | 'f_faltam' | 'f_chegando' | 'f_chegouCamera' | 'f_chegouPassos'
-  | 'f_perigo' | 'f_semMovimento' | 'f_movimentoNegado',
+  | 'f_perigo' | 'f_semMovimento' | 'f_movimentoNegado' | 'f_proximo' | 'f_proximoEsquerda' | 'f_proximoDireita'
+  | 'f_ficouPraTras' | 'f_passou' | 'f_contramao' | 'f_vireEsquerda' | 'f_vireDireita' | 'simulados',
   string
 >;
 
@@ -64,6 +74,10 @@ export function GuiaCamera({
   const avisadosRef = useRef(new Set<string>());
   const destinoRef = useRef<PontoGuia | null>(null);
   const trechoRef = useRef<string | null>(null);
+  /** demonstração: depois de chegar, a pessoa para (não simula mais passos até a câmera ver outro ponto) */
+  const paradoRef = useRef(false);
+  /** demonstração: o vídeo nunca dá meia-volta, então depois de "passou" só a câmera guia */
+  const voltandoRef = useRef(false);
 
   const [ativo, setAtivo] = useState(false);
   const [status, setStatus] = useState(t.f_inicio);
@@ -72,12 +86,13 @@ export function GuiaCamera({
   const [destino, setDestino] = useState<PontoGuia | null>(null);
   const [posicao, setPosicao] = useState<number | null>(null);
   const [passosDados, setPassosDados] = useState(0);
+  const [demo, setDemo] = useState(false);
   const [diagnostico, setDiagnostico] = useState('');
 
   const porId = useMemo(() => new Map(pontos.map((p) => [p.id, p])), [pontos]);
   const limites = useMemo(() => {
     const fixos = pontos.filter((p) => !p.trecho).map((p) => p.passos);
-    return [Math.min(...fixos), Math.max(...fixos)] as const;
+    return [Math.min(...fixos) - MARGEM_PERCURSO, Math.max(...fixos) + MARGEM_PERCURSO] as const;
   }, [pontos]);
 
   const anunciar = useCallback(
@@ -111,11 +126,20 @@ export function GuiaCamera({
         case 'chegou':
           return [
             preencher(a.porCamera ? t.f_chegouCamera : t.f_chegouPassos, { nome: d.nome }),
-            a.porCamera && d.esquerda ? preencher(t.f_esquerda, { texto: d.esquerda }) : '',
-            a.porCamera && d.direita ? preencher(t.f_direita, { texto: d.direita }) : '',
+            d.esquerda ? preencher(t.f_vireEsquerda, { texto: d.esquerda }) : '',
+            d.direita ? preencher(t.f_vireDireita, { texto: d.direita }) : '',
           ]
             .filter(Boolean)
             .join(' ');
+        case 'passou':
+          return preencher(t.f_passou, { nome: d.nome, passos: a.passos });
+        case 'proximo': {
+          const p = porId.get(a.pontoId);
+          const modelo = p?.esquerda ? t.f_proximoEsquerda : p?.direita ? t.f_proximoDireita : t.f_proximo;
+          return preencher(modelo, { passos: a.passos, nome: p?.nome ?? '' });
+        }
+        case 'ficouPraTras':
+          return preencher(t.f_ficouPraTras, { nome: porId.get(a.pontoId)?.nome ?? '' });
         case 'perigo':
           return preencher(t.f_perigo, { texto: porId.get(a.pontoId)?.perigoTexto ?? '', passos: a.passos });
       }
@@ -123,27 +147,67 @@ export function GuiaCamera({
     [t, porId],
   );
 
-  const processarAvisos = useCallback(() => {
-    const d = destinoRef.current;
-    if (!d) return;
-    for (const a of avisos(posRef.current, d, pontos, avisadosRef.current)) {
-      if (a.tipo === 'perigo') tocar('alerta');
-      if (a.tipo === 'chegou') tocar('ding');
-      anunciar(textoDoAviso(a, d), a.tipo === 'perigo');
-    }
-  }, [anunciar, pontos, textoDoAviso]);
+  // Junta tudo numa fala só: a voz nova cancela a anterior, então avisos separados se cortariam.
+  const processarAvisos = useCallback(
+    (antes: string[] = []) => {
+      const d = destinoRef.current;
+      const falas = [...antes];
+      let urgente = false;
+      if (d) {
+        for (const a of avisos(posRef.current, d, pontos, avisadosRef.current)) {
+          if (a.tipo === 'perigo' || a.tipo === 'passou') {
+            tocar('alerta');
+            urgente = true;
+          }
+          if (a.tipo === 'chegou') {
+            tocar('ding');
+            if (a.porCamera) paradoRef.current = true;
+          }
+          falas.push(textoDoAviso(a, d));
+          if (a.tipo === 'passou') {
+            // Rota de volta até o destino, começando do zero.
+            posRef.current = iniciarRota(posRef.current, d.passos);
+            avisadosRef.current = new Set(['chegando', 'passou']);
+            voltandoRef.current = true;
+          }
+        }
+      }
+      if (falas.length) anunciar(falas.join(' '), urgente);
+    },
+    [anunciar, pontos, textoDoAviso],
+  );
 
   const textosPassos = useMemo(
     () => ({ semMovimento: t.f_semMovimento, movimentoNegado: t.f_movimentoNegado }),
     [t],
   );
-  const passos = usePassos(() => {
+  const aoPassar = useCallback(() => {
     setPassosDados((n) => n + 1);
-    const d = destinoRef.current;
-    posRef.current = darPasso(posRef.current, d ? d.passos : null, limites);
+    posRef.current = darPasso(posRef.current, limites);
     setPosicao(posRef.current.passos);
     processarAvisos();
-  }, textosPassos);
+  }, [limites, processarAvisos]);
+  const passos = usePassos(aoPassar, textosPassos);
+
+  // Demonstração: sem acelerômetro, um passo a cada 1/0,75 s de vídeo tocando (respeita pausa e velocidade).
+  useEffect(() => {
+    if (!ativo || !demo) return;
+    let ultimoTempo = videoRef.current?.currentTime ?? 0;
+    let acumulado = 0;
+    const id = window.setInterval(() => {
+      const v = videoRef.current;
+      if (!v) return;
+      const delta = v.currentTime - ultimoTempo;
+      ultimoTempo = v.currentTime;
+      if (delta <= 0 || delta > 2 || paradoRef.current || voltandoRef.current) return; // pausado, pulou, chegou ou passou
+      acumulado += delta * PASSOS_POR_SEGUNDO_DEMO;
+      while (acumulado >= 1) {
+        acumulado -= 1;
+        aoPassar();
+      }
+    }, 200);
+    return () => window.clearInterval(id);
+  }, [ativo, demo, aoPassar]);
 
   // Análise contínua da imagem enquanto o guia está ativo.
   useEffect(() => {
@@ -162,9 +226,17 @@ export function GuiaCamera({
       const p = palpitar(base, vetor);
       setDiagnostico(`${p.rotulo ?? '—'} · ${p.semelhanca.toFixed(2)} · ${Math.round(p.maioria * 100)}%`);
       const confirmado = confirmar.current(p);
-      if (!confirmado || confirmado === '-' || confirmado === posRef.current.ultimoPonto) return;
+      if (!confirmado || confirmado === '-') return;
       const ponto = porId.get(confirmado);
       if (!ponto) return;
+      if (confirmado === posRef.current.ultimoPonto) {
+        // Ainda vendo o mesmo ponto: corrige a deriva dos passos, sem falar de novo.
+        if (!ponto.trecho && Math.abs(posRef.current.passos - ponto.passos) > RAIO_PASSOU) {
+          posRef.current = confirmarPonto(ponto, posRef.current);
+          setPosicao(ponto.passos);
+        }
+        return;
+      }
       if (ponto.trecho) {
         // Corredor: avisa uma vez, mas não "encaixa" a posição (é um trecho longo).
         if (trechoRef.current !== ponto.id) {
@@ -174,12 +246,25 @@ export function GuiaCamera({
         return;
       }
       trechoRef.current = null;
-      posRef.current = confirmarPonto(ponto);
+      paradoRef.current = false;
+      const anterior = posRef.current;
+      const d = destinoRef.current;
+      posRef.current = confirmarPonto(ponto, anterior);
+      if (!anterior.ultimoPonto && d) posRef.current = iniciarRota(posRef.current, d.passos);
       setPontoAtual(ponto);
       setPosicao(ponto.passos);
       tocar('ding');
-      anunciar(textoOndeEstou(ponto));
-      processarAvisos();
+      const falas = [textoOndeEstou(ponto)];
+      const passouDoDestino =
+        d && (ponto.passos - d.passos) * posRef.current.sentidoRota >= RAIO_PASSOU;
+      if (d && anterior.ultimoPonto && !passouDoDestino && indoAoContrario(anterior.passos, ponto.passos, d.passos)) {
+        posRef.current = iniciarRota(posRef.current, d.passos);
+        const distancia = Math.round(Math.abs(d.passos - ponto.passos));
+        avisadosRef.current = new Set([`faltam:${Math.ceil(distancia / AVISO_A_CADA) * AVISO_A_CADA}`]);
+        tocar('alerta');
+        falas.push(preencher(t.f_contramao, { nome: d.nome, passos: distancia }));
+      }
+      processarAvisos(falas);
     }, INTERVALO_ANALISE_MS);
     return () => window.clearInterval(id);
   }, [ativo, anunciar, porId, processarAvisos, t, textoOndeEstou]);
@@ -201,6 +286,9 @@ export function GuiaCamera({
       return false;
     }
     confirmar.current = criarConfirmador();
+    setPassosDados(0);
+    paradoRef.current = false;
+    voltandoRef.current = false;
     posRef.current = estadoInicial();
     avisadosRef.current = new Set();
     trechoRef.current = null;
@@ -214,6 +302,7 @@ export function GuiaCamera({
       const v = videoRef.current!;
       v.srcObject = stream;
       await v.play();
+      setDemo(false);
       setAtivo(true);
       anunciar(t.f_cameraLigada);
       void passos.ligar();
@@ -228,6 +317,7 @@ export function GuiaCamera({
     v.srcObject = null;
     v.src = URL.createObjectURL(arquivo);
     await v.play();
+    setDemo(true);
     setAtivo(true);
     anunciar(t.f_demo);
   }
@@ -248,12 +338,14 @@ export function GuiaCamera({
   function escolherDestino(p: PontoGuia) {
     setDestino(p);
     destinoRef.current = p;
+    paradoRef.current = false;
+    voltandoRef.current = false;
     avisadosRef.current = new Set();
     if (posRef.current.ultimoPonto) {
-      posRef.current = ancorarNaPosicaoAtual(posRef.current);
+      posRef.current = iniciarRota(posRef.current, p.passos);
       const distancia = Math.round(Math.abs(p.passos - posRef.current.passos));
-      anunciar(preencher(t.f_destino, { nome: p.nome, passos: distancia }));
-      processarAvisos();
+      avisadosRef.current.add(`faltam:${Math.ceil(distancia / AVISO_A_CADA) * AVISO_A_CADA}`); // já dito acima
+      processarAvisos([preencher(t.f_destino, { nome: p.nome, passos: distancia })]);
     } else {
       anunciar(preencher(t.f_destinoSemPosicao, { nome: p.nome }));
     }
@@ -349,7 +441,7 @@ export function GuiaCamera({
           <dt>{t.passos}</dt>
           <dd className="font-bold">
             {passosDados}
-            {passos.ativo ? '' : ` (${t.contadorDesligado})`}
+            {demo ? ` (${t.simulados})` : passos.ativo ? '' : ` (${t.contadorDesligado})`}
           </dd>
         </dl>
         {passos.erro && <p className="mt-2 text-texto-suave">{passos.erro}</p>}

@@ -89,7 +89,16 @@
       "f_chegouPassos": "Você deve ter chegado: {nome}. Aguarde a confirmação da câmera.",
       "f_perigo": "Atenção: {texto}, a {passos} passos.",
       "f_semMovimento": "Este aparelho não informa movimento. A posição usará só a câmera.",
-      "f_movimentoNegado": "Permissão de movimento negada. A posição usará só a câmera."
+      "f_movimentoNegado": "Permissão de movimento negada. A posição usará só a câmera.",
+      "simulados": "simulados pelo vídeo",
+      "f_proximo": "Em {passos} passos: {nome}.",
+      "f_proximoEsquerda": "Em {passos} passos, {nome} à sua esquerda.",
+      "f_proximoDireita": "Em {passos} passos, {nome} à sua direita.",
+      "f_ficouPraTras": "Ficou para trás: {nome}.",
+      "f_passou": "Atenção: você passou de {nome}. Vire para trás e volte cerca de {passos} passos.",
+      "f_contramao": "Atenção: você está indo no sentido contrário. Vire para trás. {nome} fica a cerca de {passos} passos.",
+      "f_vireEsquerda": "Vire à esquerda: {texto}.",
+      "f_vireDireita": "Vire à direita: {texto}."
     },
     "letreiro": { "titulo": "Ler letreiro", "objetivo": "Aponte a câmera para a fachada e o celular fala qual loja está à sua frente." }
   },

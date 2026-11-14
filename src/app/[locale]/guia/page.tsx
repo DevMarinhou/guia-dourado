@@ -17,6 +17,8 @@ const CHAVES = [
   'f_inicio', 'f_preparando', 'f_semBase', 'f_semModelo', 'f_cameraLigada', 'f_semCamera', 'f_demo', 'f_parado',
   'f_voceEsta', 'f_esquerda', 'f_direita', 'f_trecho', 'f_naoSei', 'f_destino', 'f_destinoSemPosicao', 'f_faltam',
   'f_chegando', 'f_chegouCamera', 'f_chegouPassos', 'f_perigo', 'f_semMovimento', 'f_movimentoNegado',
+  'f_proximo', 'f_proximoEsquerda', 'f_proximoDireita', 'f_ficouPraTras', 'f_passou', 'f_contramao',
+  'f_vireEsquerda', 'f_vireDireita', 'simulados',
 ] as const satisfies readonly (keyof TextosGuia)[];
 
 export default async function Pagina({ params }: PageProps<'/[locale]/guia'>) {

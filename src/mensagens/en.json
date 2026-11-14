@@ -89,7 +89,16 @@
       "f_chegouPassos": "You should have arrived: {nome}. Wait for the camera to confirm.",
       "f_perigo": "Caution: {texto}, {passos} steps ahead.",
       "f_semMovimento": "This device does not report motion. Position will use the camera only.",
-      "f_movimentoNegado": "Motion permission denied. Position will use the camera only."
+      "f_movimentoNegado": "Motion permission denied. Position will use the camera only.",
+      "simulados": "simulated from the video",
+      "f_proximo": "In {passos} steps: {nome}.",
+      "f_proximoEsquerda": "In {passos} steps, {nome} on your left.",
+      "f_proximoDireita": "In {passos} steps, {nome} on your right.",
+      "f_ficouPraTras": "Now behind you: {nome}.",
+      "f_passou": "Caution: you walked past {nome}. Turn around and go back about {passos} steps.",
+      "f_contramao": "Caution: you are walking the wrong way. Turn around. {nome} is about {passos} steps away.",
+      "f_vireEsquerda": "Turn left: {texto}.",
+      "f_vireDireita": "Turn right: {texto}."
     },
     "letreiro": { "titulo": "Read store sign", "objetivo": "Point the camera at a storefront and your phone says which store is in front of you." }
   },

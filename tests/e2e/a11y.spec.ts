@@ -2,7 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 // Varredura axe (WCAG 2.0/2.1/2.2 A e AA) nas rotas principais, nos temas padrão e alto contraste.
-const ROTAS = ['/', '/en', '/es', '/mapa/terreo', '/locais/outback-steakhouse', '/prancha', '/conversar', '/letreiro', '/ajuda', '/acessibilidade', '/central'];
+const ROTAS = ['/', '/en', '/es', '/guia', '/mapa/terreo', '/locais/outback-steakhouse', '/prancha', '/conversar', '/letreiro', '/ajuda', '/acessibilidade', '/central'];
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
 for (const rota of ROTAS) {

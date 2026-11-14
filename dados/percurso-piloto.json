@@ -1,0 +1,28 @@
+{
+  "versao": "2026-11-13-corredor-fasec",
+  "nome": { "pt-BR": "Corredor da faculdade (piloto)", "en": "College corridor (pilot)", "es": "Pasillo de la facultad (piloto)" },
+  "unidade": "passos",
+  "observacao": "Piloto do Farol gravado no corredor da FASEC. Distâncias em passos (1 passo ≈ 1 m), ESTIMADAS pelo tempo do vídeo; conferir com a contagem narrada. Lados vistos por quem anda da entrada para o fundo (a confirmar). No fim do hall o piso tátil chega às lixeiras (à frente) e dobra à esquerda para o corredor: \"virar\" marca essa curva.",
+  "pontos": [
+    { "id": "entrada", "passos": 0, "destino": true, "trecho": false,
+      "nome": { "pt-BR": "Entrada, hall", "en": "Entrance hall", "es": "Entrada, vestíbulo" } },
+    { "id": "lixeira", "passos": 10, "destino": true, "trecho": false,
+      "nome": { "pt-BR": "Lixeiras de reciclagem", "en": "Recycling bins", "es": "Papeleras de reciclaje" },
+      "frente": { "pt-BR": "lixeiras de reciclagem", "en": "recycling bins", "es": "papeleras de reciclaje" },
+      "virar": "esquerda", "reconhecidoA": 4 },
+    { "id": "corredor", "passos": 0, "destino": false, "trecho": true,
+      "nome": { "pt-BR": "Corredor principal", "en": "Main corridor", "es": "Pasillo principal" } },
+    { "id": "elevador-1", "passos": 25, "destino": true, "trecho": false,
+      "nome": { "pt-BR": "Elevador 1", "en": "Elevator 1", "es": "Ascensor 1" },
+      "esquerda": { "pt-BR": "elevador 1", "en": "elevator 1", "es": "ascensor 1" } },
+    { "id": "elevador-2", "passos": 48, "destino": true, "trecho": false,
+      "nome": { "pt-BR": "Elevador 2", "en": "Elevator 2", "es": "Ascensor 2" },
+      "esquerda": { "pt-BR": "elevador 2", "en": "elevator 2", "es": "ascensor 2" } },
+    { "id": "sala-1", "passos": 51, "destino": true, "trecho": false,
+      "nome": { "pt-BR": "Sala 1", "en": "Room 1", "es": "Sala 1" },
+      "direita": { "pt-BR": "porta da sala 1", "en": "door of room 1", "es": "puerta de la sala 1" } },
+    { "id": "sala-2", "passos": 70, "destino": true, "trecho": false,
+      "nome": { "pt-BR": "Sala 2", "en": "Room 2", "es": "Sala 2" },
+      "direita": { "pt-BR": "porta da sala 2", "en": "door of room 2", "es": "puerta de la sala 2" } }
+  ]
+}

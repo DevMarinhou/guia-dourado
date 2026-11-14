@@ -12,7 +12,7 @@ npm run dev                   # http://localhost:3000
 Requisitos: **Node.js 22+**.
 
 ## Fluxo
-- `main` sempre funcionando. Trabalhe em ramos curtos: `feat/rotas-tela`, `fix/contraste-ajuda`.
+- `producao` (padrão no GitHub) e `main` sempre funcionando e idênticas. Trabalhe em ramos curtos: `feat/rotas-tela`, `fix/contraste-ajuda`.
 - PRs pequenos (até ~300 linhas) e revisados por outra pessoa. Integre com frequência para evitar conflitos.
 - Cada pessoa é dona das suas pastas (trilhas em `PROXIMOS_PASSOS.md`). Arquivos compartilhados (`src/mensagens/*.json`, `dados/*.json`) têm mudanças pequenas e atômicas.
 

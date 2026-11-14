@@ -25,7 +25,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 | Estado atual | **MVP integrado** — estrutura completa (rotas `[locale]`, domínio, dados validados, CI) + Easter Egg |
 | Entrega final | **Sábado 14/11/2026 até 12h** (MVP funcional + repo organizado + docs + instruções de execução) |
 | Stack | **Next.js 16.4 (App Router) · React 19.3 · TypeScript estrito · next-intl (pt-BR/en/es) · Tailwind 4** |
-| Repo | `github.com/DevMarinhou/guia-dourado` · branch principal: `main` |
+| Repo | `github.com/DevMarinhou/guia-dourado` · branch principal (padrão no GitHub): `producao` (espelhada em `main`) |
 | Trilhas da equipe | [`PROXIMOS_PASSOS.md`](PROXIMOS_PASSOS.md) — cada pessoa tem uma trilha (A front-end, B rotas, C comunicação, D ajuda/central/deploy) |
 
 ### Fontes oficiais (não alterar)

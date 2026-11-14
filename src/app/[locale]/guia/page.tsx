@@ -12,14 +12,17 @@ export async function generateMetadata({ params }: PageProps<'/[locale]/guia'>) 
 }
 
 const CHAVES = [
-  'percurso', 'comecar', 'demo', 'ondeEstou', 'parar', 'paraOnde', 'situacao', 'pontoReconhecido', 'destino',
+  'percurso', 'comecar', 'ondeEstou', 'parar', 'paraOnde', 'situacao', 'pontoReconhecido', 'destino',
   'faltam', 'passos', 'contadorDesligado', 'unidade', 'tecnico', 'base', 'semAnalise', 'aviso', 'imagemCamera',
-  'f_inicio', 'f_preparando', 'f_semBase', 'f_semModelo', 'f_cameraLigada', 'f_semCamera', 'f_demo', 'f_parado',
+  'f_inicio', 'f_preparando', 'f_semBase', 'f_semModelo', 'f_cameraLigada', 'f_semCamera', 'f_parado',
   'f_voceEsta', 'f_esquerda', 'f_direita', 'f_trecho', 'f_naoSei', 'f_destino', 'f_destinoSemPosicao', 'f_faltam',
   'f_chegando', 'f_chegouCamera', 'f_chegouPassos', 'f_perigo', 'f_semMovimento', 'f_movimentoNegado',
   'f_proximo', 'f_proximoEsquerda', 'f_proximoDireita', 'f_ficouPraTras', 'f_passou', 'f_contramao',
-  'f_vireEsquerda', 'f_vireDireita', 'simulados', 'f_frente', 'f_virarEm', 'f_virarEmFrente', 'f_virarAgora',
-  'ladoEsquerda', 'ladoDireita',
+  'f_vireEsquerda', 'f_vireDireita', 'f_frente', 'f_virarEm', 'f_virarEmFrente', 'f_virarAgora',
+  'ladoEsquerda', 'ladoDireita', 'aberturaToque', 'aberturaSub', 'f_pergunta', 'f_naoEntendiModo', 'modoVoz',
+  'modoVozDesc', 'modoTela', 'modoTelaDesc', 'ouvindo', 'falarComando', 'f_digaDestino', 'f_naoEntendiDestino',
+  'escurecer', 'clarear', 'silenciar', 'ativarSom', 'comecarDeNovo', 'semDestino', 'procurando', 'sigaEmFrente',
+  'chegou', 'volte', 'palavrasVoz', 'palavrasTela', 'palavrasOndeEstou', 'palavrasParar', 'numeros',
 ] as const satisfies readonly (keyof TextosGuia)[];
 
 export default async function Pagina({ params }: PageProps<'/[locale]/guia'>) {
